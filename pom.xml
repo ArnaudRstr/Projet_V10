@@ -5,7 +5,7 @@
     <!-- Project from https://start.vaadin.com/project/21e66926-4cbb-402b-8099-d8ccdd4928c6 -->
     <groupId>com.example.application</groupId>
     <artifactId>mytodo</artifactId>
-    <name>mytodo</name>
+    <name>Projet_GP_V2</name>
     <version>1.0-SNAPSHOT</version>
     <packaging>jar</packaging>
 
@@ -77,6 +77,14 @@
             <artifactId>vaadin-testbench-junit5</artifactId>
             <scope>test</scope>
         </dependency>
+        
+        <!-- https://mvnrepository.com/artifact/com.mysql/mysql-connector-j -->
+        <dependency>
+            <groupId>com.mysql</groupId>
+            <artifactId>mysql-connector-j</artifactId>
+            <version>8.1.0</version>
+        </dependency>
+        
     </dependencies>
 
     <build>
