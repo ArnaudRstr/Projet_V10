@@ -34,6 +34,11 @@ public class Entete extends MyHorizontalLayout {
         this.getStyle().set("padding", "10px");
         this.getStyle().set("border-radius", "7px");
         this.getStyle().set("background-color","#F8E0E0");
+
+        this.getStyle().set("border", "1px solid #000000");
+        this.getStyle().set("padding", "10px");
+        this.getStyle().set("border-radius", "0px");
+
         this.setWidthFull();
         
         

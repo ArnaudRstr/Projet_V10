@@ -47,7 +47,7 @@ public class VuePrincipale extends MyVerticalLayout {
         this.mainContent.getStyle().set("border", "1px solid #000000");
         this.mainContent.getStyle().set("border-radius", "7px");
 
-        
+
         this.entete = new MyHorizontalLayout();
         this.entete.setWidthFull();
 
