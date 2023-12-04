@@ -27,7 +27,7 @@ public class FenetrePartagee extends MyVerticalLayout {
     public FenetrePartagee(){
         this.partG=new PartiePrincipale();
         this.partD=new PartieDetail();
-
+        
         this.splitLayout= new SplitLayout(partG,partD);
         add(this.splitLayout);
         
@@ -36,7 +36,7 @@ public class FenetrePartagee extends MyVerticalLayout {
         
         this.splitLayout.setWidthFull();
         this.splitLayout.setHeightFull();
-
+        
         
     }
     
