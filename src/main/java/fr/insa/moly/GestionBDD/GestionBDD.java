@@ -4,12 +4,16 @@
  */
 package fr.insa.moly.GestionBDD;
 
+import fr.insa.moly.objet.Atelier;
+import fr.insa.moly.objet.Brut;
+import fr.insa.moly.objet.Machine;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 
 
         
@@ -1085,7 +1089,93 @@ public static int askidproduit(Connection connect)throws SQLException{
 //                System.out.println(nom + " : " + numero + " avec l'identifiant : "+ id);
 //            }
     
+public static ArrayList listaltelier (Connection connect)throws SQLException{
+    ArrayList<Atelier> listatelier = new ArrayList();
     
+    connect.setAutoCommit(false); //stope la mise à jour, elle sera fait à la fin si tout se passe bien
+        try ( PreparedStatement affichetab = connect.prepareStatement(
+                "select * from atelier")) {
+            
+            ResultSet ateliers = affichetab.executeQuery();
+            while (ateliers.next()!= false){
+                Atelier at = new Atelier(ateliers.getInt("id"),ateliers.getString("nom"),ateliers.getString("des"));
+                listatelier.add(at);
+            }
+
+            }
+        try { // creation d'un requete 
+            connect.commit(); // valide le refresh
+            System.out.print("le refresh fonctionne") ;
+        } catch (SQLException ex) { // en cas d'erreur on "rollback" on retourne avant 
+            connect.rollback();
+            System.out.print("rollback");
+            throw ex;
+        } finally {
+            connect.setAutoCommit(true);// on remet le refresh automatique
+        }
+        
+     
+    return listatelier;
+}  
+
+public static ArrayList listbrut (Connection connect)throws SQLException{
+    ArrayList<Brut> listbrut = new ArrayList();
+    
+    connect.setAutoCommit(false); //stope la mise à jour, elle sera fait à la fin si tout se passe bien
+        try ( PreparedStatement affichetab = connect.prepareStatement(
+                "select * from brut")) {
+            
+            ResultSet tab = affichetab.executeQuery();
+            while (tab.next()!= false){
+                Brut at = new Brut(tab.getInt("id"),tab.getString("nom"),tab.getString("ref"),tab.getString("matiere"),tab.getInt("stock"),tab.getString("dimension"),tab.getString("fournisseur"));
+                listbrut.add(at);
+            }
+
+            }
+        try { // creation d'un requete 
+            connect.commit(); // valide le refresh
+            System.out.print("le refresh fonctionne") ;
+        } catch (SQLException ex) { // en cas d'erreur on "rollback" on retourne avant 
+            connect.rollback();
+            System.out.print("rollback");
+            throw ex;
+        } finally {
+            connect.setAutoCommit(true);// on remet le refresh automatique
+        }
+        
+     
+    return listbrut;
+}   
+
+public static ArrayList listmachine (Connection connect)throws SQLException{
+    ArrayList<Machine> listmachine = new ArrayList();
+    
+    connect.setAutoCommit(false); //stope la mise à jour, elle sera fait à la fin si tout se passe bien
+        try ( PreparedStatement affichetab = connect.prepareStatement(
+                "select * from machine")) {
+            
+            ResultSet tab = affichetab.executeQuery();
+            while (tab.next()!= false){
+                Machine at = new Machine(tab.getInt("id"),tab.getString("nom"),tab.getInt("idatelier"),tab.getInt("idtypeoperation"),tab.getString("des"),tab.getString("marque"),tab.getDouble("puissance"),tab.getInt("satut"),tab.getDouble("couthoraire"),tab.getString("localisation"),tab.getDouble("dimensionlargeur"),tab.getDouble("dimensionlongueur"));
+                listmachine.add(at);
+            }
+
+            }
+        try { // creation d'un requete 
+            connect.commit(); // valide le refresh
+            System.out.print("le refresh fonctionne") ;
+        } catch (SQLException ex) { // en cas d'erreur on "rollback" on retourne avant 
+            connect.rollback();
+            System.out.print("rollback");
+            throw ex;
+        } finally {
+            connect.setAutoCommit(true);// on remet le refresh automatique
+        }
+        
+     
+    return listmachine;
+}  
+
     public static void main(String[] args) {
         System.out.print("Bonjour et bienvenue");
        Initialisation() ;
