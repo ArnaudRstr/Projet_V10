@@ -1062,6 +1062,18 @@ public static void addtypeoperation(Connection connect,String nom)throws SQLExce
 public static void delete (Connection connect,String table,int id)throws SQLException{
 
     connect.setAutoCommit(false); //stope la mise à jour, elle sera fait à la fin si tout se passe bien
+//     try ( PreparedStatement cherche = connect.prepareStatement(
+//                "select id from atelier where nom= ? ")) {
+//        System.out.println("type d'opération");
+//        String nomoperation= Lire.S();
+//            cherche.setString(1, nomoperation);
+//            ResultSet rep = cherche.executeQuery();
+//            test =rep.next();
+//            if (test!=false){
+//            idtype=rep.getInt(1);
+//            }
+//            
+//}
         try ( PreparedStatement pst = connect.prepareStatement(
                 "DELETE FROM `?` WHERE id=?;"
 

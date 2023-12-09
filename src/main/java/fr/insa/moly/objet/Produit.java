@@ -4,6 +4,8 @@
  */
 package fr.insa.moly.objet;
 
+import java.util.ArrayList;
+
 /**
  *
  * @author molys
