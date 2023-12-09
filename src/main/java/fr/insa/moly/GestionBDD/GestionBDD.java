@@ -29,8 +29,8 @@ public class GestionBDD {
     
     Connection conn ;//Attribut de la connexion
     //Consturcteur
-    public GestionBDD(Connection conn) {
-        this.conn = conn;
+    public GestionBDD() throws SQLException {
+        this.conn = connectSurServeurM3();
     }
     
     public static Connection connectGeneralMySQL(String host,
@@ -55,7 +55,7 @@ public class GestionBDD {
         try (Connection connect = connectSurServeurM3()) {
             
             System.out.println("connecté");
-            GestionBDD gestionnaire = new GestionBDD(connect);
+            GestionBDD gestionnaire = new GestionBDD();
             System.out.println("Voulez vous commencer avec les tests de base ?");
             System.out.println("oui=0, non=1");
             System.out.println();
