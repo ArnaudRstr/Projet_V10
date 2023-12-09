@@ -13,6 +13,9 @@ import com.vaadin.flow.component.contextmenu.SubMenu;
 import com.vaadin.flow.component.menubar.MenuBar;
 import com.vaadin.flow.component.notification.Notification;
 import java.sql.Connection;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 /**
  *
  * @author arnaud
@@ -225,7 +228,11 @@ public class Entete extends MyHorizontalLayout {
         
         menuItemAjouterAtelier.addClickListener(event -> {
             Notification.show("Option produit sélectionnée !");
-            this.main.getControleur().MenuItemAjouterAtelier();
+            try {
+                this.main.getControleur().MenuItemAjouterAtelier();
+            } catch (SQLException ex) {
+                Logger.getLogger(Entete.class.getName()).log(Level.SEVERE, null, ex);
+            }
             
             
             

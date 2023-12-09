@@ -4,6 +4,9 @@ import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
+import fr.insa.moly.GestionBDD.GestionBDD;
+import java.sql.Connection;
+import java.sql.SQLException;
 
 
 
@@ -14,6 +17,11 @@ public class VuePrincipale extends MyVerticalLayout {
 
     private TextField name;
     private Button sayHello;
+    private Controleur controleur;
+    public Connection connect;
+    
+    public GestionBDD gestionnaire;
+    
     
     
     
@@ -22,20 +30,12 @@ public class VuePrincipale extends MyVerticalLayout {
     public MyVerticalLayout mainContent;
     
     
-    public VuePrincipale() {
-        /*name = new TextField("Your name");
-        sayHello = new Button("Say hello");
-        sayHello.addClickListener(e -> {
-            Notification.show("Hello " + name.getValue());
-        });
-        sayHello.addClickShortcut(Key.ENTER);
-
-        /*setMargin(true);
-        setVerticalComponentAlignment(Alignment.END, name, sayHello);
+    public VuePrincipale() throws SQLException {
         
-        add(name, sayHello);*/
+        this.gestionnaire = new GestionBDD();
         
         //this.mainContent = new MyVerticalLayout();
+        this.controleur = new Controleur(this);
         this.mainContent = new VuePlan();
         this.mainContent.setWidthFull();
         this.mainContent.setHeightFull();
@@ -88,8 +88,15 @@ public class VuePrincipale extends MyVerticalLayout {
     public MyHorizontalLayout getEntete(){
         return this.entete;
     }
+
+    public Controleur getControleur() {
+        return this.controleur;
+    }
     
-    
+    public GestionBDD getGestionBDD(){
+        return this.gestionnaire;
+        
+    }
 
    
 

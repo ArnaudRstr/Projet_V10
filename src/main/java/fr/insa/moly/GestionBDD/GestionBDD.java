@@ -27,11 +27,28 @@ public class GestionBDD {
 
    
     
-    Connection conn ;//Attribut de la connexion
+    public Connection conn ;//Attribut de la connexion
     //Consturcteur
     public GestionBDD() throws SQLException {
         this.conn = connectSurServeurM3();
     }
+    
+    
+    
+    
+    
+    
+    
+    
+    public Connection getGestionBDD(){
+        return this.conn;
+    }
+    
+    
+    
+    
+    
+    
     
     public static Connection connectGeneralMySQL(String host,
             int port, String database,
@@ -674,7 +691,7 @@ public static void addatelier (Connection connect,String nom, String des, int di
             }
         try { // creation d'un requete 
             connect.commit(); // valide le refresh
-            System.out.print("le refresh fonctionne") ;
+            System.out.println("le refresh fonctionne") ;
         } catch (SQLException ex) { // en cas d'erreur on "rollback" on retourne avant 
             connect.rollback();
             System.out.print("rollback");
@@ -1105,10 +1122,10 @@ public static ArrayList listaltelier (Connection connect)throws SQLException{
             }
         try { // creation d'un requete 
             connect.commit(); // valide le refresh
-            System.out.print("le refresh fonctionne") ;
+            System.out.println("le refresh fonctionne") ;
         } catch (SQLException ex) { // en cas d'erreur on "rollback" on retourne avant 
             connect.rollback();
-            System.out.print("rollback");
+            System.out.println("rollback");
             throw ex;
         } finally {
             connect.setAutoCommit(true);// on remet le refresh automatique
