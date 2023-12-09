@@ -7,6 +7,10 @@ package fr.insa.moly.GestionBDD;
 import fr.insa.moly.objet.Atelier;
 import fr.insa.moly.objet.Brut;
 import fr.insa.moly.objet.Machine;
+import fr.insa.moly.objet.Operateur;
+import fr.insa.moly.objet.Operation;
+import fr.insa.moly.objet.Produit;
+import fr.insa.moly.objet.Typeoperation;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -1191,6 +1195,122 @@ public static ArrayList listmachine (Connection connect)throws SQLException{
         
      
     return listmachine;
+}  
+
+public static ArrayList listoperateur (Connection connect)throws SQLException{
+    ArrayList<Operateur> listoperateur = new ArrayList();
+    
+    connect.setAutoCommit(false); //stope la mise à jour, elle sera fait à la fin si tout se passe bien
+        try ( PreparedStatement affichetab = connect.prepareStatement(
+                "select * from operateur")) {
+            
+            ResultSet tab = affichetab.executeQuery();
+            while (tab.next()!= false){
+                Operateur at = new Operateur(tab.getInt("id"),tab.getString("identifiant"),tab.getString("motdepasse"),tab.getString("nom"),tab.getString("prenom"),tab.getInt("idatelier"),tab.getInt("statut"),tab.getInt("tel"),tab.getString("mail"));
+                listoperateur.add(at);
+            }
+
+            }
+        try { // creation d'un requete 
+            connect.commit(); // valide le refresh
+            System.out.print("le refresh fonctionne") ;
+        } catch (SQLException ex) { // en cas d'erreur on "rollback" on retourne avant 
+            connect.rollback();
+            System.out.print("rollback");
+            throw ex;
+        } finally {
+            connect.setAutoCommit(true);// on remet le refresh automatique
+        }
+        
+     
+    return listoperateur;
+}  
+
+public static ArrayList listoperation (Connection connect)throws SQLException{
+    ArrayList<Operation> listoperation = new ArrayList();
+    
+    connect.setAutoCommit(false); //stope la mise à jour, elle sera fait à la fin si tout se passe bien
+        try ( PreparedStatement affichetab = connect.prepareStatement(
+                "select * from operation")) {
+            
+            ResultSet tab = affichetab.executeQuery();
+            while (tab.next()!= false){
+                Operation at = new Operation(tab.getInt("id"),tab.getInt("idtypeoperation"),tab.getString("nom"),tab.getDouble("duree"),tab.getString("outil"));
+                listoperation.add(at);
+            }
+
+            }
+        try { // creation d'un requete 
+            connect.commit(); // valide le refresh
+            System.out.print("le refresh fonctionne") ;
+        } catch (SQLException ex) { // en cas d'erreur on "rollback" on retourne avant 
+            connect.rollback();
+            System.out.print("rollback");
+            throw ex;
+        } finally {
+            connect.setAutoCommit(true);// on remet le refresh automatique
+        }
+        
+     
+    return listoperation;
+}  
+
+public static ArrayList listproduit (Connection connect)throws SQLException{
+    ArrayList<Produit> listproduit = new ArrayList();
+    
+    connect.setAutoCommit(false); //stope la mise à jour, elle sera fait à la fin si tout se passe bien
+        try ( PreparedStatement affichetab = connect.prepareStatement(
+                "select * from produit")) {
+            
+            ResultSet tab = affichetab.executeQuery();
+            while (tab.next()!= false){
+                Produit at = new Produit(tab.getInt("id"),tab.getString("ref"),tab.getString("des"),tab.getInt("idbrut"));
+                listproduit.add(at);
+            }
+
+            }
+        try { // creation d'un requete 
+            connect.commit(); // valide le refresh
+            System.out.print("le refresh fonctionne") ;
+        } catch (SQLException ex) { // en cas d'erreur on "rollback" on retourne avant 
+            connect.rollback();
+            System.out.print("rollback");
+            throw ex;
+        } finally {
+            connect.setAutoCommit(true);// on remet le refresh automatique
+        }
+        
+     
+    return listproduit;
+}  
+
+public static ArrayList listtypeoperation (Connection connect)throws SQLException{
+    ArrayList<Typeoperation> listtypeoperation = new ArrayList();
+    
+    connect.setAutoCommit(false); //stope la mise à jour, elle sera fait à la fin si tout se passe bien
+        try ( PreparedStatement affichetab = connect.prepareStatement(
+                "select * from typeoperation")) {
+            
+            ResultSet tab = affichetab.executeQuery();
+            while (tab.next()!= false){
+                Typeoperation at = new Typeoperation(tab.getInt("id"),tab.getString("nom"));
+                listtypeoperation.add(at);
+            }
+
+            }
+        try { // creation d'un requete 
+            connect.commit(); // valide le refresh
+            System.out.print("le refresh fonctionne") ;
+        } catch (SQLException ex) { // en cas d'erreur on "rollback" on retourne avant 
+            connect.rollback();
+            System.out.print("rollback");
+            throw ex;
+        } finally {
+            connect.setAutoCommit(true);// on remet le refresh automatique
+        }
+        
+     
+    return listtypeoperation;
 }  
 
     public static void main(String[] args) {
