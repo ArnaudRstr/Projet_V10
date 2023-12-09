@@ -50,10 +50,6 @@ public class GestionBDD {
     
     
     
-    
-    
-    
-    
     public static Connection connectGeneralMySQL(String host,
             int port, String database,
             String user, String pass)
@@ -1063,6 +1059,29 @@ public static void addtypeoperation(Connection connect,String nom)throws SQLExce
 }
 }
 
+public static void delete (Connection connect,String table,int id)throws SQLException{
+
+    connect.setAutoCommit(false); //stope la mise à jour, elle sera fait à la fin si tout se passe bien
+        try ( PreparedStatement pst = connect.prepareStatement(
+                "DELETE FROM `?` WHERE id=?;"
+
+            )){
+                    pst.setString(1, table);
+                    pst.setInt(2, id);
+                    pst.executeUpdate();
+        try { // creation d'un requete 
+            connect.commit(); // valide le refresh
+            System.out.println("le refresh fonctionne") ;
+        } catch (SQLException ex) { // en cas d'erreur on "rollback" on retourne avant 
+            connect.rollback();
+            System.out.println("rollback");
+            throw ex;
+        } finally {
+            connect.setAutoCommit(true);// on remet le refresh automatique
+        }
+}
+}
+
 public static int askidtype(Connection connect)throws SQLException{
     boolean test= false;
     int idtype=-1;
@@ -1082,6 +1101,7 @@ public static int askidtype(Connection connect)throws SQLException{
     }
     return idtype;
     }
+
 public static int askidproduit(Connection connect)throws SQLException{
     boolean test= false;
     int idproduit=-1;
@@ -1101,14 +1121,7 @@ public static int askidproduit(Connection connect)throws SQLException{
     }
     return idproduit;
 }
-    //Affichage résultat
-//           ResultSet r = st.executeQuery("select * from li_utilisateur where 1;");
-//            while (r.next()) {
-//                int id = r.getInt(1);
-//                String nom = r.getString(2);
-//                String numero = r.getString("numero");
-//                System.out.println(nom + " : " + numero + " avec l'identifiant : "+ id);
-//            }
+ 
     
 public static ArrayList listaltelier (Connection connect)throws SQLException{
     ArrayList<Atelier> listatelier = new ArrayList();

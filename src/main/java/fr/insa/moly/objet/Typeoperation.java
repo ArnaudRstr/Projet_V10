@@ -29,5 +29,7 @@ public class Typeoperation {
         this.nom = nom;
     }
     
-    
+    public String getnomtable(){
+      return   "typeoperation";
+    }
 }

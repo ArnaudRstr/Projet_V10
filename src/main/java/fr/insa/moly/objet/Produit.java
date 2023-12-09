@@ -49,5 +49,8 @@ public class Produit {
         this.idbrut = idbrut;
     }
     
+    public String getnomtable(){
+      return   "produit";
+    }
     
 }

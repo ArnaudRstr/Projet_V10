@@ -129,5 +129,8 @@ public class Machine {
         this.dimensionlongueur = dimensionlongueur;
     }
     
+    public String getnomtable(){
+      return   "machine";
+    }
     
 }

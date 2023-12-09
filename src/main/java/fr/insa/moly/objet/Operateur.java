@@ -99,5 +99,8 @@ public class Operateur {
         this.mail = mail;
     }
     
+    public String getnomtable(){
+      return   "operateur";
+    }
     
 }

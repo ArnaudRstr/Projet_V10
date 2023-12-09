@@ -59,5 +59,7 @@ public class Operation {
         this.outil = outil;
     }
     
-    
+    public String getnomtable(){
+      return   "operation";
+    }
 }

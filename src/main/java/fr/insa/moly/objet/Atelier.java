@@ -40,5 +40,8 @@ public class Atelier {
         this.des = des;
     }
    
+    public String getnomtable(){
+      return   "atelier";
+    }
    
 }
