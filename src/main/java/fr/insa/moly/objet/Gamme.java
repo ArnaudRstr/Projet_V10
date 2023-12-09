@@ -36,6 +36,6 @@ public class Gamme {
     }
     
     public String getnomtable(){
-//////      return   "gamme";
+      return   "gamme";
     }
 }
