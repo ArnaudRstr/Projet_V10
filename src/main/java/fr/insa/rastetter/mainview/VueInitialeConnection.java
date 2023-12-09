@@ -8,6 +8,9 @@ import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -28,7 +31,11 @@ public class VueInitialeConnection extends MyVerticalLayout{
         this.setAlignItems(FlexComponent.Alignment.CENTER);
         this.connectButton.addClickListener(e -> {
         this.main.setMainContent(new VuePlan());
-        this.main.setEntete(new Entete(this.main));
+            try {
+                this.main.setEntete(new Entete(this.main));
+            } catch (SQLException ex) {
+                Logger.getLogger(VueInitialeConnection.class.getName()).log(Level.SEVERE, null, ex);
+            }
     
     Notification.show("connection cliqué !");
     });

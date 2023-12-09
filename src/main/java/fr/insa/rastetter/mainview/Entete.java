@@ -6,14 +6,18 @@ package fr.insa.rastetter.mainview;
 
 
 import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.contextmenu.ContextMenu;
 import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.contextmenu.MenuItem;
 import com.vaadin.flow.component.contextmenu.SubMenu;
 import com.vaadin.flow.component.menubar.MenuBar;
 import com.vaadin.flow.component.notification.Notification;
+import static fr.insa.moly.GestionBDD.GestionBDD.listaltelier;
+import fr.insa.moly.objet.Atelier;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 /**
@@ -55,7 +59,10 @@ public class Entete extends MyHorizontalLayout {
     private MenuItem menuItemAjouterAtelier;
     
     
-    public Entete(VuePrincipale main) {
+    private ComboBox comboBoxAtelier;
+    
+    
+    public Entete(VuePrincipale main) throws SQLException {
         this.main = main;
         
         this.addClassName("Custom-Entete");
@@ -94,11 +101,38 @@ public class Entete extends MyHorizontalLayout {
         
         this.menuItemAjouterAtelier=this.subMenuAtelier.addItem("Ajouter");
         
+        this.comboBoxAtelier= new ComboBox<>();
+        this.comboBoxAtelier.setPlaceholder("Atelier");
         
         
         
         
         
+        //Atelier atelierSelect = (Atelier) listaltelier(this.main.getGestionBDD().conn).get(0);
+        
+        //ArrayList<Integer> listIdAtelier = new ArrayList<>();
+        
+        this.comboBoxAtelier.setItems(MAJComboBoxAtelier(listaltelier(this.main.getGestionBDD().conn)));
+        
+/*
+        ArrayList<String> listNomAtelier = new ArrayList<>();
+        ArrayList<Atelier> listateliertemp = listaltelier(this.main.getGestionBDD().conn);
+        //On cherche les identifiants des ateliers
+        //System.out.println("List size"+listateliertemp.size());
+        int index =0;
+        while (index<listateliertemp.size()){
+            Atelier atelierTemp = (Atelier) listateliertemp.get(index);
+            
+            listNomAtelier.add(atelierTemp.getId()+" : "+atelierTemp.getNom());
+            index++;
+        }
+        
+        //this.comboBoxAtelier.setItems(listNomAtelier);
+        */
+                
+            
+            
+    
         
         
         
@@ -185,6 +219,10 @@ public class Entete extends MyHorizontalLayout {
         
         
         
+        this.add(comboBoxAtelier);
+
+        
+        
         
         
         
@@ -228,14 +266,36 @@ public class Entete extends MyHorizontalLayout {
         
         menuItemAjouterAtelier.addClickListener(event -> {
             Notification.show("Option produit sélectionnée !");
+
             try {
                 this.main.getControleur().MenuItemAjouterAtelier();
             } catch (SQLException ex) {
                 Logger.getLogger(Entete.class.getName()).log(Level.SEVERE, null, ex);
             }
+             
+        });
+        
+        
+        
+        
+        
+        comboBoxAtelier.addValueChangeListener(event -> {
+            
+            //on cherche à récupérer l'identifiant de l'atelier, on fait une méthode générale dans le cas où l'on peu avoir plusieurs ateliers (+ de 9)
+            System.out.println("event value: " +event.getValue());
+            String idNom = (String) event.getValue();
+            int indexEspace = idNom.indexOf(' ');
+            String avantEspace = idNom.substring(0,indexEspace);
+            int idAtelier = Integer.parseInt(avantEspace);
+            //System.out.println("idAtelier "+idAtelier);
             
             
             
+            
+            // On renvoie la valeur de l'atelier au contrôleur pour mettre à jour dans quel atelier on se trouve
+            this.main.getControleur().ComboBoxAtelier(idAtelier);
+            
+            //Il faut encore pouvoir mettre à jou rle combobox
             
         });
 
@@ -243,5 +303,32 @@ public class Entete extends MyHorizontalLayout {
     
     
 
+            
+            
+            
+            
+            
+    public ArrayList<String> MAJComboBoxAtelier(ArrayList<Atelier> listTemp) throws SQLException{
+        
+        ArrayList<String> listNomAtelier = new ArrayList<>();
+        //On cherche les identifiants des ateliers
+        //System.out.println("List size"+listateliertemp.size());
+        int index =0;
+        while (index<listTemp.size()){
+            Atelier atelierTemp = (Atelier) listTemp.get(index);
+            
+            listNomAtelier.add(atelierTemp.getId()+" : "+atelierTemp.getNom());
+            index++;
+        }
+        System.out.println("liste des ateliers"+listNomAtelier);
+        return listNomAtelier;
+        
+    }
+    
+    
+
+    public ComboBox getComboBoxAtelier(){
+        return this.comboBoxAtelier;
+    }
     
 }

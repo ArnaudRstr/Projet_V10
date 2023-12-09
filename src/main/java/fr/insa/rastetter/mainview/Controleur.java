@@ -23,11 +23,15 @@ import java.sql.SQLException;
 public class Controleur {
     
     private VuePrincipale main;
+    private int etat;
     
     
     
-    public Controleur(VuePrincipale main){
+    
+    
+    public Controleur(VuePrincipale main,int etat){
         this.main = main;
+        this.etat = etat;
                
     }
     
@@ -36,7 +40,7 @@ public class Controleur {
     //On gère les événements pour les boutons et différents composants
     
     
-    public void boutonConnect(){
+    public void boutonConnect() throws SQLException{
         this.main.setMainContent(new VuePlan());
         this.main.setEntete(new Entete(this.main));
         
@@ -71,12 +75,31 @@ public class Controleur {
     
     public void MenuItemAjouterAtelier() throws SQLException{
         Notification.show("Ajouter Atelier via controleur");
-        //this.main.getGestionBDD().addatelier(this.main.getGestionBDD().conn,"Menuiserie","Description vide",12,20);
+        //this.main.getGestionBDD().addatelier(this.main.getGestionBDD().conn,"Atelier de production","Description vide",12,20);
         System.out.println("l'atelier devrait être créé");
-        Atelier atelierSelect = (Atelier) listaltelier(this.main.getGestionBDD().conn).get(0);
+        Atelier atelierSelect = (Atelier) listaltelier(this.main.getGestionBDD().conn).get(1);
         System.out.println(atelierSelect.getNom());
         System.out.println("les ateliers devraient être affichés");
+        
+        //this.main.getEntete().getComboBoxAtelier().setItems(MAJComboBoxAtelier(listaltelier(this.main.getGestionBDD().conn)));
+        // A finir
+        
+// il faut encore remettre à jour le tout(le combobox) après avoir ajouté un atelier        
     }
+    
+    
+    public void ComboBoxAtelier(int i){
+    this.etat = i; //l'etat correspond à l'identifiant de l'atelier sélectionné. 
+            
+        
+    }
+    
+    
+    
+    
+    //Aucun atelier sélectionné : etat = -1
+    //Atelier 1 selectionné : etat 1 etc...
+    
     
     
 }
