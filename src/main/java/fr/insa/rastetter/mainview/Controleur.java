@@ -5,12 +5,10 @@
 package fr.insa.rastetter.mainview;
 
 import com.vaadin.flow.component.notification.Notification;
-import fr.insa.moly.GestionBDD.GestionBDD;
 import fr.insa.moly.objet.Atelier;
 import static fr.insa.moly.GestionBDD.GestionBDD.listaltelier;
-
-import static fr.insa.rastetter.mainview.MyHorizontalLayout.CSS_COLOR;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 /**
  *
@@ -73,27 +71,44 @@ public class Controleur {
     }
     
     
-    public void MenuItemAjouterAtelier() throws SQLException{
+    
+    
+    
+    
+    
+    public void MenuItemAjouterAtelier() throws SQLException, InterruptedException{
         Notification.show("Ajouter Atelier via controleur");
-        //this.main.getGestionBDD().addatelier(this.main.getGestionBDD().conn,"Atelier de production","Description vide",12,20);
+        
+        this.main.getGestionBDD().addatelier(this.main.getGestionBDD().conn,"test 10","Description",14,25);
         System.out.println("l'atelier devrait être créé");
-        Atelier atelierSelect = (Atelier) listaltelier(this.main.getGestionBDD().conn).get(1);
-        System.out.println(atelierSelect.getNom());
+        
+      
+        int index =0;
+        ArrayList<Atelier> listTemp= listaltelier(this.main.getGestionBDD().conn);
+        
+        
+        while (index<listTemp.size()){
+            Atelier atelierTemp = (Atelier) listTemp.get(index);
+            System.out.println(atelierTemp.getId()+" : "+atelierTemp.getNom());
+            index++;
+        }
+        
         System.out.println("les ateliers devraient être affichés");
         
-        //this.main.getEntete().getComboBoxAtelier().setItems(MAJComboBoxAtelier(listaltelier(this.main.getGestionBDD().conn)));
-        // A finir
-        
-// il faut encore remettre à jour le tout(le combobox) après avoir ajouté un atelier        
     }
+    
+    
+    
+    
+    
     
     
     public void ComboBoxAtelier(int i){
     this.etat = i; //l'etat correspond à l'identifiant de l'atelier sélectionné. 
-            
+    
+
         
     }
-    
     
     
     
