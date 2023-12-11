@@ -11,15 +11,15 @@ import java.util.ArrayList;
  * @author molys
  */
 public class Gamme {
-    private ArrayList list;
+    private ArrayList<Integer> list;
     private int idproduit;
 
-    public Gamme(ArrayList list, int idproduit) {
+    public Gamme(ArrayList<Integer> list,int idproduit) {
         this.list = list;
         this.idproduit = idproduit;
     }
 
-    public ArrayList getList() {
+    public ArrayList<Integer> getList() {
         return list;
     }
 
@@ -27,7 +27,7 @@ public class Gamme {
         return idproduit;
     }
 
-    public void setList(ArrayList list) {
+    public void setList(ArrayList<Integer> list) {
         this.list = list;
     }
 

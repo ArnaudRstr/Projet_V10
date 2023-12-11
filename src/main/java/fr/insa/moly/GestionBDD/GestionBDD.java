@@ -6,6 +6,7 @@ package fr.insa.moly.GestionBDD;
 
 import fr.insa.moly.objet.Atelier;
 import fr.insa.moly.objet.Brut;
+import fr.insa.moly.objet.Gamme;
 import fr.insa.moly.objet.Machine;
 import fr.insa.moly.objet.Operateur;
 import fr.insa.moly.objet.Operation;
@@ -36,12 +37,7 @@ public class GestionBDD {
     public GestionBDD() throws SQLException {
         this.conn = connectSurServeurM3();
     }
-    
-    
-    
-    
-    
-    
+ 
     
     
     public Connection getGestionBDD(){
@@ -1059,6 +1055,48 @@ public static void addtypeoperation(Connection connect,String nom)throws SQLExce
 }
 }
 
+public static void addgamme(Connection connect, int idproduit,Gamme gamme) throws SQLException{
+    
+     connect.setAutoCommit(false); //stope la mise à jour, elle sera fait à la fin si tout se passe bien
+        try ( PreparedStatement cherchedouble = connect.prepareStatement(
+                "select id from ordre where idproduit=?")) {
+            cherchedouble.setInt(1, idproduit);
+            ResultSet test = cherchedouble.executeQuery();
+            if (test.next()!= false){
+                System.out.println("Attention, il existe déjà");
+                System.out.println("On ne peut pas l'ajouter");
+            }
+            else{
+
+            for(int i=0;i<gamme.getList().size()-1;i++){
+            try ( PreparedStatement pst = connect.prepareStatement(
+                        "INSERT INTO `ordre` (idopavant,idopapres,idproduit) VALUES (?,?,?);"
+
+            )){
+                    pst.setInt(1, gamme.getList().get(i));
+                    pst.setInt(2, gamme.getList().get(i+1));
+                    pst.setInt(3, idproduit);
+                    pst.executeUpdate();
+      
+            } catch (SQLException ex) {
+            // nothing to do : maybe the constraint was not created
+            System.out.println("nothing");
+            }
+            }
+            }
+        try { // creation d'un requete 
+            connect.commit(); // valide le refresh
+            System.out.print("le refresh fonctionne") ;
+        } catch (SQLException ex) { // en cas d'erreur on "rollback" on retourne avant 
+            connect.rollback();
+            System.out.print("rollback");
+            throw ex;
+        } finally {
+            connect.setAutoCommit(true);// on remet le refresh automatique
+        }
+}
+}
+
 public static void delete (Connection connect,String table,int id)throws SQLException{
 
     connect.setAutoCommit(false); //stope la mise à jour, elle sera fait à la fin si tout se passe bien
@@ -1337,6 +1375,57 @@ public static ArrayList listtypeoperation (Connection connect)throws SQLExceptio
      
     return listtypeoperation;
 }  
+
+public static ArrayList listgamme(Connection connect) throws SQLException{
+    
+      ArrayList<Gamme> listgamme = new ArrayList();
+      ArrayList<Integer> listidproduit = new ArrayList();
+      ArrayList<Integer> listidavant = new ArrayList();
+      ArrayList<Integer> listidapres = new ArrayList();
+      ArrayList<Integer> ordre = new ArrayList();
+    connect.setAutoCommit(false); //stope la mise à jour, elle sera fait à la fin si tout se passe bien
+        try ( PreparedStatement affichetabid = connect.prepareStatement(
+                "select idproduit from ordre")) {
+            
+            ResultSet tabid = affichetabid.executeQuery();
+            while (tabid.next()!= false){
+                
+                
+                listidproduit.add(tabid.getInt("idproduit"));
+            }
+            for(int i=0;i<listidproduit.size();i++){
+            try ( PreparedStatement affichetab = connect.prepareStatement(
+                "select * from ordre where idproduit=?")) {
+                affichetab.setInt(1, listidproduit.get(i));
+                ResultSet tab = affichetabid.executeQuery();
+            
+            while (tab.next()!= false){
+            listidavant.add(tab.getInt("idopavant"));
+            listidapres.add(tab.getInt("idopapres"));
+            }
+//            while 
+//            for(int j=0;j<listidavant.size();j++){
+//                
+            }
+            
+            }
+            
+
+            }
+        try { // creation d'un requete 
+            connect.commit(); // valide le refresh
+            System.out.print("le refresh fonctionne") ;
+        } catch (SQLException ex) { // en cas d'erreur on "rollback" on retourne avant 
+            connect.rollback();
+            System.out.print("rollback");
+            throw ex;
+        } finally {
+            connect.setAutoCommit(true);// on remet le refresh automatique
+        }
+        
+     
+    return listtypeoperation;
+}
 
     public static void main(String[] args) {
         System.out.print("Bonjour et bienvenue");
