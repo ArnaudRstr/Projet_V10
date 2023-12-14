@@ -1376,6 +1376,7 @@ public static ArrayList listtypeoperation (Connection connect)throws SQLExceptio
     return listtypeoperation;
 }  
 
+/*
 public static ArrayList listgamme(Connection connect) throws SQLException{
     
       ArrayList<Gamme> listgamme = new ArrayList();
@@ -1426,6 +1427,13 @@ public static ArrayList listgamme(Connection connect) throws SQLException{
      
     return listtypeoperation;
 }
+*/
+
+
+
+
+
+
 
     public static void main(String[] args) {
         System.out.print("Bonjour et bienvenue");

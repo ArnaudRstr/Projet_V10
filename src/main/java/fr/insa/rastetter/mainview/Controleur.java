@@ -23,6 +23,7 @@ public class Controleur {
     private VuePrincipale main;
     private int etat;
     
+    private FenetreEntreeDonnees fenetreEntreeDonnees;
     
     
     
@@ -73,16 +74,94 @@ public class Controleur {
     
     
     
+    public void MenuItemDetailsAtelier(){
+        
+        //A compléter
+        
+        
+    }
     
     
+    public void MenuItemSupprimerAtelier(){
+        
+        //On affiche une fenêtre d'avertissement
+        new FenetreAvertissementSuppression("Atelier");
+        
+        
+        
+    }
     
+    
+    //Plus besoin de cette méthode normalement
+    /*
     public void MenuItemAjouterAtelier() throws SQLException, InterruptedException{
         Notification.show("Ajouter Atelier via controleur");
+        //On recueuille les données nécessaires grâce à la fenêtre d'entrée de données
+        //On ajoute l'atelier avec ce que l'on a comme données
+        this.main.getGestionBDD().addatelier(this.main.getGestionBDD().conn,"test 11","Description",14,25);
+        System.out.println("l'atelier devrait être créé");
+        int index =0;
+        ArrayList<Atelier> listTemp= listaltelier(this.main.getGestionBDD().conn);
+
+        while (index<listTemp.size()){
+            Atelier atelierTemp = (Atelier) listTemp.get(index);
+            System.out.println(atelierTemp.getId()+" : "+atelierTemp.getNom());
+            index++;
+        }    
+        System.out.println("les ateliers devraient être affichés");  
+    }
+    */
+    
+    
+    
+    
+    
+    
+    public void ComboBoxAtelier(int i){
+    this.etat = i; //l'etat correspond à l'identifiant de l'atelier sélectionné. 
+    
+  
+    }
+    
+  
+    
+    
+    public void OuvrirFenetreEntree(String objet){
         
-        this.main.getGestionBDD().addatelier(this.main.getGestionBDD().conn,"test 10","Description",14,25);
+        if (objet=="atelier"){
+            System.out.println("la fenetre va être créée");
+            this.fenetreEntreeDonnees = new FenetreEntreeDonnees(this,"atelier");
+            System.out.println("La fenetre devrait être crée");
+
+            
+        }
+        
+            
+        
+    }
+    
+    
+    
+    
+    public void CreationObjet(String objet) throws SQLException{
+        
+        if(objet =="atelier"){
+            
+            ArrayList donneesText = new ArrayList();
+            ArrayList<Double> donneesNum = new ArrayList();
+
+            donneesText = this.fenetreEntreeDonnees.getDonneesText();
+            donneesNum = this.fenetreEntreeDonnees.getDonneesNum();
+            System.out.println("données avant création " + this.fenetreEntreeDonnees.getDonneesText()+this.fenetreEntreeDonnees.getDonneesNum());
+            
+            this.main.getGestionBDD().addatelier(this.main.getGestionBDD().conn,(String) donneesText.get(0),(String) donneesText.get(1),(int)Math.round(donneesNum.get(0)),(int) Math.round(donneesNum.get(1)));
         System.out.println("l'atelier devrait être créé");
         
-      
+        //Penser à enlever les arrondis si on change le type de la dimension de l'atelier
+           
+        this.main.getEntete().setComboBoxAtelier(listaltelier(this.main.getGestionBDD().conn));
+         
+        System.out.println("Combobox mis à jour");
         int index =0;
         ArrayList<Atelier> listTemp= listaltelier(this.main.getGestionBDD().conn);
         
@@ -94,23 +173,15 @@ public class Controleur {
         }
         
         System.out.println("les ateliers devraient être affichés");
+            
+        }
+        
+        
+        
+        
+        
         
     }
-    
-    
-    
-    
-    
-    
-    
-    public void ComboBoxAtelier(int i){
-    this.etat = i; //l'etat correspond à l'identifiant de l'atelier sélectionné. 
-    
-
-        
-    }
-    
-    
     
     //Aucun atelier sélectionné : etat = -1
     //Atelier 1 selectionné : etat 1 etc...

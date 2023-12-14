@@ -15,8 +15,6 @@ import java.sql.SQLException;
 @Route(value = "")
 public class VuePrincipale extends MyVerticalLayout {
 
-    private TextField name;
-    private Button sayHello;
     private Controleur controleur;
     public Connection connect;
     
@@ -25,8 +23,10 @@ public class VuePrincipale extends MyVerticalLayout {
     
     
     
+    
+    
     //private MyVerticalLayout mainContent; //Partie inférieure, dans laquelle on aura plus tard plusieurs onglets ou fenetres
-    public MyHorizontalLayout entete; //Bandeau supérieur où l'on a tout le menu
+    public Entete entete; //Bandeau supérieur où l'on a tout le menu
     public MyVerticalLayout mainContent;
     
     
@@ -36,11 +36,10 @@ public class VuePrincipale extends MyVerticalLayout {
         
         //this.mainContent = new MyVerticalLayout();
         this.controleur = new Controleur(this,-1);
-        this.mainContent = new VuePlan();
+        this.mainContent = new MyVerticalLayout();
         this.mainContent.setWidthFull();
         this.mainContent.setHeightFull();
-        this.getStyle().set("border", "1px solid #000000");
-        this.getStyle().set("padding", "10px");
+        this.getStyle().set("padding", "1px");
         this.mainContent.getStyle().set("border", "1px solid #000000");
         this.getStyle().set("background-color","#FFFFFF");
         this.mainContent.getStyle().set("border", "1px solid #000000");
@@ -48,7 +47,11 @@ public class VuePrincipale extends MyVerticalLayout {
         this.mainContent.getStyle().set("border-radius", "7px");
 
 
-        this.entete = new MyHorizontalLayout();
+        
+        
+        //this.entete = new MyHorizontalLayout();
+        
+        this.entete=new Entete();
         this.entete.setWidthFull();
 
         this.add(this.entete);
@@ -63,6 +66,7 @@ public class VuePrincipale extends MyVerticalLayout {
         
         
         //this.setEntete(new Entete(this));
+        //this.add(this.entete);
 
         
         
@@ -70,11 +74,14 @@ public class VuePrincipale extends MyVerticalLayout {
         
         
     }
-    public void setEntete(MyHorizontalLayout vlo){
+    public void setEntete(Entete entete1){
         this.entete.removeAll();
-        this.entete.add(vlo);
-        
+        this.entete.add(entete1);
+        this.entete=entete1;
+
     }
+    
+ 
 
     public void setMainContent(MyVerticalLayout vlo){
         this.mainContent.removeAll();
@@ -85,7 +92,7 @@ public class VuePrincipale extends MyVerticalLayout {
         return this.mainContent;
     }
     
-    public MyHorizontalLayout getEntete(){
+    public Entete getEntete(){
         return this.entete;
     }
 

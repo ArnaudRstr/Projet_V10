@@ -4,6 +4,8 @@
  */
 package fr.insa.moly.objet;
 
+import java.util.ArrayList;
+
 /**
  *
  * @author molys
@@ -18,6 +20,8 @@ public class Atelier {
        this.id=id;
        this.nom=nom;
        this.des=des;
+       
+       
    }
 
     public String getNom() {

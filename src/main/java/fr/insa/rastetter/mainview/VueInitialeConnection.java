@@ -29,14 +29,23 @@ public class VueInitialeConnection extends MyVerticalLayout{
         this.connectButton= new Button("se connecter");
         this.add(this.connectButton);
         this.setAlignItems(FlexComponent.Alignment.CENTER);
+        
+        
         this.connectButton.addClickListener(e -> {
-        this.main.setMainContent(new VuePlan());
+        //this.main.setMainContent(new VuePlan());
             try {
-                this.main.setEntete(new Entete(this.main));
+                this.main.getControleur().boutonConnect();
             } catch (SQLException ex) {
                 Logger.getLogger(VueInitialeConnection.class.getName()).log(Level.SEVERE, null, ex);
             }
-    
+/*
+            try {
+                
+                /this.main.setEntete(new Entete(this.main));
+            } catch (SQLException ex) {
+                Logger.getLogger(VueInitialeConnection.class.getName()).log(Level.SEVERE, null, ex);
+            }
+    */
     Notification.show("connection cliqué !");
     });
         
