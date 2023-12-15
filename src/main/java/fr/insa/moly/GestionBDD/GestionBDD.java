@@ -69,12 +69,17 @@ public class GestionBDD {
             
             System.out.println("connecté");
             GestionBDD gestionnaire = new GestionBDD();
+            
+            //addatelier(gestionnaire.conn,"production","rien",1743,2134);
+            addmachine(gestionnaire.conn,"Presse",1,1,"presse hydraulique","NoName",3000,0,12,"Strasbourg",50,223);
+            
             System.out.println("Voulez vous commencer avec les tests de base ?");
             System.out.println("oui=0, non=1");
             System.out.println();
             int r =Lire.i();
             if (r==0)
             { 
+                System.out.println("selection = 0");
                gestionnaire.deleteBDDTest();
                gestionnaire.creatBDDTest();
             }  
@@ -142,7 +147,6 @@ catch (SQLException ex) {
    
 public void deleteBDDTest()throws SQLException {
         this.conn.setAutoCommit(false); //stope la mise à jour, elle sera fait à la fin si tout se passe bien
-        
  //On supprime tout les clés étrangères
         try (Statement st = this.conn.createStatement()) {
             st.executeUpdate("ALTER TABLE machine DROP CONSTRAINT fk_machine_idatelier, DROP CONSTRAINT fk_machine_idtypeoperation");
@@ -702,7 +706,7 @@ public static void addmachine(Connection connect,String nom,int idatelier,int id
     
      connect.setAutoCommit(false); //stope la mise à jour, elle sera fait à la fin si tout se passe bien
         try ( PreparedStatement cherchedouble = connect.prepareStatement(
-                "select id from machine where nom=? and idatelier=? and idtypeatelier=? and des=? and marque=? and puissance=? and statut=? and couthoraire=? and localisation=? and dimensionlargeur=? and dimensionlongueur=?")) {
+                "select id from machine where nom=? and idatelier=? and idtypeoperation=? and des=? and marque=? and puissance=? and statut=? and couthoraire=? and localisation=? and dimensionlargeur=? and dimensionlongueur=?")) {
             cherchedouble.setString(1, nom);
             cherchedouble.setInt(2, idatelier);
             cherchedouble.setInt(3, idtypeoperation);
@@ -714,16 +718,16 @@ public static void addmachine(Connection connect,String nom,int idatelier,int id
             cherchedouble.setString(9, localisation);
             cherchedouble.setDouble(10, dimensionlargeur);
             cherchedouble.setDouble(11, dimensionlongueur);
-            
             ResultSet test = cherchedouble.executeQuery();
             if (test.next()!= false){
-                System.out.println("Attention, il existe déjà");
+                System.out.println("Attention, la machine existe déjà");
             }
             else{
             try ( PreparedStatement pst = connect.prepareStatement(
-                        "INSERT INTO `machine` (nom,idatelier,idtypeoperation,des,marque,puissance,statut,couthoraire,localisation,dimensionlargeur,dimensionlongueur) VALUES (?,?,?,?,?,?,?,?,?,?,?);"
+                        "INSERT INTO `machine` (`nom`,`idatelier`,`idtypeoperation`,`des`,`marque`,`puissance`,`statut`,`couthoraire`,`localisation`,`dimensionlargeur`,`dimensionlongueur`) VALUES (?,?,?,?,?,?,?,?,?,?,?);"
 
-            )){
+            )){            
+
                     pst.setString(1, nom);
                     pst.setInt(2, idatelier);
                     pst.setInt(3, idtypeoperation);
@@ -735,6 +739,8 @@ public static void addmachine(Connection connect,String nom,int idatelier,int id
                     pst.setString(9, localisation);
                     pst.setDouble(10, dimensionlargeur);
                     pst.setDouble(11, dimensionlongueur);
+                    System.out.println("essai d'ajout de la machine");
+                    
                     pst.executeUpdate();
                     System.out.println("machine add");
 
@@ -1457,7 +1463,7 @@ public static ArrayList listgamme(Connection connect) throws SQLException{
 
 
     public static void main(String[] args) {
-        System.out.print("Bonjour et bienvenue");
+        System.out.println("Bonjour et bienvenue");
        Initialisation() ;
     }
 }
