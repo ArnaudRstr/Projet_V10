@@ -11,6 +11,7 @@ import com.vaadin.flow.component.menubar.MenuBar;
 import com.vaadin.flow.component.notification.Notification;
 import static com.vaadin.flow.component.orderedlayout.FlexComponent.Alignment.CENTER;
 import com.vaadin.flow.component.textfield.NumberField;
+import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.component.textfield.TextField;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -38,7 +39,7 @@ public class FenetreEntreeDonnees extends Dialog{
     
     
     private TextField nom;
-    private TextField des;
+    private TextArea des;
     private NumberField dimLargeur;
     private NumberField dimLongueur;
     private MenuBar menuBar;
@@ -66,9 +67,9 @@ public class FenetreEntreeDonnees extends Dialog{
        //Pour un atelier
     if (objet =="atelier"){
         this.nom = new TextField("Nom");
-        this.des = new TextField("Description");
-        this.dimLongueur = new NumberField("Longueur");
-        this.dimLargeur = new NumberField("Largeur");
+        this.des = new TextArea("Description");
+        this.dimLongueur = new NumberField("Longueur (cm)");
+        this.dimLargeur = new NumberField("Largeur (cm)");
         
         
         this.contenu.add(new H2("Ajouter un atelier"));
@@ -114,6 +115,85 @@ public class FenetreEntreeDonnees extends Dialog{
        
        
        
+    }
+    
+    
+    if (objet =="machine"){
+        
+        this.nom = new TextField("Nom");
+        this.des = new TextArea("Description");
+        this.dimLongueur = new NumberField("Longueur (cm)");
+        this.dimLargeur = new NumberField("Largeur (cm)");
+        
+        NumberField idTypeOperation = new NumberField("Id type operation");
+        NumberField puissance = new NumberField("Puissance (W)");
+        NumberField coutHoraire = new NumberField("Coût horaire (€)");
+        TextField marque = new TextField("Marque");
+        TextField localisation = new TextField("Localisation");
+        NumberField statut = new NumberField("Statut");
+
+
+        
+        
+        
+        
+        
+        this.contenu.add(new H2("Ajouter une machine"));
+        
+        this.contenu.add(nom);
+        this.contenu.add(des);
+        this.contenu.add(marque);
+        this.contenu.add(idTypeOperation);
+        this.contenu.add(puissance);
+        this.contenu.add(coutHoraire);
+        this.contenu.add(statut);
+        this.contenu.add(dimLongueur);
+        this.contenu.add(dimLargeur);
+        this.contenu.add(localisation);
+        
+        
+        this.menuBar.addItem(boutonAnnuler);
+        this.menuBar.addItem(boutonEnregistrer);
+        this.contenu.add(menuBar);
+        this.contenu.setAlignItems(CENTER);
+        
+        this.add(contenu);
+        this.open();
+        
+        boutonAnnuler.addClickListener(event -> {
+           this.close();   
+       });
+        
+       boutonEnregistrer.addClickListener(event -> {
+            //Il faut encore faire un contrôle de saisie ici
+            
+            String nomTemp = nom.getValue();
+            String desTemp = des.getValue();
+            String marqueTemp= marque.getValue();
+            int idtypeoperationtemp = (int)Math.round(idTypeOperation.getValue());
+            double puissancetemp = puissance.getValue();
+            double couthorairetemp= coutHoraire.getValue();
+            double dimLongtemp= dimLongueur.getValue();
+            double dimLargtemp =dimLargeur.getValue();
+            String locatemp=localisation.getValue();
+            int statuttemp= (int) Math.round(statut.getValue());
+            this.close();
+
+            try {
+                this.controleur.getVuePrincipale().getGestionBDD().addmachine(this.controleur.getVuePrincipale().getGestionBDD().conn,nomTemp,this.controleur.getEtat(),idtypeoperationtemp,desTemp,marqueTemp,puissancetemp,statuttemp,couthorairetemp,locatemp,dimLargtemp,dimLongtemp);
+                this.controleur.MenuItemMachine();
+
+            } catch (SQLException ex) {
+                Logger.getLogger(FenetreEntreeDonnees.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
+
+
+        });
+        
+        
+        
+        
     }
        
         

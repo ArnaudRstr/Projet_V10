@@ -196,7 +196,11 @@ public class Entete extends MyHorizontalLayout {
          
         Notification.show("bouton ajouter Atelier sélectionné !");
 
-        this.main.getControleur().OuvrirFenetreEntree("atelier");
+            try {
+                this.main.getControleur().CreationObjet("atelier");
+            } catch (SQLException ex) {
+                Logger.getLogger(Entete.class.getName()).log(Level.SEVERE, null, ex);
+            }
         
         
         //Il faut remettre à jour le bouton
@@ -249,9 +253,10 @@ public class Entete extends MyHorizontalLayout {
             System.out.println("idAtelier "+idAtelier);
             
             // On renvoie la valeur de l'atelier au contrôleur pour mettre à jour dans quel atelier on se trouve
-            this.main.getControleur().ComboBoxAtelier(idAtelier);
+            this.main.getControleur().setEtat(idAtelier);
+            System.out.println("Etat du controleur mis à jour : "+idAtelier);
             
-           
+            
         });
 
 }

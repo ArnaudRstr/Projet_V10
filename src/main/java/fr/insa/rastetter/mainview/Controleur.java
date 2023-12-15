@@ -57,7 +57,8 @@ public class Controleur {
     }
 
     public void MenuItemMachine() throws SQLException {
-        this.main.setMainContent(new FenetrePartagee(this));
+        
+        this.main.setMainContent(new FenetrePartagee(this, "machine"));
         
         
         
@@ -93,6 +94,13 @@ public class Controleur {
     }
     
     
+    public void MenuItemAjouterMachine(){
+        
+        
+    }
+
+    
+    
     //Plus besoin de cette méthode normalement
     /*
     public void MenuItemAjouterAtelier() throws SQLException, InterruptedException{
@@ -118,7 +126,7 @@ public class Controleur {
     
     
     
-    public void ComboBoxAtelier(int i){
+    public void setEtat(int i){
     this.etat = i; //l'etat correspond à l'identifiant de l'atelier sélectionné. 
     
   
@@ -129,10 +137,10 @@ public class Controleur {
     
     public void OuvrirFenetreEntree(String objet){
         
+        
+        
         if (objet=="atelier"){
-            System.out.println("la fenetre va être créée");
-            this.fenetreEntreeDonnees = new FenetreEntreeDonnees(this,"atelier");
-            System.out.println("La fenetre devrait être crée");
+            
 
         }
         
@@ -145,7 +153,16 @@ public class Controleur {
     
     public void CreationObjet(String objet) throws SQLException{
         
+        
+        
+        
         if(objet =="atelier"){
+            
+            
+            System.out.println("la fenetre va être créée");
+            this.fenetreEntreeDonnees = new FenetreEntreeDonnees(this,"atelier");
+            System.out.println("La fenetre devrait être crée");
+            
             
             ArrayList donneesText = new ArrayList();
             ArrayList<Double> donneesNum = new ArrayList();
@@ -177,11 +194,27 @@ public class Controleur {
         }
         
         
+        if(objet =="machine"){
+        
+            System.out.println("la fenetre va être créée");
+            
+            
+            this.fenetreEntreeDonnees = new FenetreEntreeDonnees(this,"machine");
+            System.out.println("La fenetre devrait être crée");
+            
+            
+            this.MenuItemMachine();
+        }
+        
+        
         
         
         
         
     }
+    
+    
+    
     
     //Aucun atelier sélectionné : etat = -1
     //Atelier 1 selectionné : etat 1 etc...
@@ -189,6 +222,12 @@ public class Controleur {
     public VuePrincipale getVuePrincipale(){
         
         return this.main;
+    }
+    
+    
+    public int getEtat(){
+        
+        return this.etat;
     }
     
 }
