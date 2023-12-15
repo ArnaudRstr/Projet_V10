@@ -46,7 +46,7 @@ public class PartiePrincipale extends MyVerticalLayout {
         this.controleur.getVuePrincipale().getGestionBDD().addmachine(this.controleur.getVuePrincipale().getGestionBDD().conn,"Presse",1,1,"presse hydraulique","NoName",3000,0,12,"Strasbourg",50,223);
         
         ArrayList <Machine> machinesTemp = new ArrayList();
-        machinesTemp = this.controleur.getVuePrincipale().getGestionBDD().listmachine(this.controleur.getVuePrincipale().getGestionBDD().conn);
+        //machinesTemp = this.controleur.getVuePrincipale().getGestionBDD().listmachine(this.controleur.getVuePrincipale().getGestionBDD().conn);
         
         
         

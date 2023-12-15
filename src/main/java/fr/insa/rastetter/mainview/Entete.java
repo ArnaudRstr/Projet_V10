@@ -174,6 +174,7 @@ public class Entete extends MyHorizontalLayout {
             try {
                 this.main.getControleur().MenuItemMachine();
             } catch (SQLException ex) {
+                
                 Logger.getLogger(Entete.class.getName()).log(Level.SEVERE, null, ex);
             }
         });
