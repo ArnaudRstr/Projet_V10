@@ -171,7 +171,11 @@ public class Entete extends MyHorizontalLayout {
         
         menuItemMachine.addClickListener(event -> {
             Notification.show("Option machine sélectionnée !");
-            this.main.getControleur().MenuItemMachine();
+            try {
+                this.main.getControleur().MenuItemMachine();
+            } catch (SQLException ex) {
+                Logger.getLogger(Entete.class.getName()).log(Level.SEVERE, null, ex);
+            }
         });
         
         

@@ -13,12 +13,15 @@ import com.vaadin.flow.component.html.H3;
  */
 public class PartieDetail extends MyVerticalLayout{
     
-
+private Controleur controleur;
     
-    public PartieDetail(){
+    public PartieDetail(Controleur controleur){
+        this.controleur=controleur;
         this.add(new H2("ça c'est la partie de détail"));
         this.add(new H3("Ici on aura le détail"));
 
+        
+        
     }
     
 /*   

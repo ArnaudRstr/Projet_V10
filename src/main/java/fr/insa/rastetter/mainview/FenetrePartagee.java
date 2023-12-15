@@ -5,6 +5,7 @@
 package fr.insa.rastetter.mainview;
 
 import com.vaadin.flow.component.splitlayout.SplitLayout;
+import java.sql.SQLException;
 
 /**
  *
@@ -15,7 +16,7 @@ import com.vaadin.flow.component.splitlayout.SplitLayout;
 public class FenetrePartagee extends MyVerticalLayout {
     
     
-    
+    private Controleur controleur;
     public SplitLayout splitLayout;
     public MyVerticalLayout partG;
     public MyVerticalLayout partD;
@@ -24,9 +25,14 @@ public class FenetrePartagee extends MyVerticalLayout {
     //On pourrait faire en sorte de pouvoir afficher un plan de l'atelier
     
     
-    public FenetrePartagee(){
-        this.partG=new PartiePrincipale();
-        this.partD=new PartieDetail();
+    public FenetrePartagee(Controleur controleur) throws SQLException{
+        this.controleur=controleur;
+
+        this.partG=new PartiePrincipale(this.controleur);
+        
+        
+        
+        this.partD=new PartieDetail(this.controleur);
 
         this.splitLayout= new SplitLayout(partG,partD);
         add(this.splitLayout);
@@ -39,6 +45,7 @@ public class FenetrePartagee extends MyVerticalLayout {
         
 
     }
+    
     
     
    public void setPartG(MyVerticalLayout partg){

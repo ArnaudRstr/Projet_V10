@@ -4,6 +4,10 @@
  */
 package fr.insa.moly.objet;
 
+import com.vaadin.flow.component.html.Span;
+import com.vaadin.flow.component.textfield.TextArea;
+import fr.insa.rastetter.mainview.MyHorizontalLayout;
+
 /**
  *
  * @author molys
@@ -21,7 +25,12 @@ public class Machine {
     private String localisation;
     private double dimensionlargeur;
     private double dimensionlongueur;
-
+    
+    private MyHorizontalLayout pannel;
+    private TextArea nomAffiche;
+    private Span spanStatut;
+    
+    
     public Machine(int id, String nom, int idatelier, int idtypeoperation, String des, String marque, double puissance, int statut, double couthoraire, String localisation, double dimensionlargeur, double dimensionlongueur) {
         this.id = id;
         this.nom = nom;
@@ -35,8 +44,15 @@ public class Machine {
         this.localisation = localisation;
         this.dimensionlargeur = dimensionlargeur;
         this.dimensionlongueur = dimensionlongueur;
+        
+        this.pannel= new MyHorizontalLayout();
+        this.nomAffiche= new TextArea(nom);
+        this.spanStatut=new Span("En service");
+        this.spanStatut.getElement().getThemeList().add("badge succes");
+        this.pannel.add(nomAffiche,spanStatut);
     }
 
+    
     public int getId() {
         return id;
     }
@@ -83,7 +99,13 @@ public class Machine {
 
     public double getDimensionlongueur() {
         return dimensionlongueur;
+        
     }
+    
+    public MyHorizontalLayout getPannel(){
+        return this.pannel;
+    }
+    
 
     public void setNom(String nom) {
         this.nom = nom;

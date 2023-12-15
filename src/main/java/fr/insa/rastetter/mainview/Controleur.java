@@ -56,8 +56,9 @@ public class Controleur {
         Notification.show("plan via controleur");
     }
 
-    public void MenuItemMachine() {
-        this.main.setMainContent(new FenetrePartagee());
+    public void MenuItemMachine() throws SQLException {
+        this.main.setMainContent(new FenetrePartagee(this));
+        
         
         
         
@@ -133,7 +134,6 @@ public class Controleur {
             this.fenetreEntreeDonnees = new FenetreEntreeDonnees(this,"atelier");
             System.out.println("La fenetre devrait être crée");
 
-            
         }
         
             
@@ -186,6 +186,9 @@ public class Controleur {
     //Aucun atelier sélectionné : etat = -1
     //Atelier 1 selectionné : etat 1 etc...
     
-    
+    public VuePrincipale getVuePrincipale(){
+        
+        return this.main;
+    }
     
 }
