@@ -698,14 +698,14 @@ public static void addatelier (Connection connect,String nom, String des, int di
         }
 }
 
-public static void addmachine(Connection connect,String nom,int idatelier,int idtypeatelier,String des, String marque,double puissance,int statut,double couthoraire,String localisation,double dimensionlargeur,double dimensionlongueur)throws SQLException{
+public static void addmachine(Connection connect,String nom,int idatelier,int idtypeoperation,String des, String marque,double puissance,int statut,double couthoraire,String localisation,double dimensionlargeur,double dimensionlongueur)throws SQLException{
     
      connect.setAutoCommit(false); //stope la mise à jour, elle sera fait à la fin si tout se passe bien
         try ( PreparedStatement cherchedouble = connect.prepareStatement(
                 "select id from machine where nom=? and idatelier=? and idtypeatelier=? and des=? and marque=? and puissance=? and statut=? and couthoraire=? and localisation=? and dimensionlargeur=? and dimensionlongueur")) {
             cherchedouble.setString(1, nom);
             cherchedouble.setInt(2, idatelier);
-            cherchedouble.setInt(3, idtypeatelier);
+            cherchedouble.setInt(3, idtypeoperation);
             cherchedouble.setString(4, des);
             cherchedouble.setString(5, marque);
             cherchedouble.setDouble(6, puissance);
@@ -721,12 +721,12 @@ public static void addmachine(Connection connect,String nom,int idatelier,int id
             }
             else{
             try ( PreparedStatement pst = connect.prepareStatement(
-                        "INSERT INTO `machine` (nom,idatelier,idtypeatelier,des,marque,puissance,statut,couthoraire,localisation,dimensionlargeur,dimensionlongueur) VALUES (?,?,?,?,?,?,?,?,?,?,?);"
+                        "INSERT INTO `machine` (nom,idatelier,idtypeoperation,des,marque,puissance,statut,couthoraire,localisation,dimensionlargeur,dimensionlongueur) VALUES (?,?,?,?,?,?,?,?,?,?,?);"
 
             )){
                     pst.setString(1, nom);
                     pst.setInt(2, idatelier);
-                    pst.setInt(3, idtypeatelier);
+                    pst.setInt(3, idtypeoperation);
                     pst.setString(4, des);
                     pst.setString(5, marque);
                     pst.setDouble(6, puissance);
@@ -1376,7 +1376,7 @@ public static ArrayList listtypeoperation (Connection connect)throws SQLExceptio
     return listtypeoperation;
 }  
 
-/*
+
 public static ArrayList listgamme(Connection connect) throws SQLException{
     
       ArrayList<Gamme> listgamme = new ArrayList();
@@ -1384,16 +1384,19 @@ public static ArrayList listgamme(Connection connect) throws SQLException{
       ArrayList<Integer> listidavant = new ArrayList();
       ArrayList<Integer> listidapres = new ArrayList();
       ArrayList<Integer> ordre = new ArrayList();
+      int idfirst=0;
+      int k=0;
+      boolean find=false;
     connect.setAutoCommit(false); //stope la mise à jour, elle sera fait à la fin si tout se passe bien
         try ( PreparedStatement affichetabid = connect.prepareStatement(
                 "select idproduit from ordre")) {
             
             ResultSet tabid = affichetabid.executeQuery();
+            
             while (tabid.next()!= false){
-                
-                
                 listidproduit.add(tabid.getInt("idproduit"));
             }
+            
             for(int i=0;i<listidproduit.size();i++){
             try ( PreparedStatement affichetab = connect.prepareStatement(
                 "select * from ordre where idproduit=?")) {
@@ -1404,13 +1407,31 @@ public static ArrayList listgamme(Connection connect) throws SQLException{
             listidavant.add(tab.getInt("idopavant"));
             listidapres.add(tab.getInt("idopapres"));
             }
-//            while 
-//            for(int j=0;j<listidavant.size();j++){
-//                
-            }
             
-            }
+            while (find==false){
+                idfirst=listidavant.get(k);
             
+            for(int j=0;j<listidapres.size();j++){
+                if (idfirst==listidapres.get(j)){
+                    find=false;
+                }
+            }
+            k=k+1;
+            }
+            ordre.add(idfirst);
+            
+            for (int j=0;j<listidapres.size();j++){
+                 try ( PreparedStatement idapres = connect.prepareStatement(
+                "select idopapres from ordre where idopavant=?")) {
+                     idapres.setInt(1, ordre.get(j));
+                     ResultSet tabidopapres = affichetabid.executeQuery();
+                      while (tab.next()!= false){
+                         ordre.add(tabidopapres.getInt("idopapres"));
+                      }
+                 }
+            }
+            }
+            }
 
             }
         try { // creation d'un requete 
@@ -1425,9 +1446,9 @@ public static ArrayList listgamme(Connection connect) throws SQLException{
         }
         
      
-    return listtypeoperation;
+    return listgamme;
+
 }
-*/
 
 
 
