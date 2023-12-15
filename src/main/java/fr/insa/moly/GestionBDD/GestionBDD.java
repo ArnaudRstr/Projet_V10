@@ -702,7 +702,7 @@ public static void addmachine(Connection connect,String nom,int idatelier,int id
     
      connect.setAutoCommit(false); //stope la mise à jour, elle sera fait à la fin si tout se passe bien
         try ( PreparedStatement cherchedouble = connect.prepareStatement(
-                "select id from machine where nom=? and idatelier=? and idtypeatelier=? and des=? and marque=? and puissance=? and statut=? and couthoraire=? and localisation=? and dimensionlargeur=? and dimensionlongueur")) {
+                "select id from machine where nom=? and idatelier=? and idtypeatelier=? and des=? and marque=? and puissance=? and statut=? and couthoraire=? and localisation=? and dimensionlargeur=? and dimensionlongueur=?")) {
             cherchedouble.setString(1, nom);
             cherchedouble.setInt(2, idatelier);
             cherchedouble.setInt(3, idtypeoperation);
