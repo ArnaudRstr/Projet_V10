@@ -8,6 +8,7 @@ import com.vaadin.flow.component.contextmenu.MenuItem;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.html.H2;
+import com.vaadin.flow.component.html.H3;
 import com.vaadin.flow.component.html.Paragraph;
 import com.vaadin.flow.component.menubar.MenuBar;
 import com.vaadin.flow.component.notification.Notification;
@@ -50,12 +51,20 @@ public class PartiePrincipale extends MyVerticalLayout {
         if (objet=="machine"){
             this.add(new H2("Machines"));
             ArrayList <Machine> machinesTemp = new ArrayList();
-            System.out.println("Etat du controleur avant création de la machine:"+this.controleur.getEtat());
-            machinesTemp = this.controleur.getVuePrincipale().getGestionBDD().listMachineAtelier(this.controleur.getVuePrincipale().getGestionBDD().conn,this.controleur.getEtat());
+            System.out.println("Etat du controleur avant création de la machine:"+this.controleur.getEtatAtelier());
+            machinesTemp = this.controleur.getVuePrincipale().getGestionBDD().listMachineAtelier(this.controleur.getVuePrincipale().getGestionBDD().conn,this.controleur.getEtatAtelier());
+            
             
             //machinesTemp = this.controleur.getVuePrincipale().getGestionBDD().listmachine(this.controleur.getVuePrincipale().getGestionBDD().conn);
 
             int index =0;
+            if (machinesTemp.size()==0 && this.controleur.getEtatAtelier()==-1){
+                this.add(new H3("Sélectionnez tout d'abord un atelier"));
+            }
+            else if (machinesTemp.size()==0){
+                
+                this.add(new H3("Il n'y a pas de machines dans cet atelier"));
+            }
             while (index<machinesTemp.size()){
                 this.add(machinesTemp.get(index).getPannel());
                 
@@ -97,6 +106,8 @@ public class PartiePrincipale extends MyVerticalLayout {
     public void setParagraph(Paragraph paragraph){
         this.paragraph=paragraph;
     }
+    
+    
     
 
 }

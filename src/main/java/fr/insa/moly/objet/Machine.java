@@ -29,7 +29,6 @@ public class Machine {
     private double dimensionlongueur;
     
     private MyHorizontalLayout pannel;
-    private Text nomAffiche;
     private Span spanStatut;
     
     
@@ -53,11 +52,18 @@ public class Machine {
         this.pannel.getStyle().set("border", "1px solid #000000");
         this.pannel.getStyle().set("border-radius", "7px");
         this.pannel.getStyle().set("padding", "4px");
-        this.nomAffiche= new Text(nom);
+        
+        
+        Text nomaffiche= new Text(nom);
+        Text idaffiche = new Text(String.valueOf(id));
+        Text marqueaffiche = new Text(marque);
+        
+        
+        
         this.spanStatut=new Span("En service");
-        this.spanStatut.getElement().getStyle().set("margin-right", "auto");
-        this.spanStatut.getElement().getThemeList().add("badge succes");
-        this.pannel.add(nomAffiche,spanStatut);
+        //this.spanStatut.getElement().getStyle().set("margin-left", "auto");
+        this.spanStatut.getElement().getThemeList().add("badge success");
+        this.pannel.add(spanStatut,nomaffiche);
     }
 
     

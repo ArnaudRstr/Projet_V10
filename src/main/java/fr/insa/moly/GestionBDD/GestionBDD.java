@@ -69,7 +69,8 @@ public class GestionBDD {
             
             System.out.println("connecté");
             GestionBDD gestionnaire = new GestionBDD();
-            
+            gestionnaire.deleteBDDTest();
+            gestionnaire.creatBDDTest();
             
             addtypeoperation(gestionnaire.conn,"fraisage");
             //addatelier(gestionnaire.conn,"production","rien",1743,2134);

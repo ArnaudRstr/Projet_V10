@@ -35,7 +35,7 @@ public class VuePrincipale extends MyVerticalLayout {
         this.gestionnaire = new GestionBDD();
         
         //this.mainContent = new MyVerticalLayout();
-        this.controleur = new Controleur(this,-1);
+        this.controleur = new Controleur(this,-1,"initial");
         this.mainContent = new MyVerticalLayout();
         this.mainContent.setWidthFull();
         this.mainContent.setHeightFull();
