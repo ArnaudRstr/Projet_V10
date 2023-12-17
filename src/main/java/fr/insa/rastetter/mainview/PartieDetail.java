@@ -17,8 +17,8 @@ private Controleur controleur;
     
     public PartieDetail(Controleur controleur){
         this.controleur=controleur;
-        this.add(new H2("ça c'est la partie de détail"));
-        this.add(new H3("Ici on aura le détail"));
+        this.add(new H2("Partie de détail"));
+        this.add(new H3("Ici on aura le détail de l'objet sélectionné à gauche"));
 
         
         

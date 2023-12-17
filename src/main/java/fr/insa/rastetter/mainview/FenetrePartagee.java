@@ -17,6 +17,7 @@ public class FenetrePartagee extends MyVerticalLayout {
     
     
     private Controleur controleur;
+    private String objet;
     public SplitLayout splitLayout;
     public MyVerticalLayout partG;
     public MyVerticalLayout partD;
@@ -25,10 +26,11 @@ public class FenetrePartagee extends MyVerticalLayout {
     //On pourrait faire en sorte de pouvoir afficher un plan de l'atelier
     
     
-    public FenetrePartagee(Controleur controleur) throws SQLException{
+    public FenetrePartagee(Controleur controleur, String objet) throws SQLException{
         this.controleur=controleur;
-
-        this.partG=new PartiePrincipale(this.controleur);
+        this.objet=objet;
+        
+        this.partG=new PartiePrincipale(this.controleur, objet);
         
         
         

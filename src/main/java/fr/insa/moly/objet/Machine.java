@@ -4,7 +4,9 @@
  */
 package fr.insa.moly.objet;
 
+import com.vaadin.flow.component.Text;
 import com.vaadin.flow.component.html.Span;
+import com.vaadin.flow.component.orderedlayout.FlexComponent.Alignment;
 import com.vaadin.flow.component.textfield.TextArea;
 import fr.insa.rastetter.mainview.MyHorizontalLayout;
 
@@ -27,11 +29,11 @@ public class Machine {
     private double dimensionlongueur;
     
     private MyHorizontalLayout pannel;
-    private TextArea nomAffiche;
     private Span spanStatut;
     
     
     public Machine(int id, String nom, int idatelier, int idtypeoperation, String des, String marque, double puissance, int statut, double couthoraire, String localisation, double dimensionlargeur, double dimensionlongueur) {
+        
         this.id = id;
         this.nom = nom;
         this.idatelier = idatelier;
@@ -46,10 +48,22 @@ public class Machine {
         this.dimensionlongueur = dimensionlongueur;
         
         this.pannel= new MyHorizontalLayout();
-        this.nomAffiche= new TextArea(nom);
+        this.pannel.setWidthFull();
+        this.pannel.getStyle().set("border", "1px solid #000000");
+        this.pannel.getStyle().set("border-radius", "7px");
+        this.pannel.getStyle().set("padding", "4px");
+        
+        
+        Text nomaffiche= new Text(nom);
+        Text idaffiche = new Text(String.valueOf(id));
+        Text marqueaffiche = new Text(marque);
+        
+        
+        
         this.spanStatut=new Span("En service");
-        this.spanStatut.getElement().getThemeList().add("badge succes");
-        this.pannel.add(nomAffiche,spanStatut);
+        //this.spanStatut.getElement().getStyle().set("margin-left", "auto");
+        this.spanStatut.getElement().getThemeList().add("badge success");
+        this.pannel.add(spanStatut,nomaffiche);
     }
 
     

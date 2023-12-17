@@ -69,7 +69,10 @@ public class GestionBDD {
             
             System.out.println("connecté");
             GestionBDD gestionnaire = new GestionBDD();
+            gestionnaire.deleteBDDTest();
+            gestionnaire.creatBDDTest();
             
+            addtypeoperation(gestionnaire.conn,"fraisage");
             //addatelier(gestionnaire.conn,"production","rien",1743,2134);
             addmachine(gestionnaire.conn,"Presse",1,1,"presse hydraulique","NoName",3000,0,12,"Strasbourg",50,223);
             
@@ -811,7 +814,7 @@ public static void addbrut(Connection connect,String nom, String ref,String mati
 public static void addoperateur(Connection connect,String identifiant, String motdepasse,String nom,String prenom,int idatelier,int statut, int tel, String mail)throws SQLException {
     connect.setAutoCommit(false); //stope la mise à jour, elle sera fait à la fin si tout se passe bien
         try ( PreparedStatement cherchedouble = connect.prepareStatement(
-                "select id from operateur where identifiant=? and motdepasse=? and nom=? and prenom=? and idatelier=? and satut=? and tel=? and mail=?")) {
+                "select id from operateur where identifiant=? and motdepasse=? and nom=? and prenom=? and idatelier=? and statut=? and tel=? and mail=?")) {
             cherchedouble.setString(1, identifiant);
             cherchedouble.setString(2, motdepasse);
             cherchedouble.setString(3, nom);
@@ -826,7 +829,7 @@ public static void addoperateur(Connection connect,String identifiant, String mo
             }
             else{
             try ( PreparedStatement pst = connect.prepareStatement(
-                        "INSERT INTO `operateur` (identifiant,motdepasse,nom,prenom,idatelier,satut,tel,mail) VALUES (?,?,?,?,?,?,?,?);"
+                        "INSERT INTO `operateur` (identifiant,motdepasse,nom,prenom,idatelier,statut,tel,mail) VALUES (?,?,?,?,?,?,?,?);"
 
             )){
                     pst.setString(1, nom);
@@ -1246,7 +1249,39 @@ public static ArrayList listmachine (Connection connect)throws SQLException{
             
             ResultSet tab = affichetab.executeQuery();
             while (tab.next()!= false){
-                Machine at = new Machine(tab.getInt("id"),tab.getString("nom"),tab.getInt("idatelier"),tab.getInt("idtypeoperation"),tab.getString("des"),tab.getString("marque"),tab.getDouble("puissance"),tab.getInt("satut"),tab.getDouble("couthoraire"),tab.getString("localisation"),tab.getDouble("dimensionlargeur"),tab.getDouble("dimensionlongueur"));
+                Machine at = new Machine(tab.getInt("id"),tab.getString("nom"),tab.getInt("idatelier"),tab.getInt("idtypeoperation"),tab.getString("des"),tab.getString("marque"),tab.getDouble("puissance"),tab.getInt("statut"),tab.getDouble("couthoraire"),tab.getString("localisation"),tab.getDouble("dimensionlargeur"),tab.getDouble("dimensionlongueur"));
+                listmachine.add(at);
+            }
+
+            }
+        try { // creation d'un requete 
+            connect.commit(); // valide le refresh
+            System.out.print("le refresh fonctionne") ;
+        } catch (SQLException ex) { // en cas d'erreur on "rollback" on retourne avant 
+            connect.rollback();
+            System.out.print("rollback");
+            throw ex;
+        } finally {
+            connect.setAutoCommit(true);// on remet le refresh automatique
+        }
+        
+     
+    return listmachine;
+}  
+
+public static ArrayList listMachineAtelier (Connection connect, int idAtelierRecherche)throws SQLException{
+    ArrayList<Machine> listmachine = new ArrayList();
+    
+    
+    connect.setAutoCommit(false); //stope la mise à jour, elle sera fait à la fin si tout se passe bien
+    String sql = "SELECT * FROM machine WHERE idatelier=?";
+    
+        try ( PreparedStatement affichetab = connect.prepareStatement(sql)) {
+            affichetab.setInt(1,idAtelierRecherche);
+            
+            ResultSet tab = affichetab.executeQuery();
+            while (tab.next()!= false){
+                Machine at = new Machine(tab.getInt("id"),tab.getString("nom"),tab.getInt("idatelier"),tab.getInt("idtypeoperation"),tab.getString("des"),tab.getString("marque"),tab.getDouble("puissance"),tab.getInt("statut"),tab.getDouble("couthoraire"),tab.getString("localisation"),tab.getDouble("dimensionlargeur"),tab.getDouble("dimensionlongueur"));
                 listmachine.add(at);
             }
 

@@ -13,6 +13,7 @@ import com.vaadin.flow.component.contextmenu.SubMenu;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.menubar.MenuBar;
 import com.vaadin.flow.component.notification.Notification;
+import static com.vaadin.flow.component.orderedlayout.FlexComponent.Alignment.CENTER;
 import static fr.insa.moly.GestionBDD.GestionBDD.listaltelier;
 import fr.insa.moly.objet.Atelier;
 import java.sql.SQLException;
@@ -122,6 +123,9 @@ public class Entete extends MyHorizontalLayout {
         this.comboBoxAtelier.setHelperText("Atelier");
         
         
+        this.setAlignItems(CENTER);
+
+        
         
         
         
@@ -144,7 +148,7 @@ public class Entete extends MyHorizontalLayout {
         
         
         
-        this.add(menuBarG,new H1("Entête"),comboBoxAtelier,menuBarD,boutonCompteUtilisateur);
+        this.add(menuBarG,comboBoxAtelier,menuBarD,boutonCompteUtilisateur);
     
         this.getThemeList().add("spacing-xl");
         
@@ -166,6 +170,7 @@ public class Entete extends MyHorizontalLayout {
         menuItemPlan.addClickListener(event -> {
             Notification.show("Option Plan sélectionnée !");
             this.main.getControleur().MenuItemPlan();
+            this.main.getControleur().setEtatFenetre("plan");
         });
         
         
@@ -173,6 +178,7 @@ public class Entete extends MyHorizontalLayout {
             Notification.show("Option machine sélectionnée !");
             try {
                 this.main.getControleur().MenuItemMachine();
+                this.main.getControleur().setEtatFenetre("machine");
             } catch (SQLException ex) {
                 
                 Logger.getLogger(Entete.class.getName()).log(Level.SEVERE, null, ex);
@@ -196,30 +202,38 @@ public class Entete extends MyHorizontalLayout {
          
         Notification.show("bouton ajouter Atelier sélectionné !");
 
-        this.main.getControleur().OuvrirFenetreEntree("atelier");
+            try {
+                this.main.getControleur().CreationObjet("atelier");
+            } catch (SQLException ex) {
+                Logger.getLogger(Entete.class.getName()).log(Level.SEVERE, null, ex);
+            }
         
         
         //Il faut remettre à jour le bouton
         
-        try {
-
-               this.setComboBoxAtelier(listaltelier(this.main.getGestionBDD().conn));
-               
-                
-                System.out.println("Combo box Atelier mis à jour");
-            } catch (SQLException ex) {
-                Logger.getLogger(Entete.class.getName()).log(Level.SEVERE, null, ex);   
-            }
-            
-             
-        });
+//        try {
+//
+//               this.setComboBoxAtelier(listaltelier(this.main.getGestionBDD().conn));
+//               
+//                
+//                System.out.println("Combo box Atelier mis à jour");
+//            } catch (SQLException ex) {
+//                Logger.getLogger(Entete.class.getName()).log(Level.SEVERE, null, ex);   
+//            }
+//            
+//             
+     });
         
         
         menuItemDetailsAtelier.addClickListener(event -> {
          
         Notification.show("bouton details Atelier sélectionné !");
         
-        this.main.getControleur().MenuItemDetailsAtelier();
+            try {
+                this.main.getControleur().MenuItemDetailsAtelier();
+            } catch (SQLException ex) {
+                Logger.getLogger(Entete.class.getName()).log(Level.SEVERE, null, ex);
+            }
                 
  
         });
@@ -240,18 +254,48 @@ public class Entete extends MyHorizontalLayout {
             
             //on cherche à récupérer l'identifiant de l'atelier, on fait une méthode générale dans le cas où l'on peu avoir plusieurs ateliers (+ de 9)
             
+            //System.out.println("Evénement Combo box déclenché");
             
-            System.out.println("1er event value: " +event.getValue());
-            String idNom = (String) event.getValue();
+            System.out.println("1er event value: " +event.getValue()+" (Entete evenement du combobox");
+            
+            
+            
+            if (event.getValue()==null){
+                
+            }
+            else if (event.getValue()!=null){
+                
+                String idNom = (String) event.getValue();
+                
+                
             int indexEspace = idNom.indexOf(' ');
             String avantEspace = idNom.substring(0,indexEspace);
             int idAtelier = Integer.parseInt(avantEspace);
-            System.out.println("idAtelier "+idAtelier);
+            //System.out.println("idAtelier "+idAtelier);
             
             // On renvoie la valeur de l'atelier au contrôleur pour mettre à jour dans quel atelier on se trouve
-            this.main.getControleur().ComboBoxAtelier(idAtelier);
             
-           
+            this.main.getControleur().setEtatAtelier(idAtelier);
+            
+            
+            System.out.println("Etat du controleur mis à jour : "+idAtelier);
+            
+            
+            //Ici on met à jour la fenetre
+                try {
+                    if (this.main.getControleur().getEtatFenetre() =="machine"){
+                        this.main.getControleur().MenuItemMachine();
+
+                    }
+                    
+                    
+                    
+                } catch (SQLException ex) {
+                    Logger.getLogger(Entete.class.getName()).log(Level.SEVERE, null, ex);
+                }
+
+            }
+            
         });
 
 }
@@ -276,12 +320,17 @@ public class Entete extends MyHorizontalLayout {
             Atelier atelierTemp = (Atelier) listTemp.get(index);
             
             listNomAtelier.add(atelierTemp.getId()+" : "+atelierTemp.getNom());
+            
+            System.out.println(listNomAtelier.get(index));
             index++;
         }
         
-        System.out.println("arrivé dans la méthode");
-        this.comboBoxAtelier.setItems(listNomAtelier);
+        //System.out.println("arrivé dans la méthode set comboboxAtelier");
+        //System.out.println("liste ateliers à mettre dans combobox: "+listNomAtelier);
         
+        
+        comboBoxAtelier.setItems(listNomAtelier);
+        //System.out.println("Le comboBox est mis à jour (méthode setCombobox)");
         
     }
     
