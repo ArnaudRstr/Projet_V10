@@ -811,7 +811,7 @@ public static void addbrut(Connection connect,String nom, String ref,String mati
         }
 }
 
-public static void addoperateur(Connection connect,String identifiant, String motdepasse,String nom,String prenom,int idatelier,int statut, int tel, String mail)throws SQLException {
+public static void addoperateur(Connection connect,String identifiant, String motdepasse,String nom,String prenom,int idatelier,int statut, int tel, String mail,ArrayList<Integer> listoperation)throws SQLException {
     connect.setAutoCommit(false); //stope la mise à jour, elle sera fait à la fin si tout se passe bien
         try ( PreparedStatement cherchedouble = connect.prepareStatement(
                 "select id from operateur where identifiant=? and motdepasse=? and nom=? and prenom=? and idatelier=? and statut=? and tel=? and mail=?")) {
@@ -827,6 +827,7 @@ public static void addoperateur(Connection connect,String identifiant, String mo
             if (test.next()!= false){
                 System.out.println("Attention, il existe déjà");
             }
+            
             else{
             try ( PreparedStatement pst = connect.prepareStatement(
                         "INSERT INTO `operateur` (identifiant,motdepasse,nom,prenom,idatelier,statut,tel,mail) VALUES (?,?,?,?,?,?,?,?);"
@@ -843,11 +844,24 @@ public static void addoperateur(Connection connect,String identifiant, String mo
                     pst.setString(8, mail);
                     pst.executeUpdate();
                     System.out.println("operateur add");
+                    
+                    try ( ResultSet rid = pst.getGeneratedKeys()) {
+                        rid.next();
+                        int id = rid.getInt(1);
 
+                        for(int i=0;i<listoperation.size();i++){
+                                try ( PreparedStatement addrealise = connect.prepareStatement("INSERT INTO realiseoo (idoperateur,idoperation) VALUES (?,?)")){
+                                    addrealise.setInt(1,id );
+                                    addrealise.setInt(2,listoperation.get(i));
+                                }
+                        }
+                    }
+                   
             } catch (SQLException ex) {
             // nothing to do : maybe the constraint was not created
             System.out.println("nothing");
             }
+            
             }
         try { // creation d'un requete 
             connect.commit(); // valide le refresh
@@ -1343,7 +1357,6 @@ public static ArrayList listoperateur (Connection connect)throws SQLException{
     return listoperateur;
 }  
         
-
 public static ArrayList listoperation (Connection connect)throws SQLException{
     ArrayList<Operation> listoperation = new ArrayList();
     
@@ -1430,7 +1443,6 @@ public static ArrayList listtypeoperation (Connection connect)throws SQLExceptio
      
     return listtypeoperation;
 }  
-
 
 public static ArrayList listgamme(Connection connect) throws SQLException{
     
