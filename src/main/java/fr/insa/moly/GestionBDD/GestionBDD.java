@@ -409,7 +409,8 @@ public void creatBDDTest()throws SQLException {
                          `idtypeoperation` int NOT NULL,
                          `nom` varchar(20) NOT NULL,
                          `duree` double NOT NULL,
-                         `outil` varchar(50) NOT NULL
+                         `outil` varchar(50) NOT NULL,
+                         `idmachine` int NOT NULL
                        )
                         """
                 );
@@ -508,6 +509,7 @@ public void creatBDDTest()throws SQLException {
                         """
                      ALTER TABLE `operation`
                             ADD CONSTRAINT `fk_operation_idtypeoperation` FOREIGN KEY (`idtypeoperation`) REFERENCES `typeoperation` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+                            ADD CONSTRAINT `fk_operation_idmachine` FOREIGN KEY (`idmachine`) REFERENCES `machine` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
                         """
                 );
                         System.out.println("Contraint  operation created");
@@ -850,10 +852,11 @@ public static void addoperateur(Connection connect,String identifiant, String mo
                         int id = rid.getInt(1);
 
                         for(int i=0;i<listoperation.size();i++){
-                                try ( PreparedStatement addrealise = connect.prepareStatement("INSERT INTO realiseoo (idoperateur,idoperation) VALUES (?,?)")){
-                                    addrealise.setInt(1,id );
-                                    addrealise.setInt(2,listoperation.get(i));
-                                }
+                            addrealiseoo(connect,id,listoperation.get(i));
+//                                try ( PreparedStatement addrealise = connect.prepareStatement("INSERT INTO realiseoo (idoperateur,idoperation) VALUES (?,?)")){
+//                                    addrealise.setInt(1,id );
+//                                    addrealise.setInt(2,listoperation.get(i));
+//                                }
                         }
                     }
                    
@@ -876,27 +879,29 @@ public static void addoperateur(Connection connect,String identifiant, String mo
         }
 }
 
-public static void addoperation(Connection connect,int idtypeoperation, String nom,double duree,String outil)throws SQLException {
+public static void addoperation(Connection connect,int idtypeoperation, String nom,double duree,String outil,int idmachine)throws SQLException {
     connect.setAutoCommit(false); //stope la mise à jour, elle sera fait à la fin si tout se passe bien
         try ( PreparedStatement cherchedouble = connect.prepareStatement(
-                "select id from operation where idtypeoperation=? and nom=? and duree=? and outil=?")) {
+                "select id from operation where idtypeoperation=? and nom=? and duree=? and outil=? and idmachine=?")) {
             cherchedouble.setInt(1, idtypeoperation);
             cherchedouble.setString(2, nom);
             cherchedouble.setDouble(3, duree);
             cherchedouble.setString(4, outil);
+            cherchedouble.setInt(5, idmachine);
             ResultSet test = cherchedouble.executeQuery();
             if (test.next()!= false){
                 System.out.println("Attention, il existe déjà");
             }
             else{
             try ( PreparedStatement pst = connect.prepareStatement(
-                        "INSERT INTO `operation` (idtypeoperation,nom,duree,outil) VALUES (?,?,?,?);"
+                        "INSERT INTO `operation` (idtypeoperation,nom,duree,outil,idmachine) VALUES (?,?,?,?,?);"
 
             )){
                     pst.setInt(1, idtypeoperation);
                     pst.setString(2, nom);
                     pst.setDouble(3, duree);
                     pst.setString(4, outil);
+                    pst.setInt(5, idmachine);
                     pst.executeUpdate();
                     System.out.println("operation add");
 
@@ -1366,7 +1371,7 @@ public static ArrayList listoperation (Connection connect)throws SQLException{
             
             ResultSet tab = affichetab.executeQuery();
             while (tab.next()!= false){
-                Operation at = new Operation(tab.getInt("id"),tab.getInt("idtypeoperation"),tab.getString("nom"),tab.getDouble("duree"),tab.getString("outil"));
+                Operation at = new Operation(tab.getInt("id"),tab.getInt("idtypeoperation"),tab.getString("nom"),tab.getDouble("duree"),tab.getString("outil"),tab.getInt("idmachine"));
                 listoperation.add(at);
             }
 

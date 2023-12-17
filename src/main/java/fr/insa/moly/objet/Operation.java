@@ -14,13 +14,15 @@ public class Operation {
     private String nom;
     private double duree;
     private String outil;
+    private int idmachine;
 
-    public Operation(int id, int idtypeoperation, String nom, double duree, String outil) {
+    public Operation(int id, int idtypeoperation, String nom, double duree, String outil,int idmachine) {
         this.id = id;
         this.idtypeoperation = idtypeoperation;
         this.nom = nom;
         this.duree = duree;
         this.outil = outil;
+        this.idmachine = idmachine;
     }
 
     public int getId() {
@@ -43,6 +45,10 @@ public class Operation {
         return outil;
     }
 
+    public int getIdmachine() {
+        return idmachine;
+    }
+
     public void setIdtypeoperation(int idtypeoperation) {
         this.idtypeoperation = idtypeoperation;
     }
@@ -57,6 +63,10 @@ public class Operation {
 
     public void setOutil(String outil) {
         this.outil = outil;
+    }
+
+    public void setIdmachine(int idmachine) {
+        this.idmachine = idmachine;
     }
     
     public String getnomtable(){
