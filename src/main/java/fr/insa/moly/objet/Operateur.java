@@ -4,6 +4,8 @@
  */
 package fr.insa.moly.objet;
 
+import java.util.ArrayList;
+
 /**
  *
  * @author molys
@@ -18,8 +20,9 @@ public class Operateur {
     private int statut;
     private int tel;
     private String mail;
+    private ArrayList<Integer> listoperation;
 
-    public Operateur(int id, String identifiant, String motdepasse, String nom, String prenom, int idatelier, int statut, int tel, String mail) {
+    public Operateur(int id, String identifiant, String motdepasse, String nom, String prenom, int idatelier, int statut, int tel, String mail,ArrayList<Integer> listoperation) {
         this.id = id;
         this.identifiant = identifiant;
         this.motdepasse = motdepasse;
@@ -29,6 +32,7 @@ public class Operateur {
         this.statut = statut;
         this.tel = tel;
         this.mail = mail;
+        this.listoperation = listoperation;
     }
 
     public int getId() {
@@ -67,6 +71,10 @@ public class Operateur {
         return mail;
     }
 
+    public ArrayList<Integer> getListoperation() {
+        return listoperation;
+    }
+
     public void setIdentifiant(String identifiant) {
         this.identifiant = identifiant;
     }
@@ -97,6 +105,10 @@ public class Operateur {
 
     public void setMail(String mail) {
         this.mail = mail;
+    }
+
+    public void setListoperation(ArrayList<Integer> listoperation) {
+        this.listoperation = listoperation;
     }
     
     public String getnomtable(){

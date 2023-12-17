@@ -1268,17 +1268,30 @@ public static ArrayList listmachine (Connection connect)throws SQLException{
 
 public static ArrayList listoperateur (Connection connect)throws SQLException{
     ArrayList<Operateur> listoperateur = new ArrayList();
+    ArrayList<Integer> listoperationvide = new ArrayList();
+    connect.setAutoCommit(false); //stope la mise à jour, elle sera fait à la fin si tout se passe  bien
     
-    connect.setAutoCommit(false); //stope la mise à jour, elle sera fait à la fin si tout se passe bien
         try ( PreparedStatement affichetab = connect.prepareStatement(
                 "select * from operateur")) {
             
             ResultSet tab = affichetab.executeQuery();
             while (tab.next()!= false){
-                Operateur at = new Operateur(tab.getInt("id"),tab.getString("identifiant"),tab.getString("motdepasse"),tab.getString("nom"),tab.getString("prenom"),tab.getInt("idatelier"),tab.getInt("statut"),tab.getInt("tel"),tab.getString("mail"));
+                Operateur at = new Operateur(tab.getInt("id"),tab.getString("identifiant"),tab.getString("motdepasse"),tab.getString("nom"),tab.getString("prenom"),tab.getInt("idatelier"),tab.getInt("statut"),tab.getInt("tel"),tab.getString("mail"),listoperationvide);
                 listoperateur.add(at);
+                
             }
-
+        }
+    for (int i=0;i<listoperateur.size();i++){
+        ArrayList<Integer> listoperation = new ArrayList();
+        try ( PreparedStatement tabrealisoo = connect.prepareStatement("select idoperation from where idoperateur=?")){
+            tabrealisoo.setInt(1, listoperateur.get(i).getId());
+            tabrealisoo.executeUpdate();
+            ResultSet tabr = tabrealisoo.executeQuery();
+            while (tabr.next()!= false){
+                listoperation.add(tabr.getInt("idoperation"));
+            }
+            listoperateur.get(i).setListoperation(listoperation);
+        }
             }
         try { // creation d'un requete 
             connect.commit(); // valide le refresh
@@ -1294,6 +1307,7 @@ public static ArrayList listoperateur (Connection connect)throws SQLException{
      
     return listoperateur;
 }  
+        
 
 public static ArrayList listoperation (Connection connect)throws SQLException{
     ArrayList<Operation> listoperation = new ArrayList();
