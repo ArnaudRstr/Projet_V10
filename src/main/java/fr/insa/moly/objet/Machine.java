@@ -8,7 +8,11 @@ import com.vaadin.flow.component.Text;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.orderedlayout.FlexComponent.Alignment;
 import com.vaadin.flow.component.textfield.TextArea;
+import fr.insa.moly.GestionBDD.GestionBDD;
 import fr.insa.rastetter.mainview.MyHorizontalLayout;
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.util.ArrayList;
 
 /**
  *
@@ -169,4 +173,8 @@ public class Machine {
       return   "machine";
     }
     
+    public ArrayList getOperationchild(Connection connect)throws SQLException{
+        ArrayList<Integer> listidoperationchild = GestionBDD.listchild(connect,this.getnomtable(),this.id,"operation");       
+        return listidoperationchild;
+    }
 }

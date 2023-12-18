@@ -1525,10 +1525,35 @@ public static ArrayList listgamme(Connection connect) throws SQLException{
 }
 
 
+public static ArrayList listchild(Connection connect,String tabparentname,int idparent,String tabchild) throws SQLException{
+    ArrayList<Integer> listchild = new ArrayList();
+    
+    connect.setAutoCommit(false); //stope la mise à jour, elle sera fait à la fin si tout se passe bien
+        try ( PreparedStatement idtab = connect.prepareStatement(
+                "select id from ? where ?=?")) {
+            idtab.setString(1, tabchild);
+            idtab.setString(2,"id"+tabparentname);
+            idtab.setInt(3, idparent);
+            ResultSet tab = idtab.executeQuery();
+            while (tab.next()!= false){
+                listchild.add(tab.getInt("id"));
+            }
 
-
-
-
+            }
+        try { // creation d'un requete 
+            connect.commit(); // valide le refresh
+            System.out.print("le refresh fonctionne") ;
+        } catch (SQLException ex) { // en cas d'erreur on "rollback" on retourne avant 
+            connect.rollback();
+            System.out.print("rollback");
+            throw ex;
+        } finally {
+            connect.setAutoCommit(true);// on remet le refresh automatique
+        }
+        
+     
+    return listchild;
+}
 
     public static void main(String[] args) {
         System.out.println("Bonjour et bienvenue");

@@ -4,6 +4,11 @@
  */
 package fr.insa.moly.objet;
 
+import java.sql.Connection;
+import java.util.ArrayList;
+import fr.insa.moly.GestionBDD.GestionBDD;
+import java.sql.SQLException;
+
 /**
  *
  * @author molys
@@ -55,6 +60,9 @@ public class Brut {
         return fournisseur;
     }
 
+    
+    
+    
     public void setNom(String nom) {
         this.nom = nom;
     }
@@ -79,6 +87,12 @@ public class Brut {
         this.fournisseur = fournisseur;
     }
     
+    public String getnomtable(){
+      return   "brut";
+    }
     
-    
+    public ArrayList getProduitchild(Connection connect)throws SQLException{
+        ArrayList<Integer> listidproduitchild = GestionBDD.listchild(connect,this.getnomtable(),this.id,"produit");       
+        return listidproduitchild;
+    }
 }
