@@ -455,7 +455,7 @@ public void creatBDDTest()throws SQLException {
                         """
                     CREATE TABLE `realiseoo` (
                          `idoperateur` int NOT NULL,
-                         `idoperation` int NOT NULL
+                         `idtypeoperation` int NOT NULL
                        )
                         """
                 );
@@ -548,7 +548,7 @@ public void creatBDDTest()throws SQLException {
                         """
                     ALTER TABLE `realiseoo`
                                 ADD CONSTRAINT `fk_realiseoo_idoperateur` FOREIGN KEY (`idoperateur`) REFERENCES `operateur` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-                                ADD CONSTRAINT `fk_realiseoo_idoperation` FOREIGN KEY (`idoperation`) REFERENCES `operation` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+                                ADD CONSTRAINT `fk_realiseoo_idtypeoperation` FOREIGN KEY (`idtypeoperation`) REFERENCES `typeoperation` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
                         """
                 );
                         System.out.println("Contraint realiseoo created");
@@ -813,7 +813,7 @@ public static void addbrut(Connection connect,String nom, String ref,String mati
         }
 }
 
-public static void addoperateur(Connection connect,String identifiant, String motdepasse,String nom,String prenom,int idatelier,int statut, int tel, String mail,ArrayList<Integer> listoperation)throws SQLException {
+public static void addoperateur(Connection connect,String identifiant, String motdepasse,String nom,String prenom,int idatelier,int statut, int tel, String mail,ArrayList<Integer> listtypeoperation)throws SQLException {
     connect.setAutoCommit(false); //stope la mise à jour, elle sera fait à la fin si tout se passe bien
         try ( PreparedStatement cherchedouble = connect.prepareStatement(
                 "select id from operateur where identifiant=? and motdepasse=? and nom=? and prenom=? and idatelier=? and statut=? and tel=? and mail=?")) {
@@ -851,11 +851,11 @@ public static void addoperateur(Connection connect,String identifiant, String mo
                         rid.next();
                         int id = rid.getInt(1);
 
-                        for(int i=0;i<listoperation.size();i++){
-                            addrealiseoo(connect,id,listoperation.get(i));
-//                                try ( PreparedStatement addrealise = connect.prepareStatement("INSERT INTO realiseoo (idoperateur,idoperation) VALUES (?,?)")){
+                        for(int i=0;i<listtypeoperation.size();i++){
+                            addrealiseoo(connect,id,listtypeoperation.get(i));
+//                                try ( PreparedStatement addrealise = connect.prepareStatement("INSERT INTO realiseoo (idoperateur,idtypeoperation) VALUES (?,?)")){
 //                                    addrealise.setInt(1,id );
-//                                    addrealise.setInt(2,listoperation.get(i));
+//                                    addrealise.setInt(2,listtypeoperation.get(i));
 //                                }
                         }
                     }
@@ -963,7 +963,7 @@ public static void addordre(Connection connect,int idopavant, int idopapres,int 
         }
 }
 
-public static void addpruduit(Connection connect,String ref,String des,int idbrut)throws SQLException{
+public static void addproduit(Connection connect,String ref,String des,int idbrut)throws SQLException{
     
     connect.setAutoCommit(false); //stope la mise à jour, elle sera fait à la fin si tout se passe bien
         try ( PreparedStatement cherchedouble = connect.prepareStatement(
@@ -1005,13 +1005,13 @@ public static void addpruduit(Connection connect,String ref,String des,int idbru
 }
 }
 
-public static void addrealiseoo(Connection connect,int idoperateur,int idoperation)throws SQLException{
+public static void addrealiseoo(Connection connect,int idoperateur,int idtypeoperation)throws SQLException{
     
     connect.setAutoCommit(false); //stope la mise à jour, elle sera fait à la fin si tout se passe bien
         try ( PreparedStatement cherchedouble = connect.prepareStatement(
-                "select id from realiseoo where idoperateur=? and idoperation=?")) {
+                "select id from realiseoo where idoperateur=? and idtypeoperation=?")) {
             cherchedouble.setInt(1, idoperateur);
-            cherchedouble.setInt(2, idoperateur);
+            cherchedouble.setInt(2, idtypeoperation);
             ResultSet test = cherchedouble.executeQuery();
             if (test.next()!= false){
                 System.out.println("Attention, il existe déjà");
@@ -1019,11 +1019,11 @@ public static void addrealiseoo(Connection connect,int idoperateur,int idoperati
             }
             else{
             try ( PreparedStatement pst = connect.prepareStatement(
-                        "INSERT INTO `realiseoo` (idoperateur,idoperation) VALUES (?,?);"
+                        "INSERT INTO `realiseoo` (idoperateur,idtypeoperation) VALUES (?,?);"
 
             )){
                     pst.setInt(1, idoperateur);
-                    pst.setInt(2, idoperateur);
+                    pst.setInt(2, idtypeoperation);
                     pst.executeUpdate();
                     System.out.println("realiseoo add");
 
@@ -1125,6 +1125,7 @@ public static void addgamme(Connection connect, int idproduit,Gamme gamme) throw
 }
 }
 
+
 public static void delete (Connection connect,String table,int id)throws SQLException{
 
     connect.setAutoCommit(false); //stope la mise à jour, elle sera fait à la fin si tout se passe bien
@@ -1159,6 +1160,7 @@ public static void delete (Connection connect,String table,int id)throws SQLExce
         }
 }
 }
+
 
 public static int askidtype(Connection connect)throws SQLException{
     boolean test= false;

@@ -20,9 +20,9 @@ public class Operateur {
     private int statut;
     private int tel;
     private String mail;
-    private ArrayList<Integer> listoperation;
+    private ArrayList<Integer> listtypeoperation;
 
-    public Operateur(int id, String identifiant, String motdepasse, String nom, String prenom, int idatelier, int statut, int tel, String mail,ArrayList<Integer> listoperation) {
+    public Operateur(int id, String identifiant, String motdepasse, String nom, String prenom, int idatelier, int statut, int tel, String mail,ArrayList<Integer> listtypeoperation) {
         this.id = id;
         this.identifiant = identifiant;
         this.motdepasse = motdepasse;
@@ -32,7 +32,7 @@ public class Operateur {
         this.statut = statut;
         this.tel = tel;
         this.mail = mail;
-        this.listoperation = listoperation;
+        this.listtypeoperation = listtypeoperation;
     }
 
     public int getId() {
@@ -71,8 +71,8 @@ public class Operateur {
         return mail;
     }
 
-    public ArrayList<Integer> getListoperation() {
-        return listoperation;
+    public ArrayList<Integer> getListtypeoperation() {
+        return listtypeoperation;
     }
 
     public void setIdentifiant(String identifiant) {
@@ -107,8 +107,8 @@ public class Operateur {
         this.mail = mail;
     }
 
-    public void setListoperation(ArrayList<Integer> listoperation) {
-        this.listoperation = listoperation;
+    public void setListoperation(ArrayList<Integer> listtypeoperation) {
+        this.listtypeoperation = listtypeoperation;
     }
     
     public String getnomtable(){
