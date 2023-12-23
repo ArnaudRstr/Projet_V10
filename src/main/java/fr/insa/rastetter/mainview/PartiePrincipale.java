@@ -4,6 +4,7 @@
  */
 package fr.insa.rastetter.mainview;
 
+import com.vaadin.flow.component.Text;
 import com.vaadin.flow.component.contextmenu.MenuItem;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.html.H1;
@@ -33,7 +34,7 @@ public class PartiePrincipale extends MyVerticalLayout {
     private MenuItem menuItemAjouter;
     private String objet;
     public Paragraph paragraph;
-    private Grid grid;
+    private Grid<Machine> gridMachines;
     
     private Controleur controleur;
     
@@ -41,6 +42,8 @@ public class PartiePrincipale extends MyVerticalLayout {
 
         this.controleur=controleur;
         this.objet=objet;
+        
+        
         
         this.menuBar=new MenuBar();
         this.menuItemAjouter=menuBar.addItem("Ajouter");
@@ -65,11 +68,42 @@ public class PartiePrincipale extends MyVerticalLayout {
                 
                 this.add(new H3("Il n'y a pas de machines dans cet atelier"));
             }
-            while (index<machinesTemp.size()){
-                this.add(machinesTemp.get(index).getPannel());
+            else {
                 
-                index++;
+                this.gridMachines= new Grid<>();
+                gridMachines.addColumn(Machine::getNom).setHeader("Nom");
+                
+                gridMachines.addColumn(Machine::getMarque).setHeader("Marque");
+                gridMachines.addColumn(Machine::getStatut).setHeader("Statut");
+
+                gridMachines.setItems(machinesTemp);
+                this.add(gridMachines);
+                
+                gridMachines.addItemClickListener(event -> {
+                    Notification.show("Ligne sélectionnée"+event.getItem().getId());
+                   
+                MyVerticalLayout test = new MyVerticalLayout();
+                test.add(new Text("TEST"));
+                Machine machineTemp = event.getItem();
+                
+                
+                this.controleur.getFenetrePartagee().setPartD(new PartieDetail(this.controleur,"machine",machineTemp));
+                    
+                });
+                
+                
             }
+            
+            
+            
+//            while (index<machinesTemp.size()){
+//                
+//                
+//                
+//                this.add(machinesTemp.get(index).getPannel());
+//                
+//                index++;
+//            }
             
         this.menuItemAjouter.addClickListener(event -> {
             Notification.show("Option Plan sélectionnée !");

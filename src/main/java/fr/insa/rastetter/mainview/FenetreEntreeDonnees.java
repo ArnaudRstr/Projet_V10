@@ -5,6 +5,7 @@
 package fr.insa.rastetter.mainview;
 
 import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.component.icon.Icon;
@@ -15,6 +16,8 @@ import com.vaadin.flow.component.textfield.NumberField;
 import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.component.textfield.TextField;
 import static fr.insa.moly.GestionBDD.GestionBDD.listaltelier;
+import static fr.insa.moly.GestionBDD.GestionBDD.listtypeoperation;
+import fr.insa.moly.objet.Typeoperation;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.logging.Level;
@@ -32,8 +35,8 @@ public class FenetreEntreeDonnees extends Dialog{
     private Button boutonEnregistrer;
     private Button boutonAnnuler;
 
-    private MyVerticalLayout contenu;
-    
+    private MyVerticalLayout contenuVL;
+    private MyHorizontalLayout contenuHL;
     
     
     private ArrayList donneesText;
@@ -53,9 +56,10 @@ public class FenetreEntreeDonnees extends Dialog{
     
     
     
-    public FenetreEntreeDonnees(Controleur controleur, String objet){
+    public FenetreEntreeDonnees(Controleur controleur, String objet) throws SQLException{
         this.controleur=controleur;
-        this.contenu= new MyVerticalLayout();
+        this.contenuVL= new MyVerticalLayout();
+        this.contenuHL= new MyHorizontalLayout();
         this.boutonAnnuler=new Button("Annuler");
         this.boutonEnregistrer=new Button("Enregistrer");
         this.donneesText= new ArrayList();
@@ -79,17 +83,17 @@ public class FenetreEntreeDonnees extends Dialog{
         this.setHeaderTitle("Ajouter un atelier");
         this.getHeader().add(boutonFermer);
 
-        this.contenu.add(nom);
-        this.contenu.add(des);
-        this.contenu.add(dimLongueur);
-        this.contenu.add(dimLargeur);
+        this.contenuVL.add(nom);
+        this.contenuVL.add(des);
+        this.contenuVL.add(dimLongueur);
+        this.contenuVL.add(dimLargeur);
         
         this.menuBar.addItem(boutonAnnuler);
         this.menuBar.addItem(boutonEnregistrer);
-        this.contenu.add(menuBar);
-        this.add(contenu);
+        this.contenuVL.add(menuBar);
+        this.add(contenuVL);
        
-        this.contenu.setAlignItems(CENTER);
+        this.contenuVL.setAlignItems(CENTER);
         this.open();
         boutonFermer.addClickListener(event -> {
            this.close();   
@@ -151,32 +155,58 @@ public class FenetreEntreeDonnees extends Dialog{
         TextField localisation = new TextField("Localisation (String)");
         NumberField statut = new NumberField("Statut (int)");
 
+        
+        
+        MyVerticalLayout colonne1 = new MyVerticalLayout();
+        MyVerticalLayout colonne2 = new MyVerticalLayout();
 
         
+        ComboBox comboBoxTypeOperation = new ComboBox();
+        comboBoxTypeOperation.setLabel("Type d'opération");
+        
+        ArrayList<Typeoperation> listtemp = new ArrayList();
+        ArrayList listajouter = new ArrayList();
+        
+        listtemp=listtypeoperation(this.controleur.getVuePrincipale().getGestionBDD().conn);
+        
+        
+        int index =0;
+        while(index< listtemp.size()){
+            
+            listajouter.add(listtemp.get(index).getId()+" : "+listtemp.get(index).getNom());
+            index++;
+        }
+        
+        comboBoxTypeOperation.setItems(listajouter);
         
         
         
         this.setHeaderTitle("Ajouter une machine");
         this.getHeader().add(boutonFermer);
         
-        this.contenu.add(nom);
-        this.contenu.add(des);
-        this.contenu.add(marque);
-        this.contenu.add(idTypeOperation);
-        this.contenu.add(puissance);
-        this.contenu.add(coutHoraire);
-        this.contenu.add(statut);
-        this.contenu.add(dimLongueur);
-        this.contenu.add(dimLargeur);
-        this.contenu.add(localisation);
+        colonne1.add(nom);
+        colonne1.add(des);
+        colonne1.add(marque);
+        //colonne1.add(idTypeOperation);
+        colonne1.add(comboBoxTypeOperation);
+        colonne1.add(puissance);
+        colonne2.add(coutHoraire);
+        colonne2.add(statut);
+        colonne2.add(dimLongueur);
+        colonne2.add(dimLargeur);
+        colonne2.add(localisation);
         
-        
+        this.contenuHL.add(colonne1,colonne2);
+        this.contenuVL.add(this.contenuHL);
         this.menuBar.addItem(boutonAnnuler);
         this.menuBar.addItem(boutonEnregistrer);
-        this.contenu.add(menuBar);
-        this.contenu.setAlignItems(CENTER);
+        this.contenuVL.add(menuBar);
+        this.contenuVL.setAlignItems(CENTER);
         
-        this.add(contenu);
+        this.add(contenuVL);
+        
+        
+        
         this.open();
         boutonFermer.addClickListener(event -> {
            this.close();   
@@ -192,7 +222,18 @@ public class FenetreEntreeDonnees extends Dialog{
             String nomTemp = nom.getValue();
             String desTemp = des.getValue();
             String marqueTemp= marque.getValue();
-            int idtypeoperationtemp = (int)Math.round(idTypeOperation.getValue());
+            //int idtypeoperationtemp = (int)Math.round(idTypeOperation.getValue());
+            
+            String idNom = (String) comboBoxTypeOperation.getValue();
+            int indexEspace = idNom.indexOf(' ');
+            String avantEspace = idNom.substring(0,indexEspace);
+            int idtypeoperationtemp = Integer.parseInt(avantEspace);
+       
+            
+            
+            
+            
+            
             double puissancetemp = puissance.getValue();
             double couthorairetemp= coutHoraire.getValue();
             double dimLongtemp= dimLongueur.getValue();

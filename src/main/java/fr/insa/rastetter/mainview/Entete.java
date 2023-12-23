@@ -16,6 +16,7 @@ import com.vaadin.flow.component.notification.Notification;
 import static com.vaadin.flow.component.orderedlayout.FlexComponent.Alignment.CENTER;
 import static fr.insa.moly.GestionBDD.GestionBDD.listaltelier;
 import fr.insa.moly.objet.Atelier;
+import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.logging.Level;
@@ -62,7 +63,7 @@ public class Entete extends MyHorizontalLayout {
     private MenuItem menuItemAjouterAtelier;
     private MenuItem menuItemDetailsAtelier;
     private MenuItem menuItemSupprimerAtelier;
-
+    private MenuItem menuItemTypeOperation;
     
     
     private ComboBox comboBoxAtelier;
@@ -109,7 +110,8 @@ public class Entete extends MyHorizontalLayout {
         this.menuItemPlan = this.subMenuMenuPrincipal.addItem("Plan");
         this.menuItemMachine = this.subMenuMenuPrincipal.addItem("Machines");
         this.menuItemProduit = this.subMenuMenuPrincipal.addItem("Produits");
-
+        this.menuItemTypeOperation=this.subMenuMenuPrincipal.addItem("Types d'opérations");
+        
         
         this.menuItemAtelier=this.menuBarD.addItem("Atelier");
         this.subMenuAtelier=menuItemAtelier.getSubMenu();
@@ -191,6 +193,25 @@ public class Entete extends MyHorizontalLayout {
             Notification.show("Option produit sélectionnée !");
             this.main.getControleur().MenuItemProduit();
         });
+        
+        
+        
+        menuItemTypeOperation.addClickListener(event -> {
+            Notification.show("Option type operation sélectionnée !");
+            try {
+                //On essaie d'ajouter un type d'opération
+                this.main.getGestionBDD().addtypeoperation(this.main.getGestionBDD().conn,"test2");
+                System.out.println("Type opération ajouté");
+            } catch (SQLException ex) {
+                System.out.println("Type opération pas ajouté");
+            }
+            try {
+                this.main.getControleur().MenuItemTypeOperation();
+            } catch (SQLException ex) {
+                System.out.println("Pas reussi à execuer la méthode du controleur menuItemTypeOperation");
+            }
+        });
+        
         
         
         

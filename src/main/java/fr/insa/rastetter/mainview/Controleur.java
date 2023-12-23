@@ -4,8 +4,10 @@
  */
 package fr.insa.rastetter.mainview;
 
+import com.vaadin.flow.component.Text;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.dialog.Dialog;
+import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.component.html.H3;
 import com.vaadin.flow.component.icon.Icon;
@@ -16,6 +18,8 @@ import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.component.textfield.TextField;
 import fr.insa.moly.objet.Atelier;
 import static fr.insa.moly.GestionBDD.GestionBDD.listaltelier;
+import static fr.insa.moly.GestionBDD.GestionBDD.listtypeoperation;
+import fr.insa.moly.objet.Typeoperation;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
@@ -33,15 +37,18 @@ public class Controleur {
     private int etatAtelier;
     private String etatFenetre;
     
+    private FenetrePartagee fenetrePartagee;
+    
     private FenetreEntreeDonnees fenetreEntreeDonnees;
     
     
     
     
-    public Controleur(VuePrincipale main,int etat,String etatFenetre){
+    public Controleur(VuePrincipale main,int etat,String etatFenetre) throws SQLException{
         this.main = main;
         this.etatAtelier = etat;
         this.etatFenetre = etatFenetre;
+        this.fenetrePartagee=new FenetrePartagee(this);
                
     }
     
@@ -68,8 +75,10 @@ public class Controleur {
     }
 
     public void MenuItemMachine() throws SQLException {
+        this.fenetrePartagee =new FenetrePartagee(this, "machine");
+        //this.main.setMainContent(new FenetrePartagee(this, "machine"));
         
-        this.main.setMainContent(new FenetrePartagee(this, "machine"));
+        this.main.setMainContent(this.fenetrePartagee);
         this.etatFenetre= "machine";
         
         
@@ -82,6 +91,49 @@ public class Controleur {
     
     public void MenuItemProduit() {
         Notification.show("Produits via controleur");
+    }
+    
+    
+    
+    
+    public void MenuItemTypeOperation() throws SQLException{
+        Dialog fenetre = new Dialog();
+        MyVerticalLayout contenu = new MyVerticalLayout();
+        Grid<Typeoperation> grid = new Grid<>();
+        fenetre.setModal(false);
+        fenetre.setDraggable(true);
+        fenetre.setWidth("40vw");
+        fenetre.getElement().getThemeList().add("dialogResizable");
+        
+        
+        if (listtypeoperation(this.getVuePrincipale().getGestionBDD().conn).size()==0){
+            contenu.add(new Text("Il n'y a pas de type d'opération"));
+            System.out.println("Pas de types d'iopération");
+        }
+        
+        else{
+          ArrayList<Typeoperation> listtemp = new ArrayList();
+          
+          listtemp=listtypeoperation(this.getVuePrincipale().getGestionBDD().conn);
+          grid.addColumn(Typeoperation::getNom).setHeader("Nom");
+          grid.addColumn(Typeoperation::getId).setHeader("Identifiant");
+          grid.setItems(listtemp);
+          contenu.add(grid);
+             
+        }
+        fenetre.add(contenu);
+        Button boutonFermer = new Button(new Icon("lumo","cross"));
+        fenetre.getHeader().add(boutonFermer);
+        fenetre.setHeaderTitle("Types d'opération");
+            
+        fenetre.open(); 
+        
+        boutonFermer.addClickListener(event -> {
+            fenetre.close();
+        });
+        
+        
+        
     }
     
     
@@ -331,7 +383,11 @@ public class Controleur {
         
         return this.etatFenetre;
     }
-        
+       
+    public FenetrePartagee getFenetrePartagee(){
+        return this.fenetrePartagee;
+    }
+    
         
     public void setEtatAtelier(int i){
         this.etatAtelier = i; //l'etat correspond à l'identifiant de l'atelier sélectionné. 
@@ -342,5 +398,6 @@ public class Controleur {
     public void setEtatFenetre(String i ){
         this.etatFenetre=i;
     }
+    
     
 }

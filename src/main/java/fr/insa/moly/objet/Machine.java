@@ -124,6 +124,10 @@ public class Machine {
         return this.pannel;
     }
     
+    public Span getSpanStatut(){
+        return this.spanStatut;
+    }
+    
 
     public void setNom(String nom) {
         this.nom = nom;
