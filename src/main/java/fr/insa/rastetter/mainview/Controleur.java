@@ -16,12 +16,16 @@ import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.textfield.NumberField;
 import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.component.textfield.TextField;
+import static fr.insa.moly.GestionBDD.GestionBDD.addtypeoperation;
 import fr.insa.moly.objet.Atelier;
 import static fr.insa.moly.GestionBDD.GestionBDD.listaltelier;
 import static fr.insa.moly.GestionBDD.GestionBDD.listtypeoperation;
 import fr.insa.moly.objet.Typeoperation;
+import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -89,8 +93,17 @@ public class Controleur {
         
     }
     
-    public void MenuItemProduit() {
+    public void MenuItemProduit() throws SQLException {
         Notification.show("Produits via controleur");
+        
+        this.fenetrePartagee =new FenetrePartagee(this,"produit");
+        //this.main.setMainContent(new FenetrePartagee(this, "machine"));
+        
+        this.main.setMainContent(this.fenetrePartagee);
+        this.etatFenetre= "produit";
+        
+        
+        
     }
     
     
@@ -104,7 +117,15 @@ public class Controleur {
         fenetre.setDraggable(true);
         fenetre.setWidth("40vw");
         fenetre.getElement().getThemeList().add("dialogResizable");
+        Button boutonajouter = new Button("Ajouter");
+        MyHorizontalLayout hlajout = new MyHorizontalLayout();
+        hlajout.setWidthFull();
+        TextField entreetype = new TextField();
+        entreetype.setPlaceholder("Nom du type d'operation à ajouter");
+        entreetype.setWidthFull();
         
+        hlajout.add(entreetype,boutonajouter);
+        contenu.add(hlajout);
         
         if (listtypeoperation(this.getVuePrincipale().getGestionBDD().conn).size()==0){
             contenu.add(new Text("Il n'y a pas de type d'opération"));
@@ -113,7 +134,6 @@ public class Controleur {
         
         else{
           ArrayList<Typeoperation> listtemp = new ArrayList();
-          
           listtemp=listtypeoperation(this.getVuePrincipale().getGestionBDD().conn);
           grid.addColumn(Typeoperation::getNom).setHeader("Nom");
           grid.addColumn(Typeoperation::getId).setHeader("Identifiant");
@@ -125,8 +145,52 @@ public class Controleur {
         Button boutonFermer = new Button(new Icon("lumo","cross"));
         fenetre.getHeader().add(boutonFermer);
         fenetre.setHeaderTitle("Types d'opération");
-            
+        fenetre.setResizable(true);
         fenetre.open(); 
+        
+        
+        boutonajouter.addClickListener(event -> {
+            
+            String nomtype = entreetype.getValue();
+            
+
+            if (nomtype.isEmpty()){
+                Notification.show("Ajoutez un nom");
+                System.out.println("Ajoutez un nom");
+            }
+            else  {
+                
+            try {
+                addtypeoperation(this.getVuePrincipale().getGestionBDD().conn,nomtype);
+            } catch (SQLException ex) {
+                System.out.println("Controleur : Erreur lors de l'ajout du type d'opération");
+            }
+            try {
+                grid.setItems(listtypeoperation(this.getVuePrincipale().getGestionBDD().conn));
+            } catch (SQLException ex) {
+                System.out.println("Controleur : Erreur lors de la mise à jour du type d'opération");
+            }
+                
+                
+            }
+            
+            
+            
+            
+                
+                
+                
+            
+
+            
+            
+            
+            
+            
+            
+        });
+        
+        
         
         boutonFermer.addClickListener(event -> {
             fenetre.close();
@@ -355,7 +419,17 @@ public class Controleur {
             this.MenuItemMachine();
         }
         
+        if(objet =="produit"){
         
+            System.out.println("la fenetre va être créée");
+            
+            
+            this.fenetreEntreeDonnees = new FenetreEntreeDonnees(this,"produit");
+            System.out.println("La fenetre devrait être crée");
+            
+            
+            this.MenuItemProduit();
+        }
         
         
         

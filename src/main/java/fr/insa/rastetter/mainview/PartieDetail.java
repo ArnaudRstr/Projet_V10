@@ -38,7 +38,8 @@ private Controleur controleur;
         if (typeobjet =="machine"){
             
             MyVerticalLayout contenu = new MyVerticalLayout();
-            
+            contenu.getStyle().set("padding", "1px");
+            contenu.setSpacing(false);
             MyHorizontalLayout hlnom = new MyHorizontalLayout();
             MyHorizontalLayout hlid = new MyHorizontalLayout();
             MyHorizontalLayout hldes = new MyHorizontalLayout();

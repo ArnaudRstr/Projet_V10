@@ -17,6 +17,7 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.component.textfield.TextField;
 import fr.insa.moly.objet.Machine;
+import fr.insa.moly.objet.Produit;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -35,6 +36,7 @@ public class PartiePrincipale extends MyVerticalLayout {
     private String objet;
     public Paragraph paragraph;
     private Grid<Machine> gridMachines;
+    private Grid<Produit> gridProduits;
     
     private Controleur controleur;
     
@@ -95,15 +97,7 @@ public class PartiePrincipale extends MyVerticalLayout {
             }
             
             
-            
-//            while (index<machinesTemp.size()){
-//                
-//                
-//                
-//                this.add(machinesTemp.get(index).getPannel());
-//                
-//                index++;
-//            }
+         
             
         this.menuItemAjouter.addClickListener(event -> {
             Notification.show("Option Plan sélectionnée !");
@@ -117,6 +111,45 @@ public class PartiePrincipale extends MyVerticalLayout {
                     });
             
 
+        }
+        
+        if (objet=="produit"){
+            
+            this.add(new H2("Produits"));
+            ArrayList <Produit> produitsTemp = new ArrayList();
+            System.out.println("Etat du controleur avant création de la machine:"+this.controleur.getEtatAtelier());
+            produitsTemp = this.controleur.getVuePrincipale().getGestionBDD().listproduit(this.controleur.getVuePrincipale().getGestionBDD().conn);
+            
+            
+            //machinesTemp = this.controleur.getVuePrincipale().getGestionBDD().listmachine(this.controleur.getVuePrincipale().getGestionBDD().conn);
+
+            int index =0;
+            if (produitsTemp.size()==0 && this.controleur.getEtatAtelier()==-1){
+                this.add(new H3("Sélectionnez tout d'abord un atelier"));
+            }
+            else if (produitsTemp.size()==0){
+                
+                this.add(new H3("Il n'y a pas de produits à fabriquer dans cet atelier"));
+            }
+            
+            else{
+                this.gridProduits= new Grid<>();
+                gridProduits.addColumn(Produit::getRef).setHeader("Référence");
+                gridProduits.setItems(produitsTemp);
+                this.add(gridProduits);
+                
+                
+            }
+            
+            this.menuItemAjouter.addClickListener(event -> {
+            Notification.show("Option Plan sélectionnée !");
+                try {
+                    this.controleur.CreationObjet("produit");
+                } catch (SQLException ex) {
+                    Logger.getLogger(PartiePrincipale.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            });
+            
         }
         
 

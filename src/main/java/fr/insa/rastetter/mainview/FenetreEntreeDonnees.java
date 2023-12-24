@@ -254,6 +254,22 @@ public class FenetreEntreeDonnees extends Dialog{
 
         });
         
+       
+       
+       
+       
+       
+       
+       if (objet=="produit"){
+           
+           
+           
+           
+           
+           
+           
+           
+       }
         
         
         

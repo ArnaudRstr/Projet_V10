@@ -64,6 +64,7 @@ public class Entete extends MyHorizontalLayout {
     private MenuItem menuItemDetailsAtelier;
     private MenuItem menuItemSupprimerAtelier;
     private MenuItem menuItemTypeOperation;
+    private MenuItem menuItemOperateurs;
     
     
     private ComboBox comboBoxAtelier;
@@ -86,7 +87,7 @@ public class Entete extends MyHorizontalLayout {
         this.getStyle().set("border", "1px solid #000000");
         this.getStyle().set("padding", "1px");
         this.getStyle().set("border-radius", "7px");
-        this.getStyle().set("background-color","#F8E0E0");
+        this.getStyle().set("background-color","#F8F8FF");
 
 
         this.setWidthFull();
@@ -111,7 +112,8 @@ public class Entete extends MyHorizontalLayout {
         this.menuItemMachine = this.subMenuMenuPrincipal.addItem("Machines");
         this.menuItemProduit = this.subMenuMenuPrincipal.addItem("Produits");
         this.menuItemTypeOperation=this.subMenuMenuPrincipal.addItem("Types d'opérations");
-        
+        this.menuItemOperateurs=this.subMenuMenuPrincipal.addItem("Operateurs");
+
         
         this.menuItemAtelier=this.menuBarD.addItem("Atelier");
         this.subMenuAtelier=menuItemAtelier.getSubMenu();
@@ -191,7 +193,16 @@ public class Entete extends MyHorizontalLayout {
         
         menuItemProduit.addClickListener(event -> {
             Notification.show("Option produit sélectionnée !");
-            this.main.getControleur().MenuItemProduit();
+            try {
+                this.main.getControleur().MenuItemProduit();
+            } catch (SQLException ex) {
+                System.out.println("Entete : erreur :  MenuItemProduit dans le controleur");
+            }
+            
+            
+            
+            
+            
         });
         
         
@@ -212,7 +223,12 @@ public class Entete extends MyHorizontalLayout {
             }
         });
         
-        
+        menuItemOperateurs.addClickListener(event -> {
+            Notification.show("Operateurs sélectionnés !");
+            
+            
+            
+        });
         
         
         
