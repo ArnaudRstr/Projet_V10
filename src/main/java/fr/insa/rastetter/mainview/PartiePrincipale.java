@@ -71,6 +71,8 @@ public class PartiePrincipale extends MyVerticalLayout {
                 this.add(new H3("Il n'y a pas de machines dans cet atelier"));
             }
             else {
+                Text nbelements = new Text(machinesTemp.size()+" machines");
+                this.add(nbelements);
                 
                 this.gridMachines= new Grid<>();
                 gridMachines.addColumn(Machine::getNom).setHeader("Nom");

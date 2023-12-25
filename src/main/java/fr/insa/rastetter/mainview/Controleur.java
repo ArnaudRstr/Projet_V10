@@ -20,6 +20,7 @@ import static fr.insa.moly.GestionBDD.GestionBDD.addtypeoperation;
 import fr.insa.moly.objet.Atelier;
 import static fr.insa.moly.GestionBDD.GestionBDD.listaltelier;
 import static fr.insa.moly.GestionBDD.GestionBDD.listtypeoperation;
+import fr.insa.moly.objet.Machine;
 import fr.insa.moly.objet.Typeoperation;
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -118,14 +119,16 @@ public class Controleur {
         fenetre.setWidth("40vw");
         fenetre.getElement().getThemeList().add("dialogResizable");
         Button boutonajouter = new Button("Ajouter");
-        MyHorizontalLayout hlajout = new MyHorizontalLayout();
-        hlajout.setWidthFull();
+        Button boutonsupprimer = new Button("Supprimer");
+        boutonsupprimer.setEnabled(false);
+        MyHorizontalLayout hlmodif = new MyHorizontalLayout();
+        hlmodif.setWidthFull();
         TextField entreetype = new TextField();
         entreetype.setPlaceholder("Nom du type d'operation à ajouter");
         entreetype.setWidthFull();
         
-        hlajout.add(entreetype,boutonajouter);
-        contenu.add(hlajout);
+        hlmodif.add(entreetype,boutonajouter,boutonsupprimer);
+        contenu.add(hlmodif);
         
         if (listtypeoperation(this.getVuePrincipale().getGestionBDD().conn).size()==0){
             contenu.add(new Text("Il n'y a pas de type d'opération"));
@@ -175,20 +178,53 @@ public class Controleur {
             }
             
             
-            
-            
-                
-                
-                
-            
 
             
-            
-            
-            
-            
-            
         });
+        
+        grid.addItemClickListener(event -> {
+                    Notification.show("Ligne sélectionnée"+event.getItem().getId());
+                
+                    boutonsupprimer.setEnabled(true);
+                    
+                    boutonsupprimer.addClickListener(event2 -> {
+                         Dialog dsuppression = new Dialog();
+                         dsuppression.setHeaderTitle("Confirmer la suppression");
+                         MyVerticalLayout vlsuppression = new MyVerticalLayout();
+                         vlsuppression.add(new H2("Etes-vous sûr de vouloir supprimer les éléments suivants?"));
+
+                         vlsuppression.add(new Text("Liste des éléments qui seront supprimés"));
+                         
+                         
+                         dsuppression.add(vlsuppression);
+                         
+                         
+                         
+                         
+                         
+                         
+                         
+                         
+                         dsuppression.open();
+                        
+                        
+                        
+                        
+                    System.out.println("Ligne sélectionnée"+event.getItem().getId()+" fenetre fermée avec bouton supprimer");
+                    
+                    
+                    
+                    
+                });
+                    
+
+                
+                
+                    
+                });
+        
+        
+        
         
         
         
