@@ -209,13 +209,16 @@ public class Entete extends MyHorizontalLayout {
         
         menuItemTypeOperation.addClickListener(event -> {
             Notification.show("Option type operation sélectionnée !");
-            try {
-                //On essaie d'ajouter un type d'opération
-                this.main.getGestionBDD().addtypeoperation(this.main.getGestionBDD().conn,"test2");
-                System.out.println("Type opération ajouté");
-            } catch (SQLException ex) {
-                System.out.println("Type opération pas ajouté");
-            }
+//            try {
+//                //On essaie d'ajouter un type d'opération
+//                this.main.getGestionBDD().addtypeoperation(this.main.getGestionBDD().conn,"test2");
+//                System.out.println("Type opération ajouté");
+//            } catch (SQLException ex) {
+//                System.out.println("Type opération pas ajouté");
+//            }
+
+
+
             try {
                 this.main.getControleur().MenuItemTypeOperation();
             } catch (SQLException ex) {

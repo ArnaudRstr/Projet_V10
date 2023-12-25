@@ -130,10 +130,12 @@ public class Controleur {
         hlmodif.add(entreetype,boutonajouter,boutonsupprimer);
         contenu.add(hlmodif);
         
+        
         if (listtypeoperation(this.getVuePrincipale().getGestionBDD().conn).size()==0){
             contenu.add(new Text("Il n'y a pas de type d'opération"));
             System.out.println("Pas de types d'iopération");
         }
+        
         
         else{
           ArrayList<Typeoperation> listtemp = new ArrayList();
@@ -152,10 +154,10 @@ public class Controleur {
         fenetre.open(); 
         
         
-        boutonajouter.addClickListener(event -> {
+        boutonajouter.addClickListener(event4 -> {
             
             String nomtype = entreetype.getValue();
-            
+            System.out.println("Bouton Ajouté activé");
 
             if (nomtype.isEmpty()){
                 Notification.show("Ajoutez un nom");
@@ -173,56 +175,84 @@ public class Controleur {
             } catch (SQLException ex) {
                 System.out.println("Controleur : Erreur lors de la mise à jour du type d'opération");
             }
-                
-                
+     
             }
-            
-            
-
-            
+      
         });
         
-        grid.addItemClickListener(event -> {
-                    Notification.show("Ligne sélectionnée"+event.getItem().getId());
-                
+        
+       
+        
+        grid.addItemClickListener(event5 -> {
+                    Notification.show("Ligne sélectionnée"+event5.getItem().getId());
+                    System.out.println("Id à supprimer "+event5.getItem().getId());
                     boutonsupprimer.setEnabled(true);
                     
+                    final int intselect = event5.getItem().getId();
+                    
+                    //Ouvre la fenetre supplémentaire : confirmation de suppression
                     boutonsupprimer.addClickListener(event2 -> {
-                         Dialog dsuppression = new Dialog();
-                         dsuppression.setHeaderTitle("Confirmer la suppression");
-                         MyVerticalLayout vlsuppression = new MyVerticalLayout();
-                         vlsuppression.add(new H2("Etes-vous sûr de vouloir supprimer les éléments suivants?"));
+                        
+                        
+                        grid.deselectAll();
+                        System.out.println("Id à supprimer ( 2ème boucle) "+intselect);
+                        grid.deselectAll();
+                        Dialog dsuppression = new Dialog();
+                        dsuppression.setHeaderTitle("Confirmer la suppression");
+                        MyVerticalLayout vlsuppression = new MyVerticalLayout();
+                        vlsuppression.add(new Text("Etes-vous sûr de vouloir supprimer les éléments suivants?"));
+                        vlsuppression.add();
+                        vlsuppression.add(new Text("Liste des éléments qui seront supprimés"));
+                        
+                        //Il faudra ajouter tout ce qui est supprimé
+                        
+                        
+                        
+                        dsuppression.add(vlsuppression);
+                        Button boutonFermer2 = new Button(new Icon("lumo","cross"));
+                        dsuppression.getHeader().add(boutonFermer2);
+                        Button boutonSupp = new Button("Supprimer");
+                        Button boutonAnnuler = new Button("Annuler");
+                        dsuppression.open();
 
-                         vlsuppression.add(new Text("Liste des éléments qui seront supprimés"));
-                         
-                         
-                         dsuppression.add(vlsuppression);
-                         
-                         
-                         
-                         
-                         
-                         
-                         
-                         
-                         dsuppression.open();
                         
                         
                         
                         
-                    System.out.println("Ligne sélectionnée"+event.getItem().getId()+" fenetre fermée avec bouton supprimer");
+                        dsuppression.getFooter().add(boutonAnnuler,boutonSupp);                     
+
+                        
+                        boutonSupp.addClickListener(event3 -> {
+                            dsuppression.close();
+                            
+                            //ICI IL FAUDRA METTRE LA METHODE DE SUPPRESSION
+                     
+                        });
+                        
+                  
+                        boutonAnnuler.addClickListener(event3 -> {
+                            dsuppression.close();
+                        });
+
+                        boutonFermer2.addClickListener(event3 -> {
+                            dsuppression.close();
+                        });
+                             
+                        
+
+                    //System.out.println("Id à supprimer "+event.getItem().getId()+" fenetre fermée avec bouton supprimer");
                     
                     
-                    
-                    
+                 
                 });
                     
+                event5=null;
+                return;
+                
 
+       
                 
-                
-                    
                 });
-        
         
         
         
@@ -235,6 +265,7 @@ public class Controleur {
         
         
     }
+    
     
     
     
