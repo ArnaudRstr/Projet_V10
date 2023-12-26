@@ -6,6 +6,7 @@ package fr.insa.rastetter.mainview;
 
 import com.vaadin.flow.component.Text;
 import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.component.html.H3;
@@ -14,7 +15,11 @@ import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.textfield.NumberField;
 import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.component.textfield.TextField;
+import static fr.insa.moly.GestionBDD.GestionBDD.listtypeoperation;
 import fr.insa.moly.objet.Machine;
+import fr.insa.moly.objet.Typeoperation;
+import java.sql.SQLException;
+import java.util.ArrayList;
 
 /**
  *
@@ -30,7 +35,7 @@ private Controleur controleur;
         this.add(new H2("Partie de détail")); 
     }
         
-    public PartieDetail(Controleur controleur, String typeobjet , Object object ){
+    public PartieDetail(Controleur controleur, String typeobjet , Object object ) throws SQLException{
         this.controleur=controleur;
 
         System.out.println("Partie detail mise à jour");
@@ -136,7 +141,32 @@ private Controleur controleur;
             tades.setWidthFull();
             contenu.add(tades);
             
+            ComboBox cbtypeoperation = new ComboBox();
             
+            
+            ArrayList altypeop = new ArrayList();
+            
+            altypeop = listtypeoperation(this.controleur.getVuePrincipale().getGestionBDD().conn);
+            
+            cbtypeoperation.setItems(altypeop);
+            //Ici il faut encore faire en sorte d'afficher l'id + le nom du type d'opération et pas uniquement le type d'op pcq ça marche pas.
+            
+            //On recherche le type d'operation à partir de son id.
+            int valide=0;
+            int i =0;
+            int id = machinetemp.getIdtypeoperation();
+            while (valide==0){
+                if (id == ((Typeoperation) altypeop.get(i)).getId()){
+                    valide =1;
+                    cbtypeoperation.setValue(((Typeoperation) altypeop.get(i)).getNom());
+
+                }
+                i++;
+                                
+            }
+            cbtypeoperation.setReadOnly(true);
+            cbtypeoperation.setLabel("Type operation");
+            contenu.add(cbtypeoperation);
             
             NumberField nfpuissance = new NumberField();
             nfpuissance.setLabel("Puissance (W)");
@@ -175,6 +205,7 @@ private Controleur controleur;
             nfcouthoraire.setReadOnly(false);
             nfdimlarg.setReadOnly(false);
             nfdimlong.setReadOnly(false);
+            cbtypeoperation.setReadOnly(false);
             
                         
             
