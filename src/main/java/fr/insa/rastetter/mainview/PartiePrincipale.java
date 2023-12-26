@@ -78,8 +78,8 @@ public class PartiePrincipale extends MyVerticalLayout {
                 gridMachines.addColumn(Machine::getNom).setHeader("Nom");
                 
                 gridMachines.addColumn(Machine::getMarque).setHeader("Marque");
-                gridMachines.addColumn(Machine::getStatut).setHeader("Statut");
-
+                //gridMachines.addColumn(Machine::getStatut).setHeader("Statut");
+                gridMachines.addColumn(Machine::getSpanText).setHeader("Statut");
                 gridMachines.setItems(machinesTemp);
                 this.add(gridMachines);
                 
@@ -91,7 +91,11 @@ public class PartiePrincipale extends MyVerticalLayout {
                 Machine machineTemp = event.getItem();
                 
                 
-                this.controleur.getFenetrePartagee().setPartD(new PartieDetail(this.controleur,"machine",machineTemp));
+                    try {
+                        this.controleur.getFenetrePartagee().setPartD(new PartieDetail(this.controleur,"machine",machineTemp));
+                    } catch (SQLException ex) {
+                        Logger.getLogger(PartiePrincipale.class.getName()).log(Level.SEVERE, null, ex);
+                    }
                     
                 });
                 

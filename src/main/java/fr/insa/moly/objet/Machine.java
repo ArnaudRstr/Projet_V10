@@ -64,9 +64,10 @@ public class Machine {
         
         
         
-        this.spanStatut=new Span("En service");
+        this.spanStatut=new Span();
+        this.spanStatut.setText("statut");
         //this.spanStatut.getElement().getStyle().set("margin-left", "auto");
-        this.spanStatut.getElement().getThemeList().add("badge success");
+        this.spanStatut.getElement().getThemeList().add("badge success primary");
         this.pannel.add(spanStatut,nomaffiche);
     }
 
@@ -126,6 +127,14 @@ public class Machine {
     
     public Span getSpanStatut(){
         return this.spanStatut;
+    }
+    
+    public String getSpanText(){
+        return this.spanStatut.getText();
+    }
+    
+    public void setSpanStatut(Span statut){
+        this.spanStatut=statut;
     }
     
 

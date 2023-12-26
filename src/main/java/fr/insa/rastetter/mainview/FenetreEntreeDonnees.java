@@ -88,10 +88,9 @@ public class FenetreEntreeDonnees extends Dialog{
         this.contenuVL.add(dimLongueur);
         this.contenuVL.add(dimLargeur);
         
-        this.menuBar.addItem(boutonAnnuler);
-        this.menuBar.addItem(boutonEnregistrer);
-        this.contenuVL.add(menuBar);
+
         this.add(contenuVL);
+        this.getFooter().add(boutonAnnuler,boutonEnregistrer);
        
         this.contenuVL.setAlignItems(CENTER);
         this.open();
@@ -165,11 +164,11 @@ public class FenetreEntreeDonnees extends Dialog{
         comboBoxTypeOperation.setLabel("Type d'opération");
         
         ArrayList<Typeoperation> listtemp = new ArrayList();
-        ArrayList listajouter = new ArrayList();
         
         listtemp=listtypeoperation(this.controleur.getVuePrincipale().getGestionBDD().conn);
         
-        
+        ArrayList listajouter = new ArrayList();
+
         int index =0;
         while(index< listtemp.size()){
             
@@ -198,9 +197,9 @@ public class FenetreEntreeDonnees extends Dialog{
         
         this.contenuHL.add(colonne1,colonne2);
         this.contenuVL.add(this.contenuHL);
-        this.menuBar.addItem(boutonAnnuler);
-        this.menuBar.addItem(boutonEnregistrer);
-        this.contenuVL.add(menuBar);
+        
+        this.getFooter().add(boutonAnnuler,boutonEnregistrer);
+
         this.contenuVL.setAlignItems(CENTER);
         
         this.add(contenuVL);

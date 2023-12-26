@@ -10,7 +10,9 @@ import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.component.html.H3;
+import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.icon.Icon;
+import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.textfield.NumberField;
 import com.vaadin.flow.component.textfield.TextArea;
@@ -107,6 +109,9 @@ private Controleur controleur;
 
             MyHorizontalLayout listboutons = new MyHorizontalLayout();
             
+            
+            
+            
             Button boutonModifier = new Button(new Icon("lumo","edit"));
             listboutons.add(boutonModifier);
             Button boutonEnregistrer = new Button(new Icon("lumo","checkmark"));
@@ -115,8 +120,10 @@ private Controleur controleur;
 
             Machine machinetemp = (Machine) object;
             
+            
             TextField tfnom=  new TextField();
             tfnom.setLabel("Nom");
+            tfnom.getStyle().set("font-size","40px");
             tfnom.setReadOnly(true);
             tfnom.setValue(machinetemp.getNom());
             tfnom.setWidthFull();
@@ -148,7 +155,15 @@ private Controleur controleur;
             
             altypeop = listtypeoperation(this.controleur.getVuePrincipale().getGestionBDD().conn);
             
-            cbtypeoperation.setItems(altypeop);
+            ArrayList listajouter = new ArrayList();
+
+            int index =0;
+            while(index< altypeop.size()){
+            
+            listajouter.add(((Typeoperation)altypeop.get(index)).getId()+" : "+ ((Typeoperation)altypeop.get(index)).getNom());
+            index++;
+        }
+            cbtypeoperation.setItems(listajouter);
             //Ici il faut encore faire en sorte d'afficher l'id + le nom du type d'opération et pas uniquement le type d'op pcq ça marche pas.
             
             //On recherche le type d'operation à partir de son id.
@@ -223,6 +238,7 @@ private Controleur controleur;
             nfcouthoraire.setReadOnly(true);
             nfdimlarg.setReadOnly(true);
             nfdimlong.setReadOnly(true); 
+            cbtypeoperation.setReadOnly(false);
             
             Notification.show("La méthode d'enregistrement n'est pas encore faite");
             
