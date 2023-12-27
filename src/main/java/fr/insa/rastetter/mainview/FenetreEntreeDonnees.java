@@ -309,6 +309,62 @@ public class FenetreEntreeDonnees extends Dialog{
            
            
        }
+       
+       
+       if (objet=="brut"){
+           
+           System.out.println("Creation de brut");
+           
+            this.setHeaderTitle("Ajouter un brut");
+
+            this.nom = new TextField("Nom");
+            //this.des = new TextArea("Description");
+            TextField tfmat = new TextField("Matière");
+            TextField tfref = new TextField("Référence");
+            NumberField nbidbrut = new NumberField("Identifiant du brut");
+            NumberField nbstock = new NumberField("Nombre en stock");
+            TextField tfdim = new TextField("Dimensions");
+            TextField tffournisseur = new TextField("Fournisseur");
+
+
+
+            this.contenuVL.add(nom,tfref,nbstock,tffournisseur,tfmat,tfdim);
+            this.add(contenuVL);
+            
+            this.open();
+           
+           
+           
+           
+            boutonFermer.addClickListener(event -> {
+            this.close();   
+        });
+
+         boutonAnnuler.addClickListener(event -> {
+            this.close();   
+        });
+        
+        boutonEnregistrer.addClickListener(event -> {
+            
+            
+            this.close();
+               try {
+                   this.controleur.getVuePrincipale().getGestionBDD().addbrut(this.controleur.getVuePrincipale().getGestionBDD().conn,this.nom.getValue(), tfref.getValue(),tfmat.getValue(),(int) Math.round(nbstock.getValue()),tfdim.getValue(),tffournisseur.getValue());
+                   this.controleur.MenuItemBrut();
+               } catch (SQLException ex) {
+                   System.out.print("Fenêtre entrée de donnée : erreur lors de l'ajout du brut");
+               }
+            
+            
+            
+        });
+        
+           
+           
+           
+           
+           
+       }
         
         
         

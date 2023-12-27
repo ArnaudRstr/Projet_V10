@@ -16,6 +16,7 @@ import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.component.textfield.TextField;
+import fr.insa.moly.objet.Brut;
 import fr.insa.moly.objet.Machine;
 import fr.insa.moly.objet.Produit;
 import java.sql.Connection;
@@ -37,7 +38,8 @@ public class PartiePrincipale extends MyVerticalLayout {
     public Paragraph paragraph;
     private Grid<Machine> gridMachines;
     private Grid<Produit> gridProduits;
-    
+    private Grid<Brut> gridBruts;
+
     private Controleur controleur;
     
     public PartiePrincipale(Controleur controleur, String objet) throws SQLException{
@@ -153,6 +155,52 @@ public class PartiePrincipale extends MyVerticalLayout {
                     this.controleur.CreationObjet("produit");
                 } catch (SQLException ex) {
                     Logger.getLogger(PartiePrincipale.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            });
+            
+        }
+        
+        
+        
+        if (objet=="brut"){
+            
+            this.add(new H2("Bruts"));
+            ArrayList <Brut> brutstemp = new ArrayList();
+            System.out.println("Etat du controleur avant création de la machine:"+this.controleur.getEtatAtelier());
+            brutstemp = this.controleur.getVuePrincipale().getGestionBDD().listbrut(this.controleur.getVuePrincipale().getGestionBDD().conn);
+            
+            
+            
+            
+            
+            
+            
+
+            int index =0;
+            if (brutstemp.size()==0 && this.controleur.getEtatAtelier()==-1){
+                this.add(new H3("Sélectionnez tout d'abord un atelier"));
+            }
+            else if (brutstemp.size()==0){
+                
+                this.add(new H3("Il n'y a pas de produits à fabriquer dans cet atelier"));
+            }
+            
+            else{
+                this.gridBruts= new Grid<>();
+                gridBruts.addColumn(Brut::getNom).setHeader("Nom");
+                gridBruts.addColumn(Brut::getRef).setHeader("Référence");
+                gridBruts.setItems(brutstemp);
+                this.add(gridBruts);
+                
+                
+            }
+            
+            this.menuItemAjouter.addClickListener(event -> {
+            Notification.show("Option brut sélectionnée !");
+                try {
+                    this.controleur.CreationObjet("brut");
+                } catch (SQLException ex) {
+                    System.out.println("Erreur : partie principale : Pas reussi à créer le brut");
                 }
             });
             

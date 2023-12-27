@@ -266,6 +266,17 @@ public class Controleur {
         
     }
     
+    public void MenuItemBrut() throws SQLException{
+        this.fenetrePartagee =new FenetrePartagee(this,"brut");
+        //this.main.setMainContent(new FenetrePartagee(this, "machine"));
+        
+        this.main.setMainContent(this.fenetrePartagee);
+        this.etatFenetre= "brut";
+        
+        
+        
+    }
+    
     
     
     
@@ -496,6 +507,19 @@ public class Controleur {
             
             
             this.MenuItemProduit();
+        }
+        
+        
+        if(objet =="brut"){
+        
+            System.out.println("la fenetre va être créée");
+            
+            
+            this.fenetreEntreeDonnees = new FenetreEntreeDonnees(this,"brut");
+            System.out.println("La fenetre devrait être crée");
+            
+            
+            this.MenuItemBrut();
         }
         
         

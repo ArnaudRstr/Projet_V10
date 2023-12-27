@@ -65,7 +65,8 @@ public class Entete extends MyHorizontalLayout {
     private MenuItem menuItemSupprimerAtelier;
     private MenuItem menuItemTypeOperation;
     private MenuItem menuItemOperateurs;
-    
+    private MenuItem menuItemBrut;
+
     
     private ComboBox comboBoxAtelier;
     
@@ -113,6 +114,7 @@ public class Entete extends MyHorizontalLayout {
         this.menuItemProduit = this.subMenuMenuPrincipal.addItem("Produits");
         this.menuItemTypeOperation=this.subMenuMenuPrincipal.addItem("Types d'opérations");
         this.menuItemOperateurs=this.subMenuMenuPrincipal.addItem("Operateurs");
+        this.menuItemBrut=this.subMenuMenuPrincipal.addItem("Bruts");
 
         
         this.menuItemAtelier=this.menuBarD.addItem("Atelier");
@@ -229,6 +231,19 @@ public class Entete extends MyHorizontalLayout {
         menuItemOperateurs.addClickListener(event -> {
             Notification.show("Operateurs sélectionnés !");
             
+            
+            
+        });
+        
+        
+        menuItemBrut.addClickListener(event -> {
+            Notification.show("Bruts sélectionnés !");
+            
+            try {
+                this.main.getControleur().MenuItemBrut();
+            } catch (SQLException ex) {
+                System.out.println("Erreur controleur : menuItemBrut");
+            }
             
             
         });
