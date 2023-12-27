@@ -18,6 +18,7 @@ import com.vaadin.flow.component.textfield.TextField;
 import static fr.insa.moly.GestionBDD.GestionBDD.listaltelier;
 import static fr.insa.moly.GestionBDD.GestionBDD.listtypeoperation;
 import fr.insa.moly.objet.Typeoperation;
+import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.logging.Level;
@@ -67,7 +68,9 @@ public class FenetreEntreeDonnees extends Dialog{
         this.menuBar=new MenuBar();
         this.boutonFermer = new Button(new Icon("lumo","cross"));
 
-       
+        this.getFooter().add(boutonAnnuler,boutonEnregistrer);
+        this.getHeader().add(boutonFermer);
+
        
        
        
@@ -81,7 +84,6 @@ public class FenetreEntreeDonnees extends Dialog{
         this.dimLargeur = new NumberField("Largeur (cm)");
         
         this.setHeaderTitle("Ajouter un atelier");
-        this.getHeader().add(boutonFermer);
 
         this.contenuVL.add(nom);
         this.contenuVL.add(des);
@@ -90,7 +92,6 @@ public class FenetreEntreeDonnees extends Dialog{
         
 
         this.add(contenuVL);
-        this.getFooter().add(boutonAnnuler,boutonEnregistrer);
        
         this.contenuVL.setAlignItems(CENTER);
         this.open();
@@ -181,7 +182,6 @@ public class FenetreEntreeDonnees extends Dialog{
         
         
         this.setHeaderTitle("Ajouter une machine");
-        this.getHeader().add(boutonFermer);
         
         colonne1.add(nom);
         colonne1.add(des);
@@ -198,7 +198,6 @@ public class FenetreEntreeDonnees extends Dialog{
         this.contenuHL.add(colonne1,colonne2);
         this.contenuVL.add(this.contenuHL);
         
-        this.getFooter().add(boutonAnnuler,boutonEnregistrer);
 
         this.contenuVL.setAlignItems(CENTER);
         
@@ -233,7 +232,7 @@ public class FenetreEntreeDonnees extends Dialog{
             
             
             
-            double puissancetemp = puissance.getValue();
+            double puissancetemp = puissance.getValue();        //PAS BESOIN DE TOUT çA, ON PEUT METTRE DANS LA METHODE DE CREATION DIRECTEMENT (RESTE A FAIRE)
             double couthorairetemp= coutHoraire.getValue();
             double dimLongtemp= dimLongueur.getValue();
             double dimLargtemp =dimLargeur.getValue();
@@ -255,14 +254,55 @@ public class FenetreEntreeDonnees extends Dialog{
         
        
        
-       
+    }
        
        
        
        if (objet=="produit"){
            
+           System.out.println("Creation de produit");
+           
+            this.setHeaderTitle("Ajouter un produit");
+
+            this.nom = new TextField("Nom");
+            this.des = new TextArea("Description");
+            TextField tfref = new TextField("Référence");
+            NumberField nbidbrut = new NumberField("Identifiant du brut");
+            
+
+
+
+            this.contenuVL.add(nom,tfref, des,nbidbrut);
+            this.add(contenuVL);
+            
+            this.open();
            
            
+           
+           
+            boutonFermer.addClickListener(event -> {
+            this.close();   
+        });
+
+         boutonAnnuler.addClickListener(event -> {
+            this.close();   
+        });
+        
+        boutonEnregistrer.addClickListener(event -> {
+            
+            
+            this.close();
+               try {
+                   this.controleur.getVuePrincipale().getGestionBDD().addproduit(this.controleur.getVuePrincipale().getGestionBDD().conn,tfref.getValue(),des.getValue(),(int) Math.round(nbidbrut.getValue()));
+                   this.controleur.MenuItemProduit();
+               } catch (SQLException ex) {
+                   System.out.print("Fenêtre entrée de donnée : erreur lors de l'ajout du produit");
+               }
+            
+            
+            
+        });
+        
            
            
            
@@ -272,7 +312,7 @@ public class FenetreEntreeDonnees extends Dialog{
         
         
         
-    }
+    
        
         
         

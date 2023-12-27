@@ -148,7 +148,7 @@ public class PartiePrincipale extends MyVerticalLayout {
             }
             
             this.menuItemAjouter.addClickListener(event -> {
-            Notification.show("Option Plan sélectionnée !");
+            Notification.show("Option produit sélectionnée !");
                 try {
                     this.controleur.CreationObjet("produit");
                 } catch (SQLException ex) {
