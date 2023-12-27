@@ -25,7 +25,6 @@ public class VuePrincipale extends MyVerticalLayout {
     
     
     
-    //private MyVerticalLayout mainContent; //Partie inférieure, dans laquelle on aura plus tard plusieurs onglets ou fenetres
     public Entete entete; //Bandeau supérieur où l'on a tout le menu
     public MyVerticalLayout mainContent;
     
@@ -39,12 +38,13 @@ public class VuePrincipale extends MyVerticalLayout {
         this.mainContent = new MyVerticalLayout();
         this.mainContent.setWidthFull();
         this.mainContent.setHeightFull();
-        this.getStyle().set("padding", "1px");
+        this.getStyle().set("padding", "0px");
         this.mainContent.getStyle().set("border", "1px solid #000000");
         this.getStyle().set("background-color","#FFFFFF");
-        this.mainContent.getStyle().set("border", "1px solid #000000");
-        this.mainContent.getStyle().set("border", "1px solid #000000");
-        this.mainContent.getStyle().set("border-radius", "7px");
+        this.mainContent.getStyle().set("border", "0px solid #000000");
+        this.mainContent.getStyle().set("border-radius", "10px");
+        this.mainContent.getStyle().set("padding", "0px");
+        this.mainContent.setMargin(false);
 
 
         

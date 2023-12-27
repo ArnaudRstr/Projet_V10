@@ -14,7 +14,7 @@ public class VuePlan extends MyVerticalLayout {
     
     
     public VuePlan(){
-        this.add(new H2("ça c'est le plan de l'atelier"));
+        this.add(new H2("Plan de l'atelier"));
 
     }
 }

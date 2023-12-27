@@ -17,6 +17,7 @@ import com.vaadin.flow.component.textfield.NumberField;
 import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.component.textfield.TextField;
 import static fr.insa.moly.GestionBDD.GestionBDD.addtypeoperation;
+import static fr.insa.moly.GestionBDD.GestionBDD.delete;
 import fr.insa.moly.objet.Atelier;
 import static fr.insa.moly.GestionBDD.GestionBDD.listaltelier;
 import static fr.insa.moly.GestionBDD.GestionBDD.listtypeoperation;
@@ -225,7 +226,14 @@ public class Controleur {
                         boutonSupp.addClickListener(event3 -> {
                             dsuppression.close();
                             
-                            //ICI IL FAUDRA METTRE LA METHODE DE SUPPRESSION
+                            try {
+                                System.out.println("Essai de suppression : id = "+intselect);
+
+                                delete(this.getVuePrincipale().getGestionBDD().conn,"Typeoperation",intselect);
+                                boutonSupp.setEnabled(true);
+                            } catch (SQLException ex) {
+                                System.out.println("Pas reussi à supprimer le type d'operation");
+                            }
                      
                         });
                         
@@ -373,13 +381,45 @@ public class Controleur {
     }
     
     
-    public void MenuItemSupprimerAtelier(){
+    public void MenuItemSupprimerAtelier() throws SQLException{
         
+        
+        
+        
+        if(this.etatAtelier==-1){
+            Notification.show("Séléctionnez un atelier");
+        }
+        else {
+            
+            
+            
+            
+            
+            ArrayList<Atelier> listTemp =  new ArrayList();
+       
+        listTemp=listaltelier(this.getVuePrincipale().getGestionBDD().conn);
+        String nom = new String();
+        int index =0;
+        while (index<listTemp.size()){
+            Atelier atelierTemp = (Atelier) listTemp.get(index);
+
+            if(atelierTemp.getId()==this.etatAtelier){
+                
+                nom = atelierTemp.getNom();
+                
+            }
+            
+            
+            index++;        
+
+        }
         //On affiche une fenêtre d'avertissement
-        new FenetreAvertissementSuppression("Atelier");
         
+                    FenetreAvertissementSuppression fenetreAvertissementSuppression = new FenetreAvertissementSuppression(this,nom,this.etatAtelier);
+
+
         
-        
+    }
     }
     
     

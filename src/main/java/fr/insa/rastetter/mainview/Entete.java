@@ -7,16 +7,17 @@ package fr.insa.rastetter.mainview;
 
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.combobox.ComboBox;
-import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.contextmenu.MenuItem;
 import com.vaadin.flow.component.contextmenu.SubMenu;
-import com.vaadin.flow.component.html.Span;
+import com.vaadin.flow.component.html.Div;
+import com.vaadin.flow.component.html.H5;
+import com.vaadin.flow.component.icon.Icon;
+import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.menubar.MenuBar;
 import com.vaadin.flow.component.notification.Notification;
 import static com.vaadin.flow.component.orderedlayout.FlexComponent.Alignment.CENTER;
 import static fr.insa.moly.GestionBDD.GestionBDD.listaltelier;
 import fr.insa.moly.objet.Atelier;
-import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.logging.Level;
@@ -85,10 +86,11 @@ public class Entete extends MyHorizontalLayout {
         this.main = main;
         
         this.addClassName("Custom-Entete");
-        this.getStyle().set("border", "1px solid #000000");
-        this.getStyle().set("padding", "1px");
-        this.getStyle().set("border-radius", "7px");
-        this.getStyle().set("background-color","#F8F8FF");
+        //this.getStyle().set("border", "1px solid #000000");
+        this.getStyle().set("padding", "0px");
+        this.getStyle().set("border-radius", "10px");
+        this.getStyle().set("background-color","#D3D3D3");
+        this.setMargin(false);
 
 
         this.setWidthFull();
@@ -102,8 +104,19 @@ public class Entete extends MyHorizontalLayout {
         this.menuBarD = new MenuBar();
 
         
-                
-        this.menuItemMenu= this.menuBarG.addItem("Menu Principal");
+        Icon menuIcon = new Icon(VaadinIcon.MENU);
+        menuIcon.setSize("25px");
+        MyHorizontalLayout hlmenu = new MyHorizontalLayout();
+        hlmenu.add(menuIcon,new H5("MENU"));
+        Icon compteIcon = new Icon(VaadinIcon.USER);
+        compteIcon.setSize("25px");
+        MyHorizontalLayout hlcompte = new MyHorizontalLayout();
+        hlcompte.add(compteIcon,new H5("COMPTE"));
+        hlcompte.setAlignItems(CENTER);
+        hlmenu.setAlignItems(CENTER);
+        //this.menuItemMenu= this.menuBarG.addItem(menuIcon,"Menu Principal");
+        this.menuItemMenu= this.menuBarG.addItem(hlmenu);
+        
         
         //On crée un sous menu du menu item du menu principal
         this.subMenuMenuPrincipal= menuItemMenu.getSubMenu();
@@ -117,7 +130,7 @@ public class Entete extends MyHorizontalLayout {
         this.menuItemBrut=this.subMenuMenuPrincipal.addItem("Bruts");
 
         
-        this.menuItemAtelier=this.menuBarD.addItem("Atelier");
+        this.menuItemAtelier=this.menuBarD.addItem(new H5("ATELIER"));
         this.subMenuAtelier=menuItemAtelier.getSubMenu();
         
         
@@ -126,7 +139,7 @@ public class Entete extends MyHorizontalLayout {
         this.menuItemSupprimerAtelier=this.subMenuAtelier.addItem("Supprimer");
         
         this.comboBoxAtelier= new ComboBox<>();
-        this.comboBoxAtelier.setHelperText("Atelier");
+        this.comboBoxAtelier.setPlaceholder("Atelier");
         
         
         this.setAlignItems(CENTER);
@@ -150,11 +163,14 @@ public class Entete extends MyHorizontalLayout {
 
         
         
-        this.boutonCompteUtilisateur = new Button("Compte");
-        
-        
-        
-        this.add(menuBarG,comboBoxAtelier,menuBarD,boutonCompteUtilisateur);
+        this.boutonCompteUtilisateur = new Button(hlcompte);
+        Div div0 = new Div();
+        div0.setWidth("100px");
+        Div div1 = new Div();
+        div1.setWidth("500px");
+        Div div2 = new Div();
+        div2.setWidth("500px");
+        this.add(menuBarG,div1,comboBoxAtelier,menuBarD,div2,boutonCompteUtilisateur,div0);
     
         this.getThemeList().add("spacing-xl");
         
@@ -299,7 +315,11 @@ public class Entete extends MyHorizontalLayout {
          
         Notification.show("bouton Supprimer Atelier sélectionné !");
         
-        this.main.getControleur().MenuItemSupprimerAtelier();
+            try {
+                this.main.getControleur().MenuItemSupprimerAtelier();
+            } catch (SQLException ex) {
+                Logger.getLogger(Entete.class.getName()).log(Level.SEVERE, null, ex);
+            }
                 
  
         });

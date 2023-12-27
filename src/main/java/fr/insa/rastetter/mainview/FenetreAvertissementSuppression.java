@@ -4,12 +4,17 @@
  */
 package fr.insa.rastetter.mainview;
 
+import com.vaadin.flow.component.Text;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.dialog.Dialog;
+import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.component.html.H3;
-import com.vaadin.flow.component.menubar.MenuBar;
-import com.vaadin.flow.component.menubar.MenuBarVariant;
+import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
+import static fr.insa.moly.GestionBDD.GestionBDD.delete;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -19,38 +24,56 @@ public class FenetreAvertissementSuppression extends Dialog {
     
     private Button boutonContinuer;
     private Button boutonAnnuler;
+    private Button boutonFermer;
     private MyVerticalLayout contenu;
-    private MenuBar menuBar;
     private Controleur controleur;
 
     
-public FenetreAvertissementSuppression(String text){
+public FenetreAvertissementSuppression(Controleur controleur,String text,int id){
     
+    this.controleur=controleur;
     this.contenu=new MyVerticalLayout();
     this.boutonAnnuler =new Button("Annuler");
     this.boutonContinuer=new Button("Supprimer définitivement");
-    this.menuBar=new MenuBar();
+    this.boutonFermer = new Button(new Icon("lumo","cross"));
+
+    this.setHeaderTitle("Suppression");
+    this.getHeader().add(boutonFermer);
     
-    this.menuBar.getElement().getThemeList().add("borderless");
-    this.menuBar.getElement().getThemeList().add("padding");
+    this.getFooter().add(boutonAnnuler,boutonContinuer);
     
-    this.menuBar.addItem(boutonAnnuler);
-    this.menuBar.addItem(boutonContinuer);
-    this.contenu.add(new H3("Etes-vous sûr de vouloir supprimer la sélection? : "+ text), menuBar);
+    
+    this.contenu.add(new H3("Etes-vous sûr de vouloir supprimer la sélection? "));
+    this.contenu.add(new Text(text));
     this.contenu.setAlignItems(FlexComponent.Alignment.CENTER);
     this.add(contenu);
     
     this.open();
     
+    
+    boutonFermer.addClickListener(event -> {
+           this.close();   
+       });
     boutonAnnuler.addClickListener(event -> {
            this.close();   
        });
-    
-    boutonContinuer.addClickListener(event -> {
+        boutonContinuer.addClickListener(event -> {
            this.close(); 
            
-           //Ici il faut mettre la suppresion
+           
+        try {
+            
+            
+            
+            delete(this.controleur.getVuePrincipale().getGestionBDD().conn,"Atelier",id);
+            System.out.println("suppression devrait être effectuée : id atelier : "+id);
+
+        } catch (SQLException ex) {
+            Logger.getLogger(FenetreAvertissementSuppression.class.getName()).log(Level.SEVERE, null, ex);
+        }
        });
+        
+      
     
     
 }

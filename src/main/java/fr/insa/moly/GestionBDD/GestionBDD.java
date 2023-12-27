@@ -1145,8 +1145,8 @@ public static void delete (Connection connect,String table,int id)throws SQLExce
                 "DELETE FROM `?` WHERE id=?;"
 
             )){
-                    pst.setString(1, table);
-                    pst.setInt(2, id);
+                    pst.setString(1,table);
+                    pst.setInt(2,id);
                     pst.executeUpdate();
         try { // creation d'un requete 
             connect.commit(); // valide le refresh

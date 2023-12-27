@@ -4,15 +4,11 @@
  */
 package fr.insa.rastetter.mainview;
 
-import com.vaadin.flow.component.Text;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.combobox.ComboBox;
-import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.html.H2;
-import com.vaadin.flow.component.html.H3;
-import com.vaadin.flow.component.html.Span;
+import com.vaadin.flow.component.html.H4;
 import com.vaadin.flow.component.icon.Icon;
-import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.textfield.NumberField;
 import com.vaadin.flow.component.textfield.TextArea;
@@ -33,19 +29,20 @@ private Controleur controleur;
 
     public PartieDetail(Controleur controleur){
         this.controleur=controleur;
-        
-        this.add(new H2("Partie de détail")); 
+        this.getStyle().set("padding", "1px");
+        this.add(new H2(" Détail")); 
+        this.add(new H4("Sélectionnez un élement pour en afficher les détails"));
     }
         
     public PartieDetail(Controleur controleur, String typeobjet , Object object ) throws SQLException{
         this.controleur=controleur;
-
+        this.getStyle().set("padding", "0px");
         System.out.println("Partie detail mise à jour");
         
         if (typeobjet =="machine"){
             
             MyVerticalLayout contenu = new MyVerticalLayout();
-            contenu.getStyle().set("padding", "1px");
+            contenu.getStyle().set("padding", "10px");
             contenu.setSpacing(false);
             MyHorizontalLayout hlnom = new MyHorizontalLayout();
             MyHorizontalLayout hlid = new MyHorizontalLayout();
