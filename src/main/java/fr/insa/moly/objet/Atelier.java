@@ -46,7 +46,10 @@ public class Atelier {
     public void setDes(String des) {
         this.des = des;
     }
-   
+    public String getString(){
+        String tab = "Identifiant: "+this.id + " Nom: "+ this.nom+ " Description: "+ this.des;
+        return tab;
+    }
     public String getnomtable(){
       return   "atelier";
     }

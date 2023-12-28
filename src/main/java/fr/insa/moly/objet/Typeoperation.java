@@ -29,7 +29,10 @@ public class Typeoperation {
     public String getNom() {
         return nom;
     }
-
+public String getString(){
+        String tab = "identifiant: "+this.id + " Nom: "+ this.nom;
+        return tab;
+    }
     public void setNom(String nom) {
         this.nom = nom;
     }

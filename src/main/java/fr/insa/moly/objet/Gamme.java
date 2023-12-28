@@ -34,7 +34,13 @@ public class Gamme {
     public void setIdproduit(int idproduit) {
         this.idproduit = idproduit;
     }
-    
+    public String getString(){
+        String tab= "Identifiant produit: "+this.idproduit+ " Gamme: ";
+        for (int i=0;i>this.list.size();i++){
+        tab = tab +","+this.list.get(i);
+        }
+        return tab;
+    }
     public String getnomtable(){
       return   "gamme";
     }

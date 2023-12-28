@@ -182,6 +182,10 @@ public class Machine {
         this.dimensionlongueur = dimensionlongueur;
     }
     
+    public String getString(){
+        String tab = "Identifiant: "+this.id + " Nom: "+ this.nom+" Description: "+this.des+" Marque: "+this.marque+" Indentifiant Atelier:"+this.idatelier+ " Identifiant du type d'opération: "+ this.idtypeoperation+" Coût horaire: "+this.couthoraire+" Puissance: "+this.puissance+" Statut: "+this.statut+" Localisation: "+this.localisation+" Longueur x Largeur: "+this.dimensionlongueur+" x "+this.dimensionlargeur;
+        return tab;
+    }
     public String getnomtable(){
       return   "machine";
     }

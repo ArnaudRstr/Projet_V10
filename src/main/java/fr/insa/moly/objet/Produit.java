@@ -53,7 +53,10 @@ public class Produit {
     public void setIdbrut(int idbrut) {
         this.idbrut = idbrut;
     }
-    
+    public String getString(){
+        String tab = "identifiant: "+this.id + " Reférence: "+ this.ref+ " Description: "+ this.des+" Identifiant Brut: "+this.idbrut;
+        return tab;
+    }
     public String getnomtable(){
       return   "produit";
     }

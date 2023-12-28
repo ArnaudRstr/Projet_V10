@@ -1554,6 +1554,7 @@ public static ArrayList listchild(Connection connect,String tabparentname,int id
      
     return listchild;
 }
+
 public static ArrayList listchildgamme(Connection connect,int idproduit) throws SQLException{
     ArrayList<Integer> listchild = new ArrayList();
     
@@ -1578,8 +1579,7 @@ public static ArrayList listchildgamme(Connection connect,int idproduit) throws 
         } finally {
             connect.setAutoCommit(true);// on remet le refresh automatique
         }
-        
-     
+          
     return listchild;
 }
     public static void main(String[] args) {

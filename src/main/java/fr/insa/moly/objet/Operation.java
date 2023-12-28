@@ -74,6 +74,10 @@ public class Operation {
         this.idmachine = idmachine;
     }
     
+    public String getString(){
+        String tab = "identifiant: "+this.id + " Nom: "+ this.nom+ " Identifiant du type d'opération: "+ this.idtypeoperation+" Outils: "+this.outil+" Durée: "+this.duree;
+        return tab;
+    }
     public String getnomtable(){
       return   "operation";
     }
