@@ -1142,7 +1142,7 @@ public static void delete (Connection connect,String table,int id)throws SQLExce
 //            
 //}
         try ( PreparedStatement pst = connect.prepareStatement(
-                "DELETE FROM `?` WHERE id=?;"
+                "DELETE FROM ? WHERE id=?;"
 
             )){
                     pst.setString(1,table);
@@ -1554,7 +1554,34 @@ public static ArrayList listchild(Connection connect,String tabparentname,int id
      
     return listchild;
 }
+public static ArrayList listchildgamme(Connection connect,int idproduit) throws SQLException{
+    ArrayList<Integer> listchild = new ArrayList();
+    
+    connect.setAutoCommit(false); //stope la mise à jour, elle sera fait à la fin si tout se passe bien
+        try ( PreparedStatement idtab = connect.prepareStatement(
+                "select idproduit from ordre where idopavant=? OR idopapres=?")) {
+            idtab.setInt(1, idproduit);
+            idtab.setInt(2,idproduit);
+            ResultSet tab = idtab.executeQuery();
+            while (tab.next()!= false){
+                listchild.add(tab.getInt("idproduit"));
+            }
 
+            }
+        try { // creation d'un requete 
+            connect.commit(); // valide le refresh
+            System.out.print("le refresh fonctionne") ;
+        } catch (SQLException ex) { // en cas d'erreur on "rollback" on retourne avant 
+            connect.rollback();
+            System.out.print("rollback");
+            throw ex;
+        } finally {
+            connect.setAutoCommit(true);// on remet le refresh automatique
+        }
+        
+     
+    return listchild;
+}
     public static void main(String[] args) {
         System.out.println("Bonjour et bienvenue");
        Initialisation() ;

@@ -4,6 +4,9 @@
  */
 package fr.insa.moly.objet;
 
+import fr.insa.moly.GestionBDD.GestionBDD;
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 /**
@@ -54,5 +57,8 @@ public class Produit {
     public String getnomtable(){
       return   "produit";
     }
-    
+   public ArrayList getGammechild(Connection connect)throws SQLException{
+        ArrayList<Integer> listidchild = GestionBDD.listchild(connect,this.getnomtable(),this.id,"machine");       
+        return listidchild;
+    }
 }

@@ -4,6 +4,11 @@
  */
 package fr.insa.moly.objet;
 
+import fr.insa.moly.GestionBDD.GestionBDD;
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.util.ArrayList;
+
 /**
  *
  * @author molys
@@ -71,5 +76,12 @@ public class Operation {
     
     public String getnomtable(){
       return   "operation";
+    }
+    
+    public ArrayList getGammechild(Connection connect)throws SQLException{
+        ArrayList<Integer> listidchild = GestionBDD.listchildgamme(connect,this.id); 
+       
+        
+        return listidchild;
     }
 }
