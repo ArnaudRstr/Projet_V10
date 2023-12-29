@@ -68,4 +68,11 @@ public class Atelier {
         ArrayList<Integer> listidchild = GestionBDD.listchild(connect,this.getnomtable(),this.id,"produit");       
         return listidchild;
     }
+    
+    public ArrayList getGrandChildList(Connection connect)throws SQLException{
+        ArrayList<String> listIdGrandChild = new ArrayList();
+        
+        
+        return listIdGrandChild;
+    }
 }

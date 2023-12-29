@@ -98,4 +98,11 @@ public class Brut {
         ArrayList<Integer> listidproduitchild = GestionBDD.listchild(connect,this.getnomtable(),this.id,"produit");       
         return listidproduitchild;
     }
+    
+    public ArrayList getGrandChildList(Connection connect)throws SQLException{
+        ArrayList<String> listIdGrandChild = new ArrayList();
+        
+        
+        return listIdGrandChild;
+    }
 }

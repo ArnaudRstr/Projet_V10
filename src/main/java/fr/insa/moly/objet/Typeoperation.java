@@ -50,4 +50,9 @@ public String getString(){
         ArrayList<Integer> listidchild = GestionBDD.listchild(connect,this.getnomtable(),this.id,"machine");       
         return listidchild;
     }
+    
+    public ArrayList getRealiseOOchild(Connection connect)throws SQLException{
+        ArrayList<Integer> listidchild = GestionBDD.listchild(connect,this.getnomtable(),this.id,"realiseOO");       
+        return listidchild;
+    }
 }
