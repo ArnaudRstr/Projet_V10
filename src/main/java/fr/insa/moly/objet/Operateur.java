@@ -4,6 +4,8 @@
  */
 package fr.insa.moly.objet;
 
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 /**
@@ -118,4 +120,10 @@ public class Operateur {
       return   "operateur";
     }
     
+     public ArrayList getGrandChildList(Connection connect)throws SQLException{
+        ArrayList<String> listIdGrandChild = new ArrayList();
+        
+        
+        return listIdGrandChild;
+    }
 }
