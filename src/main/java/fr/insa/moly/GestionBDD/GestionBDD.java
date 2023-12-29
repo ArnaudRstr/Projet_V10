@@ -19,6 +19,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
 
         
@@ -853,10 +855,6 @@ public static void addoperateur(Connection connect,String identifiant, String mo
 
                         for(int i=0;i<listtypeoperation.size();i++){
                             addrealiseoo(connect,id,listtypeoperation.get(i));
-//                                try ( PreparedStatement addrealise = connect.prepareStatement("INSERT INTO realiseoo (idoperateur,idtypeoperation) VALUES (?,?)")){
-//                                    addrealise.setInt(1,id );
-//                                    addrealise.setInt(2,listtypeoperation.get(i));
-//                                }
                         }
                     }
                    
@@ -1125,41 +1123,34 @@ public static void addgamme(Connection connect, int idproduit,Gamme gamme) throw
 }
 }
 
+//ATTENTION ne fonctionne pas avec gamme(ordre) et realiseoo (ne peuvent pas être supprimés seulement modifiés)
+public static void delete(Connection connect, String table, int id) throws SQLException {
+    try {
+        connect.setAutoCommit(false);
 
-public static void delete (Connection connect,String table,int id)throws SQLException{
-
-    connect.setAutoCommit(false); //stope la mise à jour, elle sera fait à la fin si tout se passe bien
-//     try ( PreparedStatement cherche = connect.prepareStatement(
-//                "select id from atelier where nom= ? ")) {
-//        System.out.println("type d'opération");
-//        String nomoperation= Lire.S();
-//            cherche.setString(1, nomoperation);
-//            ResultSet rep = cherche.executeQuery();
-//            test =rep.next();
-//            if (test!=false){
-//            idtype=rep.getInt(1);
-//            }
-//            
-//}
-        try ( PreparedStatement pst = connect.prepareStatement(
-                "DELETE FROM ? WHERE id=?;"
-
-            )){
-                    pst.setString(1,table);
-                    pst.setInt(2,id);
-                    pst.executeUpdate();
-        try { // creation d'un requete 
-            connect.commit(); // valide le refresh
-            System.out.println("le refresh fonctionne") ;
-        } catch (SQLException ex) { // en cas d'erreur on "rollback" on retourne avant 
+        String sql = "DELETE FROM " + table + " WHERE id=?";
+        try (PreparedStatement pst = connect.prepareStatement(sql)) {
+            pst.setInt(1, id);
+            pst.executeUpdate();
+            connect.commit();
+            System.out.println("Le DELETE a été exécuté avec succès.");
+        } catch (SQLException ex) {
             connect.rollback();
-            System.out.println("rollback");
+            System.out.println("Rollback. Erreur : " + ex.getMessage());
             throw ex;
-        } finally {
-            connect.setAutoCommit(true);// on remet le refresh automatique
         }
+    } finally {
+        try {
+            if (connect != null) {
+                connect.setAutoCommit(true);
+                connect.close();
+            }
+        } catch (SQLException ex) {
+            System.err.println("Erreur lors de la gestion des ressources : " + ex.getMessage());
+        }
+    }
 }
-}
+
 
 
 public static int askidtype(Connection connect)throws SQLException{
@@ -1451,31 +1442,17 @@ public static ArrayList listtypeoperation (Connection connect)throws SQLExceptio
     return listtypeoperation;
 }  
 
-public static ArrayList listgamme(Connection connect) throws SQLException{
-    
-      ArrayList<Gamme> listgamme = new ArrayList();
-      ArrayList<Integer> listidproduit = new ArrayList();
+public static ArrayList listgammeproduit(Connection connect,int idproduit) throws SQLException{
       ArrayList<Integer> listidavant = new ArrayList();
       ArrayList<Integer> listidapres = new ArrayList();
       ArrayList<Integer> ordre = new ArrayList();
       int idfirst=0;
       int k=0;
       boolean find=false;
-    connect.setAutoCommit(false); //stope la mise à jour, elle sera fait à la fin si tout se passe bien
-        try ( PreparedStatement affichetabid = connect.prepareStatement(
-                "select idproduit from ordre")) {
-            
-            ResultSet tabid = affichetabid.executeQuery();
-            
-            while (tabid.next()!= false){
-                listidproduit.add(tabid.getInt("idproduit"));
-            }
-            
-            for(int i=0;i<listidproduit.size();i++){
-            try ( PreparedStatement affichetab = connect.prepareStatement(
+  try ( PreparedStatement affichetab = connect.prepareStatement(
                 "select * from ordre where idproduit=?")) {
-                affichetab.setInt(1, listidproduit.get(i));
-                ResultSet tab = affichetabid.executeQuery();
+                affichetab.setInt(1, idproduit);
+                ResultSet tab = affichetab.executeQuery();
             
             while (tab.next()!= false){
             listidavant.add(tab.getInt("idopavant"));
@@ -1489,6 +1466,9 @@ public static ArrayList listgamme(Connection connect) throws SQLException{
                 if (idfirst==listidapres.get(j)){
                     find=false;
                 }
+                else{
+                    find=true;
+                }
             }
             k=k+1;
             }
@@ -1498,16 +1478,40 @@ public static ArrayList listgamme(Connection connect) throws SQLException{
                  try ( PreparedStatement idapres = connect.prepareStatement(
                 "select idopapres from ordre where idopavant=?")) {
                      idapres.setInt(1, ordre.get(j));
-                     ResultSet tabidopapres = affichetabid.executeQuery();
+                     ResultSet tabidopapres = idapres.executeQuery();
                       while (tab.next()!= false){
                          ordre.add(tabidopapres.getInt("idopapres"));
                       }
                  }
             }
-            }
-            }
+            } 
+  return ordre;
+}
+public static ArrayList listgamme(Connection connect) throws SQLException{
+    
+      ArrayList<Gamme> listgamme = new ArrayList();
+      ArrayList<Integer> listidproduit = new ArrayList();
 
+      ArrayList<Integer> ordre = new ArrayList();
+
+    connect.setAutoCommit(false); //stope la mise à jour, elle sera fait à la fin si tout se passe bien
+        try ( PreparedStatement affichetabid = connect.prepareStatement(
+                "select idproduit from ordre")) {
+            
+            ResultSet tabid = affichetabid.executeQuery();
+            
+            while (tabid.next()!= false){
+                listidproduit.add(tabid.getInt("idproduit"));
             }
+            //Suppression des doubles (listidproduit est maintenant sans double)
+            Set<Integer> idProdSansDouble = new HashSet<>(listidproduit);
+            listidproduit = new ArrayList<>(idProdSansDouble);
+            
+            for(int i=0;i<listidproduit.size();i++){
+            ordre = listgammeproduit(connect,listidproduit.get(i));
+            listgamme.add(new Gamme(ordre,listidproduit.get(i)));
+            }
+        }   
         try { // creation d'un requete 
             connect.commit(); // valide le refresh
             System.out.print("le refresh fonctionne") ;
@@ -1582,6 +1586,61 @@ public static ArrayList listchildgamme(Connection connect,int idproduit) throws 
           
     return listchild;
 }
+
+public static ArrayList listchildrealiseOperateur(Connection connect,int id) throws SQLException{
+    ArrayList<Integer> listchild = new ArrayList();
+    
+    connect.setAutoCommit(false); //stope la mise à jour, elle sera fait à la fin si tout se passe bien
+        try ( PreparedStatement idtab = connect.prepareStatement(
+                "select idoperateur from realiseoo where idtypeoperation=?")) {
+            idtab.setInt(1, id);
+            ResultSet tab = idtab.executeQuery();
+            while (tab.next()!= false){
+                listchild.add(tab.getInt("idoperateur"));
+            }
+
+            }
+        try { // creation d'un requete 
+            connect.commit(); // valide le refresh
+            System.out.print("le refresh fonctionne") ;
+        } catch (SQLException ex) { // en cas d'erreur on "rollback" on retourne avant 
+            connect.rollback();
+            System.out.print("rollback");
+            throw ex;
+        } finally {
+            connect.setAutoCommit(true);// on remet le refresh automatique
+        }
+          
+    return listchild;
+}
+
+public static ArrayList listchildrealiseoperation(Connection connect,int id) throws SQLException{
+    ArrayList<Integer> listchild = new ArrayList();
+    
+    connect.setAutoCommit(false); //stope la mise à jour, elle sera fait à la fin si tout se passe bien
+        try ( PreparedStatement idtab = connect.prepareStatement(
+                "select idtypeoperation from realiseoo where idoperateur=?")) {
+            idtab.setInt(1, id);
+            ResultSet tab = idtab.executeQuery();
+            while (tab.next()!= false){
+                listchild.add(tab.getInt("idtypeoperation"));
+            }
+
+            }
+        try { // creation d'un requete 
+            connect.commit(); // valide le refresh
+            System.out.print("le refresh fonctionne") ;
+        } catch (SQLException ex) { // en cas d'erreur on "rollback" on retourne avant 
+            connect.rollback();
+            System.out.print("rollback");
+            throw ex;
+        } finally {
+            connect.setAutoCommit(true);// on remet le refresh automatique
+        }
+          
+    return listchild;
+}
+
     public static void main(String[] args) {
         System.out.println("Bonjour et bienvenue");
        Initialisation() ;
