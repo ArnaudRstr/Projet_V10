@@ -1149,7 +1149,7 @@ public static void updateString(Connection connect, String table, int id, String
 }
 //ATTENTION ne fonctionne pas avec gamme(ordre) et realiseoo (ne peuvent pas être supprimés seulement modifiés)
 public static void delete(Connection connect, String table, int id) throws SQLException {
-    try {
+    //try {
         connect.setAutoCommit(false);
 
         String sql = "DELETE FROM " + table + " WHERE id=?";
@@ -1163,16 +1163,16 @@ public static void delete(Connection connect, String table, int id) throws SQLEx
             System.out.println("Rollback. Erreur : " + ex.getMessage());
             throw ex;
         }
-    } finally {
-        try {
-            if (connect != null) {
-                connect.setAutoCommit(true);
-                connect.close();
-            }
-        } catch (SQLException ex) {
-            System.err.println("Erreur lors de la gestion des ressources : " + ex.getMessage());
-        }
-    }
+//    } finally {
+//        try {
+//            if (connect != null) {
+//                connect.setAutoCommit(true);
+//                connect.close();
+//            }
+//        } catch (SQLException ex) {
+//            System.err.println("Erreur lors de la gestion des ressources : " + ex.getMessage());
+//        }
+    //}
 }
 
 

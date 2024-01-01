@@ -70,6 +70,8 @@ public class PartiePrincipale extends MyVerticalLayout {
             else if (machinesTemp.size()==0){
                 
                 this.add(new H3("Il n'y a pas de machines dans cet atelier"));
+                this.menuItemAjouter.setEnabled(true);
+
             }
             else {
                 this.menuItemAjouter.setEnabled(true);
@@ -135,12 +137,10 @@ public class PartiePrincipale extends MyVerticalLayout {
             //machinesTemp = this.controleur.getVuePrincipale().getGestionBDD().listmachine(this.controleur.getVuePrincipale().getGestionBDD().conn);
 
             int index =0;
-            if (produitsTemp.size()==0 && this.controleur.getEtatAtelier()==-1){
-                this.add(new H3("Sélectionnez tout d'abord un atelier"));
-            }
-            else if (produitsTemp.size()==0){
+            
+            if (produitsTemp.size()==0){
                 
-                this.add(new H3("Il n'y a pas de produits à fabriquer dans cet atelier"));
+                this.add(new H3("Il n'y a pas de produits à fabriquer"));
             }
             
             else{
@@ -148,7 +148,19 @@ public class PartiePrincipale extends MyVerticalLayout {
                 gridProduits.addColumn(Produit::getRef).setHeader("Référence");
                 gridProduits.setItems(produitsTemp);
                 this.add(gridProduits);
+                gridProduits.addItemClickListener(event -> {
+                    Notification.show("Ligne sélectionnée"+event.getItem().getId());
+                   
+                Produit produitTemp = event.getItem();
                 
+                
+                    try {
+                        this.controleur.getFenetrePartagee().setPartD(new PartieDetail(this.controleur,"produit",produitTemp));
+                    } catch (SQLException ex) {
+                        Logger.getLogger(PartiePrincipale.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                    
+                });
                 
             }
             
@@ -183,12 +195,11 @@ public class PartiePrincipale extends MyVerticalLayout {
             
 
             int index =0;
-            if (brutstemp.size()==0 && this.controleur.getEtatAtelier()==-1){
-                this.add(new H3("Sélectionnez tout d'abord un atelier"));
-            }
-            else if (brutstemp.size()==0){
+            
+            if (brutstemp.size()==0){
                 
-                this.add(new H3("Il n'y a pas de produits à fabriquer dans cet atelier"));
+                this.add(new H3("Il n'y a pas de bruts "));
+                
             }
             
             else{
@@ -197,6 +208,20 @@ public class PartiePrincipale extends MyVerticalLayout {
                 gridBruts.addColumn(Brut::getRef).setHeader(new H5("Référence"));
                 gridBruts.setItems(brutstemp);
                 this.add(gridBruts);
+                
+                gridBruts.addItemClickListener(event -> {
+                    Notification.show("Ligne sélectionnée"+event.getItem().getId());
+                   
+                Brut brutTemp = event.getItem();
+                
+                
+                    try {
+                        this.controleur.getFenetrePartagee().setPartD(new PartieDetail(this.controleur,"brut",brutTemp));
+                    } catch (SQLException ex) {
+                        Logger.getLogger(PartiePrincipale.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                    
+                });
                 
                 
             }

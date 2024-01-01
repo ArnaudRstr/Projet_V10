@@ -9,15 +9,21 @@ import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.component.html.H4;
 import com.vaadin.flow.component.icon.Icon;
+import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.textfield.NumberField;
 import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.component.textfield.TextField;
+import static fr.insa.moly.GestionBDD.GestionBDD.delete;
 import static fr.insa.moly.GestionBDD.GestionBDD.listtypeoperation;
+import fr.insa.moly.objet.Brut;
 import fr.insa.moly.objet.Machine;
+import fr.insa.moly.objet.Produit;
 import fr.insa.moly.objet.Typeoperation;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -26,6 +32,13 @@ import java.util.ArrayList;
 public class PartieDetail extends MyVerticalLayout{
     
 private Controleur controleur;
+
+private MyVerticalLayout contenu; 
+private MyHorizontalLayout listboutons;
+private Button boutonModifier;
+private Button boutonEnregistrer;
+private Button boutonSupprimer;
+
 
     public PartieDetail(Controleur controleur){
         this.controleur=controleur;
@@ -38,12 +51,17 @@ private Controleur controleur;
         this.controleur=controleur;
         this.getStyle().set("padding", "0px");
         System.out.println("Partie detail mise à jour");
+        this.contenu = new MyVerticalLayout();
+        contenu.getStyle().set("padding", "10px");
+        contenu.setSpacing(false);
+        this.listboutons= new MyHorizontalLayout();
         
+        this.boutonEnregistrer= new Button(new Icon("lumo","checkmark"));
+        this.boutonModifier =new Button(new Icon("lumo","edit"));
+        this.boutonSupprimer=new Button(new Icon(VaadinIcon.TRASH));
+        this.listboutons.add(boutonSupprimer,boutonModifier,boutonEnregistrer);
         if (typeobjet =="machine"){
             
-            MyVerticalLayout contenu = new MyVerticalLayout();
-            contenu.getStyle().set("padding", "10px");
-            contenu.setSpacing(false);
             MyHorizontalLayout hlnom = new MyHorizontalLayout();
             MyHorizontalLayout hlid = new MyHorizontalLayout();
             MyHorizontalLayout hldes = new MyHorizontalLayout();
@@ -104,15 +122,15 @@ private Controleur controleur;
 //            hldimlong.add(nfdimlong,bmdimlong);
 //            contenu.add(hldimlong);
 
-            MyHorizontalLayout listboutons = new MyHorizontalLayout();
-            
-            
-            
-            
-            Button boutonModifier = new Button(new Icon("lumo","edit"));
-            listboutons.add(boutonModifier);
-            Button boutonEnregistrer = new Button(new Icon("lumo","checkmark"));
-            listboutons.add(boutonEnregistrer);
+//            MyHorizontalLayout listboutons = new MyHorizontalLayout();
+//
+//            
+//            Button boutonModifier = new Button(new Icon("lumo","edit"));
+//            listboutons.add(boutonModifier);
+//            Button boutonEnregistrer = new Button(new Icon("lumo","checkmark"));
+//            listboutons.add(boutonEnregistrer);
+//            Button boutonSupprimer = new Button(new Icon(VaadinIcon.TRASH));
+//            listboutons.add(boutonSupprimer);
             contenu.add(listboutons);
 
             Machine machinetemp = (Machine) object;
@@ -241,8 +259,251 @@ private Controleur controleur;
             
             });
             
+            boutonSupprimer.addClickListener(event -> {
+                
+                try {
+                    delete(this.controleur.getVuePrincipale().getGestionBDD().conn,machinetemp.getnomtable(),machinetemp.getId());
+                } catch (SQLException ex) {
+                    System.out.println("Partie Detail : pas reussi à supprimer la machine");
+                }
+                try {
+                    this.controleur.MenuItemMachine();
+                } catch (SQLException ex) {
+                    Logger.getLogger(PartieDetail.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            });
+            
         }
         
+        
+        if (typeobjet == "produit"){
+            contenu.add(listboutons);
+            this.add(contenu);
+            MyHorizontalLayout hlref = new MyHorizontalLayout();
+            MyHorizontalLayout hlid = new MyHorizontalLayout();
+            MyHorizontalLayout hldes = new MyHorizontalLayout();
+            MyHorizontalLayout hlidbut = new MyHorizontalLayout();
+            
+            Produit produittemp = (Produit) object;
+            
+            TextField tfref=  new TextField();
+            tfref.setLabel("Référence");
+            tfref.getStyle().set("font-size","40px");
+            tfref.setReadOnly(true);
+            tfref.setValue(produittemp.getRef());
+            tfref.setWidthFull();
+            contenu.add(tfref);
+            
+            NumberField nfid = new NumberField();
+            nfid.setLabel("Identifiant");
+            nfid.setReadOnly(true);
+            nfid.setValue((double)Math.round(produittemp.getId()));
+            contenu.add(nfid);
+
+            TextArea tades= new TextArea();
+            tades.setLabel("Description");
+            tades.setReadOnly(true);
+            tades.setValue(produittemp.getDes());
+            tades.setWidthFull();
+            contenu.add(tades);
+            
+            
+            NumberField nfidbrut = new NumberField();
+            nfidbrut.setLabel("Identifiant du brut");
+            nfidbrut.setReadOnly(true);
+            nfidbrut.setValue((double)Math.round(produittemp.getIdbrut()));
+            contenu.add(nfidbrut);
+            
+            
+            //On pourra encore ajouter le nom du brut
+//            TextField tfnombrut=  new TextField();
+//            tfref.setLabel("Nom du brut");
+//            tfref.getStyle().set("font-size","40px");
+//            tfref.setReadOnly(true);
+//            
+//            
+//            tfref.setValue();
+//            tfref.setWidthFull();
+//            contenu.add(tfref);
+
+            
+            
+            
+            
+            boutonModifier.addClickListener(event -> {
+                    
+            tfref.setReadOnly(false);
+            nfidbrut.setReadOnly(false);
+            tades.setReadOnly(false);
+            
+            
+                        
+            
+            
+            
+            
+            });
+            
+            boutonEnregistrer.addClickListener(event -> {
+                    
+            tfref.setReadOnly(true);
+            nfidbrut.setReadOnly(true);
+            tades.setReadOnly(true);
+            
+            
+            Notification.show("La méthode d'enregistrement n'est pas encore faite");
+            
+            });
+            
+            
+            boutonSupprimer.addClickListener(event -> {
+                
+                
+                
+                try {
+                    
+                    
+                    delete(this.controleur.getVuePrincipale().getGestionBDD().conn,produittemp.getnomtable(),produittemp.getId());
+                } catch (SQLException ex) {
+                    Logger.getLogger(PartieDetail.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                try {
+                    this.controleur.MenuItemProduit();
+                } catch (SQLException ex) {
+                    Logger.getLogger(PartieDetail.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            });
+            
+        }
+        
+        
+        
+        
+         if (typeobjet == "brut"){
+            contenu.add(listboutons);
+            this.add(contenu);
+            
+            
+            Brut bruttemp = (Brut) object;
+            
+            TextField tfnom=  new TextField();
+            tfnom.setLabel("Nom");
+            tfnom.getStyle().set("font-size","40px");
+            tfnom.setReadOnly(true);
+            tfnom.setValue(bruttemp.getNom());
+            tfnom.setWidthFull();
+            contenu.add(tfnom);
+            
+            TextField tfref=  new TextField();
+            tfref.setLabel("Référence");
+            tfref.setReadOnly(true);
+            tfref.setValue(bruttemp.getRef());
+            tfref.setWidthFull();
+            contenu.add(tfref);
+            
+            NumberField nfid = new NumberField();
+            nfid.setLabel("Identifiant");
+            nfid.setReadOnly(true);
+            nfid.setValue((double)Math.round(bruttemp.getId()));
+            contenu.add(nfid);
+            
+            TextField tfmatiere=  new TextField();
+            tfmatiere.setLabel("Matière");
+            tfmatiere.setReadOnly(true);
+            tfmatiere.setValue(bruttemp.getMatiere());
+            tfmatiere.setWidthFull();
+            contenu.add(tfmatiere);
+            
+            NumberField nfstock = new NumberField();
+            nfstock.setLabel("Stock");
+            nfstock.setReadOnly(true);
+            nfstock.setValue((double)Math.round(bruttemp.getStock()));
+            contenu.add(nfstock);
+            
+            
+            TextField tfdim=  new TextField();
+            tfdim.setLabel("Dimension");
+            tfdim.setReadOnly(true);
+            tfdim.setValue(bruttemp.getDimension());
+            tfdim.setWidthFull();
+            contenu.add(tfdim);
+            
+            TextField tffourn=  new TextField();
+            tffourn.setLabel("Dimension");
+            tffourn.setReadOnly(true);
+            tffourn.setValue(bruttemp.getFournisseur());
+            tffourn.setWidthFull();
+            contenu.add(tffourn);
+            
+            
+ 
+           
+            
+            //On pourra encore ajouter le nom du brut
+//            TextField tfnombrut=  new TextField();
+//            tfref.setLabel("Nom du brut");
+//            tfref.getStyle().set("font-size","40px");
+//            tfref.setReadOnly(true);
+//            
+//            
+//            tfref.setValue();
+//            tfref.setWidthFull();
+//            contenu.add(tfref);
+
+            
+            
+            
+            
+            boutonModifier.addClickListener(event -> {
+                    
+            tfref.setReadOnly(false);
+            tfnom.setReadOnly(false);
+            tfdim.setReadOnly(false);
+            tffourn.setReadOnly(false);
+            tfmatiere.setReadOnly(false);
+            nfstock.setReadOnly(false);
+            
+                        
+            
+            
+            
+            
+            });
+            
+            boutonEnregistrer.addClickListener(event -> {
+                    
+            tfref.setReadOnly(true);
+            tfnom.setReadOnly(true);
+            tfdim.setReadOnly(true);
+            tffourn.setReadOnly(true);
+            tfmatiere.setReadOnly(true);
+            nfstock.setReadOnly(true);
+            
+            
+            Notification.show("La méthode d'enregistrement n'est pas encore faite");
+            
+            });
+            
+            
+            boutonSupprimer.addClickListener(event -> {
+                
+                
+                
+                try {
+                    
+                    
+                    delete(this.controleur.getVuePrincipale().getGestionBDD().conn,bruttemp.getnomtable(),bruttemp.getId());
+                } catch (SQLException ex) {
+                    Logger.getLogger(PartieDetail.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                try {
+                    this.controleur.MenuItemBrut();
+                } catch (SQLException ex) {
+                    Logger.getLogger(PartieDetail.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            });
+            
+        }
         
         
         
