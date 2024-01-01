@@ -34,6 +34,12 @@ public class GestionBDD {
 
    
     
+    
+    
+    
+    
+    
+    
     public Connection conn ;//Attribut de la connexion
     //Consturcteur
     public GestionBDD() throws SQLException {
