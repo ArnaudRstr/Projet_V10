@@ -64,6 +64,8 @@ public FenetreAvertissementSuppression(Controleur controleur,String type,String 
            this.close(); 
            
            
+        if (type == "atelier"){
+            
         
         try {
             
@@ -81,11 +83,62 @@ public FenetreAvertissementSuppression(Controleur controleur,String type,String 
         } catch (SQLException ex) {
             Logger.getLogger(FenetreAvertissementSuppression.class.getName()).log(Level.SEVERE, null, ex);
         }
+        
+        
+        }
+        
+        if (type=="brut"){
+            
+               try {
+                   delete(this.controleur.getVuePrincipale().getGestionBDD().conn,type,id);
+               } catch (SQLException ex) {
+                   Logger.getLogger(FenetreAvertissementSuppression.class.getName()).log(Level.SEVERE, null, ex);
+               }
+               try {
+                   this.controleur.MenuItemBrut();
+               } catch (SQLException ex) {
+                   Logger.getLogger(FenetreAvertissementSuppression.class.getName()).log(Level.SEVERE, null, ex);
+               }
+            
+            
+        }
+        
+        if (type=="produit"){
+            
+               try {
+                   delete(this.controleur.getVuePrincipale().getGestionBDD().conn,type,id);
+               } catch (SQLException ex) {
+                   Logger.getLogger(FenetreAvertissementSuppression.class.getName()).log(Level.SEVERE, null, ex);
+               }
+               try {
+                   this.controleur.MenuItemProduit();
+               } catch (SQLException ex) {
+                   Logger.getLogger(FenetreAvertissementSuppression.class.getName()).log(Level.SEVERE, null, ex);
+               }
+            
+            
+        }
+        if (type=="machine"){
+            try {
+                   delete(this.controleur.getVuePrincipale().getGestionBDD().conn,type,id);
+               } catch (SQLException ex) {
+                   Logger.getLogger(FenetreAvertissementSuppression.class.getName()).log(Level.SEVERE, null, ex);
+               }
+               try {
+                   this.controleur.MenuItemMachine();
+               } catch (SQLException ex) {
+                   Logger.getLogger(FenetreAvertissementSuppression.class.getName()).log(Level.SEVERE, null, ex);
+               }
+            
+            
+            
+        }
+
 
        });
         
         
-    
+        
     
 }
 }

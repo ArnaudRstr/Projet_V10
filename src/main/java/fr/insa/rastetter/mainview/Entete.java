@@ -124,10 +124,11 @@ public class Entete extends MyHorizontalLayout {
         //On ajoute les menu item au sous menu du menuitem du menu principal
         this.menuItemPlan = this.subMenuMenuPrincipal.addItem("Plan");
         this.menuItemMachine = this.subMenuMenuPrincipal.addItem("Machines");
-        this.menuItemProduit = this.subMenuMenuPrincipal.addItem("Produits");
+        this.menuItemProduit = this.subMenuMenuPrincipal.addItem("Produits");       
+        this.menuItemBrut=this.subMenuMenuPrincipal.addItem("Bruts");
+
         this.menuItemTypeOperation=this.subMenuMenuPrincipal.addItem("Types d'opérations");
         this.menuItemOperateurs=this.subMenuMenuPrincipal.addItem("Operateurs");
-        this.menuItemBrut=this.subMenuMenuPrincipal.addItem("Bruts");
 
         
         this.menuItemAtelier=this.menuBarD.addItem(new H5("ATELIER"));

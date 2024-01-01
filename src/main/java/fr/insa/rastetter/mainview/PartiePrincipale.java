@@ -83,7 +83,7 @@ public class PartiePrincipale extends MyVerticalLayout {
                 
                 gridMachines.addColumn(Machine::getMarque).setHeader(new H5("Marque"));
                 //gridMachines.addColumn(Machine::getStatut).setHeader("Statut");
-                gridMachines.addColumn(Machine::getSpanText).setHeader(new H5("Statut"));
+                gridMachines.addColumn(Machine::getStatutString).setHeader(new H5("Statut"));
                 gridMachines.setItems(machinesTemp);
                 this.add(gridMachines);
                 
@@ -144,6 +144,8 @@ public class PartiePrincipale extends MyVerticalLayout {
             }
             
             else{
+                Text nbelements = new Text(produitsTemp.size()+" produits");
+                this.add(nbelements);
                 this.gridProduits= new Grid<>();
                 gridProduits.addColumn(Produit::getRef).setHeader("Référence");
                 gridProduits.setItems(produitsTemp);
@@ -203,9 +205,13 @@ public class PartiePrincipale extends MyVerticalLayout {
             }
             
             else{
+                Text nbelements = new Text(brutstemp.size()+" bruts");
+                this.add(nbelements);
                 this.gridBruts= new Grid<>();
                 gridBruts.addColumn(Brut::getNom).setHeader(new H5("Nom"));
                 gridBruts.addColumn(Brut::getRef).setHeader(new H5("Référence"));
+                gridBruts.addColumn(Brut::getStock).setHeader(new H5("En stock"));
+
                 gridBruts.setItems(brutstemp);
                 this.add(gridBruts);
                 
