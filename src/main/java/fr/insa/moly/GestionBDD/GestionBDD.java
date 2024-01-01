@@ -34,6 +34,12 @@ public class GestionBDD {
 
    
     
+    
+    
+    
+    
+    
+    
     public Connection conn ;//Attribut de la connexion
     //Consturcteur
     public GestionBDD() throws SQLException {
@@ -709,6 +715,36 @@ public static void addatelier (Connection connect,String nom, String des, int di
         }
 }
 
+public static void updateAtelier(Connection connect,int id, String nom, String des, int dimensionlargeur, int dimensionlongueur)throws SQLException {
+     try {
+        connect.setAutoCommit(false);
+
+        String sql = "UPDATE atelier SET `nom`=?, `des`=?, `dimensionlargeur`=?,`dimensionlongueur`=? WHERE id=?";
+        try (PreparedStatement pst = connect.prepareStatement(sql)) {
+            pst.setString(1, nom);
+            pst.setString(2, des);
+            pst.setDouble(3, dimensionlargeur);
+            pst.setDouble(4, dimensionlongueur);
+            pst.setInt(5, id);
+            pst.executeUpdate();
+            connect.commit();
+            System.out.println("Le update a été exécuté avec succès.");
+        } catch (SQLException ex) {
+            connect.rollback();
+            System.out.println("Rollback. Erreur : " + ex.getMessage());
+            throw ex;
+        }
+    } finally {
+        try {
+            if (connect != null) {
+                connect.setAutoCommit(true);
+            }
+        } catch (SQLException ex) {
+            System.err.println("Erreur lors de la gestion des ressources : " + ex.getMessage());
+        }
+    }
+}
+
 public static void addmachine(Connection connect,String nom,int idatelier,int idtypeoperation,String des, String marque,double puissance,int statut,double couthoraire,String localisation,double dimensionlargeur,double dimensionlongueur)throws SQLException{
     
      connect.setAutoCommit(false); //stope la mise à jour, elle sera fait à la fin si tout se passe bien
@@ -769,6 +805,43 @@ public static void addmachine(Connection connect,String nom,int idatelier,int id
 }
 }
 
+public static void updateMachine(Connection connect,int id,String nom,int idatelier,int idtypeoperation,String des, String marque,double puissance,int statut,double couthoraire,String localisation,double dimensionlargeur,double dimensionlongueur)throws SQLException {
+     try {
+        connect.setAutoCommit(false);
+
+        String sql = "UPDATE atelier SET `nom`=?,`idatelier`=?,`idtypeoperation`=?,`des`=?,`marque`=?,`puissance`=?,`statut`=?,`couthoraire`=?,`localisation`=?,`dimensionlargeur`=?,`dimensionlongueur`=? WHERE id=?";
+        try (PreparedStatement pst = connect.prepareStatement(sql)) {
+            pst.setString(1, nom);
+                    pst.setInt(2, idatelier);
+                    pst.setInt(3, idtypeoperation);
+                    pst.setString(4, des);
+                    pst.setString(5, marque);
+                    pst.setDouble(6, puissance);
+                    pst.setInt(7, statut);
+                    pst.setDouble(8, couthoraire);
+                    pst.setString(9, localisation);
+                    pst.setDouble(10, dimensionlargeur);
+                    pst.setDouble(11, dimensionlongueur);
+            pst.setInt(12, id);
+            pst.executeUpdate();
+            connect.commit();
+            System.out.println("Le update a été exécuté avec succès.");
+        } catch (SQLException ex) {
+            connect.rollback();
+            System.out.println("Rollback. Erreur : " + ex.getMessage());
+            throw ex;
+        }
+    } finally {
+        try {
+            if (connect != null) {
+                connect.setAutoCommit(true);
+            }
+        } catch (SQLException ex) {
+            System.err.println("Erreur lors de la gestion des ressources : " + ex.getMessage());
+        }
+    }
+}
+
 public static void addbrut(Connection connect,String nom, String ref,String matiere,int stock,String dimension,String fournisseur)throws SQLException {
     connect.setAutoCommit(false); //stope la mise à jour, elle sera fait à la fin si tout se passe bien
         try ( PreparedStatement cherchedouble = connect.prepareStatement(
@@ -813,6 +886,38 @@ public static void addbrut(Connection connect,String nom, String ref,String mati
             connect.setAutoCommit(true);// on remet le refresh automatique
         }
         }
+}
+
+public static void updateBrut(Connection connect,int id, String nom, String ref,String matiere,int stock,String dimension,String fournisseur)throws SQLException {
+     try {
+        connect.setAutoCommit(false);
+
+        String sql = "UPDATE atelier SET nom=?, ref=?, matiere=?, stock=?, dimension=?, fournisseur=? WHERE id=?";
+        try (PreparedStatement pst = connect.prepareStatement(sql)) {
+            pst.setString(1, nom);
+            pst.setString(2, ref);
+            pst.setString(3, matiere);
+            pst.setInt(4, stock);
+            pst.setString(5, dimension);
+            pst.setString(6, fournisseur);
+            pst.setInt(7, id);
+            pst.executeUpdate();
+            connect.commit();
+            System.out.println("Le update a été exécuté avec succès.");
+        } catch (SQLException ex) {
+            connect.rollback();
+            System.out.println("Rollback. Erreur : " + ex.getMessage());
+            throw ex;
+        }
+    } finally {
+        try {
+            if (connect != null) {
+                connect.setAutoCommit(true);
+            }
+        } catch (SQLException ex) {
+            System.err.println("Erreur lors de la gestion des ressources : " + ex.getMessage());
+        }
+    }
 }
 
 public static void addoperateur(Connection connect,String identifiant, String motdepasse,String nom,String prenom,int idatelier,int statut, int tel, String mail,ArrayList<Integer> listtypeoperation)throws SQLException {
@@ -877,6 +982,48 @@ public static void addoperateur(Connection connect,String identifiant, String mo
         }
 }
 
+public static void updateOperateur(Connection connect,int id,String identifiant, String motdepasse,String nom,String prenom,int idatelier,int statut, int tel, String mail,ArrayList<Integer> listtypeoperation)throws SQLException {
+     try {
+        connect.setAutoCommit(false);
+
+        String sql = "UPDATE atelier SET identifiant=?, motdepasse=?, nom=?, prenom=?, idatelier=?, statut=?, tel=?, mail=? WHERE id=?";
+        try (PreparedStatement pst = connect.prepareStatement(sql)) {
+            pst.setString(1, nom);
+                    pst.setString(1, identifiant);
+                    pst.setString(2, motdepasse);
+                    pst.setString(3, nom);
+                    pst.setString(4, prenom);
+                    pst.setInt(5, idatelier);
+                    pst.setInt(6, statut);
+                    pst.setInt(7, tel);
+                    pst.setString(8, mail);
+            pst.setInt(9, id);
+            pst.executeUpdate();
+            
+            deleteRealiseoo(connect,"idoperateur",id);
+            
+            for(int i=0;i<listtypeoperation.size();i++){
+                            addrealiseoo(connect,id,listtypeoperation.get(i));
+                        }
+            
+            connect.commit();
+            System.out.println("Le update a été exécuté avec succès.");
+        } catch (SQLException ex) {
+            connect.rollback();
+            System.out.println("Rollback. Erreur : " + ex.getMessage());
+            throw ex;
+        }
+    } finally {
+        try {
+            if (connect != null) {
+                connect.setAutoCommit(true);
+            }
+        } catch (SQLException ex) {
+            System.err.println("Erreur lors de la gestion des ressources : " + ex.getMessage());
+        }
+    }
+}
+
 public static void addoperation(Connection connect,int idtypeoperation, String nom,double duree,String outil,int idmachine)throws SQLException {
     connect.setAutoCommit(false); //stope la mise à jour, elle sera fait à la fin si tout se passe bien
         try ( PreparedStatement cherchedouble = connect.prepareStatement(
@@ -921,6 +1068,38 @@ public static void addoperation(Connection connect,int idtypeoperation, String n
         }
 }
 
+public static void updateOperation(Connection connect,int id, int idtypeoperation, String nom,double duree,String outil,int idmachine)throws SQLException {
+     try {
+        connect.setAutoCommit(false);
+
+        String sql = "UPDATE atelier SET idtypeoperation=?, nom=?, duree=?, outil=?, idmachine=? WHERE id=?";
+        try (PreparedStatement pst = connect.prepareStatement(sql)) {
+            pst.setInt(1, idtypeoperation);
+                    pst.setString(2, nom);
+                    pst.setDouble(3, duree);
+                    pst.setString(4, outil);
+                    pst.setInt(5, idmachine);
+            pst.setInt(6, id);
+            pst.executeUpdate();
+            connect.commit();
+            System.out.println("Le update a été exécuté avec succès.");
+        } catch (SQLException ex) {
+            connect.rollback();
+            System.out.println("Rollback. Erreur : " + ex.getMessage());
+            throw ex;
+        }
+    } finally {
+        try {
+            if (connect != null) {
+                connect.setAutoCommit(true);
+            }
+        } catch (SQLException ex) {
+            System.err.println("Erreur lors de la gestion des ressources : " + ex.getMessage());
+        }
+    }
+}
+
+//Premet d'ajouter les ligne de la table et non une 'gamme' en soit
 public static void addordre(Connection connect,int idopavant, int idopapres,int idproduit)throws SQLException {
     connect.setAutoCommit(false); //stope la mise à jour, elle sera fait à la fin si tout se passe bien
         try ( PreparedStatement cherchedouble = connect.prepareStatement(
@@ -961,6 +1140,37 @@ public static void addordre(Connection connect,int idopavant, int idopapres,int 
         }
 }
 
+
+public static void updateOrdre(Connection connect,int id, int idopavant, int idopapres,int idproduit)throws SQLException {
+     try {
+        connect.setAutoCommit(false);
+
+        String sql = "UPDATE atelier SET idopavant=?, idopapres=?, idproduit=? WHERE id=?";
+        try (PreparedStatement pst = connect.prepareStatement(sql)) {
+           pst.setInt(1, idopavant);
+            pst.setInt(2, idopapres);
+            pst.setInt(3, idproduit);
+            pst.setInt(4, id);
+            pst.executeUpdate();
+            connect.commit();
+            System.out.println("Le update a été exécuté avec succès.");
+        } catch (SQLException ex) {
+            connect.rollback();
+            System.out.println("Rollback. Erreur : " + ex.getMessage());
+            throw ex;
+        }
+    } finally {
+        try {
+            if (connect != null) {
+                connect.setAutoCommit(true);
+            }
+        } catch (SQLException ex) {
+            System.err.println("Erreur lors de la gestion des ressources : " + ex.getMessage());
+        }
+    }
+}
+
+//Attention cette fonction ne prend pas en compte l'ajoue de la gamme voir addordre
 public static void addproduit(Connection connect,String ref,String des,int idbrut)throws SQLException{
     
     connect.setAutoCommit(false); //stope la mise à jour, elle sera fait à la fin si tout se passe bien
@@ -1001,6 +1211,36 @@ public static void addproduit(Connection connect,String ref,String des,int idbru
             connect.setAutoCommit(true);// on remet le refresh automatique
         }
 }
+}
+
+//Attention cette fonction ne prend pas en compte l'update de la gamme voir updateOrdre
+public static void updateProduit(Connection connect,int id,String ref,String des,int idbrut)throws SQLException {
+     try {
+        connect.setAutoCommit(false);
+
+        String sql = "UPDATE atelier SET ref=?, des=?, idbrut=? WHERE id=?";
+        try (PreparedStatement pst = connect.prepareStatement(sql)) {
+            pst.setString(1, ref);
+            pst.setString(2, des);
+            pst.setInt(3, idbrut);
+            pst.setInt(4, id);
+            pst.executeUpdate();
+            connect.commit();
+            System.out.println("Le update a été exécuté avec succès.");
+        } catch (SQLException ex) {
+            connect.rollback();
+            System.out.println("Rollback. Erreur : " + ex.getMessage());
+            throw ex;
+        }
+    } finally {
+        try {
+            if (connect != null) {
+                connect.setAutoCommit(true);
+            }
+        } catch (SQLException ex) {
+            System.err.println("Erreur lors de la gestion des ressources : " + ex.getMessage());
+        }
+    }
 }
 
 public static void addrealiseoo(Connection connect,int idoperateur,int idtypeoperation)throws SQLException{
@@ -1081,12 +1321,39 @@ public static void addtypeoperation(Connection connect,String nom)throws SQLExce
 }
 }
 
-public static void addgamme(Connection connect, int idproduit,Gamme gamme) throws SQLException{
+public static void updateTypeOperation(Connection connect,int id, String nom)throws SQLException {
+     try {
+        connect.setAutoCommit(false);
+
+        String sql = "UPDATE atelier SET `nom`=? WHERE id=?";
+        try (PreparedStatement pst = connect.prepareStatement(sql)) {
+            pst.setString(1, nom);
+            pst.setInt(2, id);
+            pst.executeUpdate();
+            connect.commit();
+            System.out.println("Le update a été exécuté avec succès.");
+        } catch (SQLException ex) {
+            connect.rollback();
+            System.out.println("Rollback. Erreur : " + ex.getMessage());
+            throw ex;
+        }
+    } finally {
+        try {
+            if (connect != null) {
+                connect.setAutoCommit(true);
+            }
+        } catch (SQLException ex) {
+            System.err.println("Erreur lors de la gestion des ressources : " + ex.getMessage());
+        }
+    }
+}
+
+public static void addgamme(Connection connect,Gamme gamme) throws SQLException{
     
      connect.setAutoCommit(false); //stope la mise à jour, elle sera fait à la fin si tout se passe bien
         try ( PreparedStatement cherchedouble = connect.prepareStatement(
                 "select id from ordre where idproduit=?")) {
-            cherchedouble.setInt(1, idproduit);
+            cherchedouble.setInt(1, gamme.getIdproduit());
             ResultSet test = cherchedouble.executeQuery();
             if (test.next()!= false){
                 System.out.println("Attention, il existe déjà");
@@ -1101,7 +1368,7 @@ public static void addgamme(Connection connect, int idproduit,Gamme gamme) throw
             )){
                     pst.setInt(1, gamme.getList().get(i));
                     pst.setInt(2, gamme.getList().get(i+1));
-                    pst.setInt(3, idproduit);
+                    pst.setInt(3, gamme.getIdproduit());
                     pst.executeUpdate();
       
             } catch (SQLException ex) {
@@ -1122,11 +1389,18 @@ public static void addgamme(Connection connect, int idproduit,Gamme gamme) throw
         }
 }
 }
-public static void updateString(Connection connect, String table, int id, String colonne, String newvalus)throws SQLException {
-     try {
+
+public static void updateGamme(Connection connect,Gamme gamme)throws SQLException {
+     deleteOrdre(connect,gamme.getIdproduit());
+     addgamme(connect,gamme);
+}
+
+//ATTENTION ne fonctionne pas avec gamme(ordre) et realiseoo (ne peuvent pas être supprimés seulement modifiés)
+public static void delete(Connection connect, String table, int id) throws SQLException {
+    try {
         connect.setAutoCommit(false);
 
-        String sql = "UPDATE FROM " + table + " WHERE id=?";
+        String sql = "DELETE FROM " + table + " WHERE id=?";
         try (PreparedStatement pst = connect.prepareStatement(sql)) {
             pst.setInt(1, id);
             pst.executeUpdate();
@@ -1141,20 +1415,21 @@ public static void updateString(Connection connect, String table, int id, String
         try {
             if (connect != null) {
                 connect.setAutoCommit(true);
+                connect.close();
             }
         } catch (SQLException ex) {
             System.err.println("Erreur lors de la gestion des ressources : " + ex.getMessage());
         }
     }
 }
-//ATTENTION ne fonctionne pas avec gamme(ordre) et realiseoo (ne peuvent pas être supprimés seulement modifiés)
-public static void delete(Connection connect, String table, int id) throws SQLException {
-    //try {
+
+public static void deleteRealiseoo(Connection connect, String colonne, int idcolonne) throws SQLException {
+    try {
         connect.setAutoCommit(false);
 
-        String sql = "DELETE FROM " + table + " WHERE id=?";
+        String sql = "DELETE FROM realiseoo WHERE " + colonne+ "=?";
         try (PreparedStatement pst = connect.prepareStatement(sql)) {
-            pst.setInt(1, id);
+            pst.setInt(1, idcolonne);
             pst.executeUpdate();
             connect.commit();
             System.out.println("Le DELETE a été exécuté avec succès.");
@@ -1163,19 +1438,44 @@ public static void delete(Connection connect, String table, int id) throws SQLEx
             System.out.println("Rollback. Erreur : " + ex.getMessage());
             throw ex;
         }
-//    } finally {
-//        try {
-//            if (connect != null) {
-//                connect.setAutoCommit(true);
-//                connect.close();
-//            }
-//        } catch (SQLException ex) {
-//            System.err.println("Erreur lors de la gestion des ressources : " + ex.getMessage());
-//        }
-    //}
+    } finally {
+        try {
+            if (connect != null) {
+                connect.setAutoCommit(true);
+                connect.close();
+            }
+        } catch (SQLException ex) {
+            System.err.println("Erreur lors de la gestion des ressources : " + ex.getMessage());
+        }
+    }
 }
 
+public static void deleteOrdre(Connection connect, int idproduit) throws SQLException {
+    try {
+        connect.setAutoCommit(false);
 
+        String sql = "DELETE FROM realiseoo WHERE idproduit=?";
+        try (PreparedStatement pst = connect.prepareStatement(sql)) {
+            pst.setInt(1, idproduit);
+            pst.executeUpdate();
+            connect.commit();
+            System.out.println("Le DELETE a été exécuté avec succès.");
+        } catch (SQLException ex) {
+            connect.rollback();
+            System.out.println("Rollback. Erreur : " + ex.getMessage());
+            throw ex;
+        }
+    } finally {
+        try {
+            if (connect != null) {
+                connect.setAutoCommit(true);
+                connect.close();
+            }
+        } catch (SQLException ex) {
+            System.err.println("Erreur lors de la gestion des ressources : " + ex.getMessage());
+        }
+    }
+}
 
 public static int askidtype(Connection connect)throws SQLException{
     boolean test= false;
