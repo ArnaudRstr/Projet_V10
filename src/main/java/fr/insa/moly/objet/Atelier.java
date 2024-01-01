@@ -46,7 +46,10 @@ public class Atelier {
     public void setDes(String des) {
         this.des = des;
     }
-   
+    public String getString(){
+        String tab = "Identifiant: "+this.id + " Nom: "+ this.nom+ " Description: "+ this.des;
+        return tab;
+    }
     public String getnomtable(){
       return   "atelier";
     }
@@ -64,5 +67,12 @@ public class Atelier {
     public ArrayList getProduitchild(Connection connect)throws SQLException{
         ArrayList<Integer> listidchild = GestionBDD.listchild(connect,this.getnomtable(),this.id,"produit");       
         return listidchild;
+    }
+    
+    public ArrayList getGrandChildList(Connection connect)throws SQLException{
+        ArrayList<String> listIdGrandChild = new ArrayList();
+        
+        
+        return listIdGrandChild;
     }
 }

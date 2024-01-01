@@ -4,6 +4,11 @@
  */
 package fr.insa.moly.objet;
 
+import fr.insa.moly.GestionBDD.GestionBDD;
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.util.ArrayList;
+
 /**
  *
  * @author molys
@@ -69,7 +74,18 @@ public class Operation {
         this.idmachine = idmachine;
     }
     
+    public String getString(){
+        String tab = "identifiant: "+this.id + " Nom: "+ this.nom+ " Identifiant du type d'opération: "+ this.idtypeoperation+" Outils: "+this.outil+" Durée: "+this.duree;
+        return tab;
+    }
     public String getnomtable(){
       return   "operation";
+    }
+    
+    public ArrayList getGammechild(Connection connect)throws SQLException{
+        ArrayList<Integer> listidchild = GestionBDD.listchildgamme(connect,this.id); 
+       
+        
+        return listidchild;
     }
 }

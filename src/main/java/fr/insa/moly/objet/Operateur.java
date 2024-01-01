@@ -4,6 +4,8 @@
  */
 package fr.insa.moly.objet;
 
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 /**
@@ -110,9 +112,18 @@ public class Operateur {
     public void setListoperation(ArrayList<Integer> listtypeoperation) {
         this.listtypeoperation = listtypeoperation;
     }
-    
+    public String getString(){
+        String tab = "Identifiant: "+this.id + " Nom: "+ this.nom+ " Prénom: "+ this.prenom+" Identifiant Atelier: "+this.idatelier+" Téléphone: "+this.tel+ " Mail: "+this.mail;
+        return tab;
+    }
     public String getnomtable(){
       return   "operateur";
     }
     
+     public ArrayList getGrandChildList(Connection connect)throws SQLException{
+        ArrayList<String> listIdGrandChild = new ArrayList();
+        
+        
+        return listIdGrandChild;
+    }
 }

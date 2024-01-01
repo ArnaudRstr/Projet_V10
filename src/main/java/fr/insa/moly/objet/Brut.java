@@ -86,7 +86,10 @@ public class Brut {
     public void setFournisseur(String fournisseur) {
         this.fournisseur = fournisseur;
     }
-    
+    public String getString(){
+        String tab = "Identifiant: "+this.id + " Nom: "+ this.nom+ " Réference: "+ this.ref+" Matière: "+this.matiere+" Dimention: "+this.dimension +" Stock: "+ this.stock +" Fournisseur: "+ this.fournisseur;
+        return tab;
+    }
     public String getnomtable(){
       return   "brut";
     }
@@ -94,5 +97,12 @@ public class Brut {
     public ArrayList getProduitchild(Connection connect)throws SQLException{
         ArrayList<Integer> listidproduitchild = GestionBDD.listchild(connect,this.getnomtable(),this.id,"produit");       
         return listidproduitchild;
+    }
+    
+    public ArrayList getGrandChildList(Connection connect)throws SQLException{
+        ArrayList<String> listIdGrandChild = new ArrayList();
+        
+        
+        return listIdGrandChild;
     }
 }

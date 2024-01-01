@@ -4,6 +4,9 @@
  */
 package fr.insa.moly.objet;
 
+import fr.insa.moly.GestionBDD.GestionBDD;
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 /**
@@ -50,9 +53,15 @@ public class Produit {
     public void setIdbrut(int idbrut) {
         this.idbrut = idbrut;
     }
-    
+    public String getString(){
+        String tab = "identifiant: "+this.id + " Reférence: "+ this.ref+ " Description: "+ this.des+" Identifiant Brut: "+this.idbrut;
+        return tab;
+    }
     public String getnomtable(){
       return   "produit";
     }
-    
+   public ArrayList getGammechild(Connection connect)throws SQLException{
+        ArrayList<Integer> listidchild = GestionBDD.listchild(connect,this.getnomtable(),this.id,"machine");       
+        return listidchild;
+    }
 }

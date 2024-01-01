@@ -29,7 +29,10 @@ public class Typeoperation {
     public String getNom() {
         return nom;
     }
-
+public String getString(){
+        String tab = "identifiant: "+this.id + " Nom: "+ this.nom;
+        return tab;
+    }
     public void setNom(String nom) {
         this.nom = nom;
     }
@@ -45,6 +48,11 @@ public class Typeoperation {
     
     public ArrayList getMachinechild(Connection connect)throws SQLException{
         ArrayList<Integer> listidchild = GestionBDD.listchild(connect,this.getnomtable(),this.id,"machine");       
+        return listidchild;
+    }
+    
+    public ArrayList getRealiseOOchild(Connection connect)throws SQLException{
+        ArrayList<Integer> listidchild = GestionBDD.listchild(connect,this.getnomtable(),this.id,"realiseOO");       
         return listidchild;
     }
 }
