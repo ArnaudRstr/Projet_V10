@@ -14,16 +14,17 @@ import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.textfield.NumberField;
 import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.component.textfield.TextField;
-import static fr.insa.moly.GestionBDD.GestionBDD.delete;
 import static fr.insa.moly.GestionBDD.GestionBDD.listtypeoperation;
 import fr.insa.moly.objet.Brut;
 import fr.insa.moly.objet.Machine;
 import fr.insa.moly.objet.Produit;
 import fr.insa.moly.objet.Typeoperation;
+import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
 
 /**
  *
@@ -336,6 +337,18 @@ private Button boutonSupprimer;
             tades.setReadOnly(true);
             
             
+            
+            
+            
+            System.out.println();
+            System.out.println(produittemp.getId()+tfref.getValue()+tades.getValue()+(int)Math.round(nfidbrut.getValue()));
+            
+                try {
+                    this.controleur.getVuePrincipale().getGestionBDD().updateProduit(this.controleur.getVuePrincipale().getGestionBDD().conn,produittemp.getId(),tfref.getValue(),tades.getValue(),(int)Math.round(nfidbrut.getValue()));
+                } catch (SQLException ex) {
+                    Logger.getLogger(PartieDetail.class.getName()).log(Level.SEVERE, null, ex);
+                }
+
             Notification.show("La méthode d'enregistrement n'est pas encore faite");
             
             });
@@ -468,6 +481,14 @@ private Button boutonSupprimer;
             
             
             Notification.show("La méthode d'enregistrement n'est pas encore faite");
+            
+            
+            try {
+                    this.controleur.getVuePrincipale().getGestionBDD().updateBrut(this.controleur.getVuePrincipale().getGestionBDD().conn,bruttemp.getId(),tfnom.getValue(),tfref.getValue(),tfmatiere.getValue(),(int)Math.round(nfstock.getValue()),tfdim.getValue(),tffourn.getValue());
+                } catch (SQLException ex) {
+                    Logger.getLogger(PartieDetail.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            
             
             });
             
