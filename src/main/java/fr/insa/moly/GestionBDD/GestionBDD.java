@@ -1122,7 +1122,31 @@ public static void addgamme(Connection connect, int idproduit,Gamme gamme) throw
         }
 }
 }
+public static void updateString(Connection connect, String table, int id, String colonne, String newvalus)throws SQLException {
+     try {
+        connect.setAutoCommit(false);
 
+        String sql = "UPDATE FROM " + table + " WHERE id=?";
+        try (PreparedStatement pst = connect.prepareStatement(sql)) {
+            pst.setInt(1, id);
+            pst.executeUpdate();
+            connect.commit();
+            System.out.println("Le DELETE a été exécuté avec succès.");
+        } catch (SQLException ex) {
+            connect.rollback();
+            System.out.println("Rollback. Erreur : " + ex.getMessage());
+            throw ex;
+        }
+    } finally {
+        try {
+            if (connect != null) {
+                connect.setAutoCommit(true);
+            }
+        } catch (SQLException ex) {
+            System.err.println("Erreur lors de la gestion des ressources : " + ex.getMessage());
+        }
+    }
+}
 //ATTENTION ne fonctionne pas avec gamme(ordre) et realiseoo (ne peuvent pas être supprimés seulement modifiés)
 public static void delete(Connection connect, String table, int id) throws SQLException {
     try {
