@@ -6,6 +6,8 @@ package fr.insa.moly.objet;
 
 import fr.insa.moly.GestionBDD.GestionBDD;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
@@ -22,11 +24,38 @@ public class Atelier {
    public Atelier(int id, String nom, String des){
        this.id=id;
        this.nom=nom;
-       this.des=des;
-       
-       
+       this.des=des;  
    }
+ 
+   public Atelier(Connection connect,int id)throws SQLException {
+       this.id=id;
+        try {
+        connect.setAutoCommit(false);
 
+        String sql = "select * from atelier WHERE id=?";
+        try (PreparedStatement pst = connect.prepareStatement(sql)) {
+            pst.setInt(1, id);
+            ResultSet resultat = pst.executeQuery();
+            while (resultat.next()!= false){
+                this.nom=resultat.getString("nom");
+                this.des=resultat.getString("des");
+            }
+        } catch (SQLException ex) {
+            connect.rollback();
+            System.out.println("Rollback. Erreur : " + ex.getMessage());
+            throw ex;
+        }
+    } finally {
+        try {
+            if (connect != null) {
+                connect.setAutoCommit(true);
+            }
+        } catch (SQLException ex) {
+            System.err.println("Erreur lors de la gestion des ressources : " + ex.getMessage());
+        }
+    }
+   }
+   
     public String getNom() {
         return nom;
     }

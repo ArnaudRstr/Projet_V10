@@ -7,6 +7,8 @@ package fr.insa.moly.objet;
 import java.sql.Connection;
 import java.util.ArrayList;
 import fr.insa.moly.GestionBDD.GestionBDD;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 /**
@@ -31,6 +33,39 @@ public class Brut {
         this.dimension = dimension;
         this.fournisseur = fournisseur;
     }
+    
+     public Brut(Connection connect,int id)throws SQLException {
+       this.id=id;
+        try {
+        connect.setAutoCommit(false);
+
+        String sql = "select * from brut WHERE id=?";
+        try (PreparedStatement pst = connect.prepareStatement(sql)) {
+            pst.setInt(1, id);
+            ResultSet resultat = pst.executeQuery();
+            while (resultat.next()!= false){
+                this.nom=resultat.getString("nom");
+                this.ref = resultat.getString("ref");
+                this.matiere = resultat.getString("matiere");
+                this.stock = resultat.getInt("stock");
+                this.dimension = resultat.getString("dimension");
+                this.fournisseur = resultat.getString("fournisseur");
+            }
+        } catch (SQLException ex) {
+            connect.rollback();
+            System.out.println("Rollback. Erreur : " + ex.getMessage());
+            throw ex;
+        }
+    } finally {
+        try {
+            if (connect != null) {
+                connect.setAutoCommit(true);
+            }
+        } catch (SQLException ex) {
+            System.err.println("Erreur lors de la gestion des ressources : " + ex.getMessage());
+        }
+    }
+   }
 
     public int getId() {
         return id;

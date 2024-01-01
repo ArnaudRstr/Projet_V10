@@ -4,7 +4,10 @@
  */
 package fr.insa.moly.objet;
 
+import fr.insa.moly.GestionBDD.GestionBDD;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
@@ -37,6 +40,45 @@ public class Operateur {
         this.listtypeoperation = listtypeoperation;
     }
 
+    public Operateur(Connection connect,int id)throws SQLException {
+       this.id=id;
+        try {
+        connect.setAutoCommit(false);
+
+        String sql = "select * from operateur WHERE id=?";
+        try (PreparedStatement pst = connect.prepareStatement(sql)) {
+            pst.setInt(1, id);
+            ResultSet resultat = pst.executeQuery();
+            while (resultat.next()!= false){
+                this.identifiant = resultat.getString("identifiant");
+                this.motdepasse = resultat.getString("motdepasse");
+                this.nom = resultat.getString("nom");
+                this.prenom = resultat.getString("prenom");
+                this.idatelier = resultat.getInt("idatelier");
+                this.statut = resultat.getInt("statut");
+                this.tel = resultat.getInt("tel");
+                this.mail = resultat.getString("mail");
+                
+            }
+        } catch (SQLException ex) {
+            connect.rollback();
+            System.out.println("Rollback. Erreur : " + ex.getMessage());
+            throw ex;
+        }
+        
+        this.listtypeoperation = GestionBDD.listgammeproduit(connect,id);
+        
+    } finally {
+        try {
+            if (connect != null) {
+                connect.setAutoCommit(true);
+            }
+        } catch (SQLException ex) {
+            System.err.println("Erreur lors de la gestion des ressources : " + ex.getMessage());
+        }
+    }
+   }
+    
     public int getId() {
         return id;
     }

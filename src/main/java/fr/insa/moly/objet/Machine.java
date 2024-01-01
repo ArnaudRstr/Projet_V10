@@ -11,6 +11,8 @@ import com.vaadin.flow.component.textfield.TextArea;
 import fr.insa.moly.GestionBDD.GestionBDD;
 import fr.insa.rastetter.mainview.MyHorizontalLayout;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
@@ -71,6 +73,62 @@ public class Machine {
         this.pannel.add(spanStatut,nomaffiche);
     }
 
+   public Machine(Connection connect,int id)throws SQLException {
+       this.id=id;
+        try {
+        connect.setAutoCommit(false);
+
+        String sql = "select * from machine WHERE id=?";
+        try (PreparedStatement pst = connect.prepareStatement(sql)) {
+            pst.setInt(1, id);
+            ResultSet resultat = pst.executeQuery();
+            while (resultat.next()!= false){
+                this.nom = resultat.getString("nom");
+                this.idatelier = resultat.getInt("idatelier");
+                this.idtypeoperation = resultat.getInt("idtypeoperation");
+                this.des = resultat.getString("des");
+                this.marque = resultat.getString("marque");
+                this.puissance = resultat.getDouble("puissance");
+                this.statut = resultat.getInt("statut");
+                this.couthoraire = resultat.getDouble("couthoraire");
+                this.localisation = resultat.getString("localisation");
+                this.dimensionlargeur = resultat.getDouble("dimensionlargeur");
+                this.dimensionlongueur = resultat.getDouble("dimensionlongueur");
+            }
+        } catch (SQLException ex) {
+            connect.rollback();
+            System.out.println("Rollback. Erreur : " + ex.getMessage());
+            throw ex;
+        }
+    } finally {
+        try {
+            if (connect != null) {
+                connect.setAutoCommit(true);
+            }
+        } catch (SQLException ex) {
+            System.err.println("Erreur lors de la gestion des ressources : " + ex.getMessage());
+        }
+    }
+        
+        this.pannel= new MyHorizontalLayout();
+        this.pannel.setWidthFull();
+        this.pannel.getStyle().set("border", "1px solid #000000");
+        this.pannel.getStyle().set("border-radius", "7px");
+        this.pannel.getStyle().set("padding", "4px");
+        
+        
+        Text nomaffiche= new Text(nom);
+        Text idaffiche = new Text(String.valueOf(id));
+        Text marqueaffiche = new Text(marque);
+        
+        
+        
+        this.spanStatut=new Span();
+        this.spanStatut.setText("statut");
+        //this.spanStatut.getElement().getStyle().set("margin-left", "auto");
+        this.spanStatut.getElement().getThemeList().add("badge success primary");
+        this.pannel.add(spanStatut,nomaffiche);
+   }
     
     public int getId() {
         return id;

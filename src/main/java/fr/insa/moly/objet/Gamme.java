@@ -4,6 +4,9 @@
  */
 package fr.insa.moly.objet;
 
+import fr.insa.moly.GestionBDD.GestionBDD;
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 /**
@@ -18,6 +21,12 @@ public class Gamme {
         this.list = list;
         this.idproduit = idproduit;
     }
+    
+    public Gamme(Connection connect,int idproduit) throws SQLException {
+        this.list = GestionBDD.listgammeproduit(connect, idproduit);
+        this.idproduit = idproduit;
+    }
+    
 
     public ArrayList<Integer> getList() {
         return list;
