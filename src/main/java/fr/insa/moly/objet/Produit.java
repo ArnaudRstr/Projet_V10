@@ -20,12 +20,14 @@ public class Produit {
     private String ref;
     private String des;
     private int idbrut;
+    private Gamme gamme ;
 
-    public Produit(int id, String ref, String des, int idbrut) {
+    public Produit(Connection connect, int id, String ref, String des, int idbrut) throws SQLException {
         this.id = id;
         this.ref = ref;
         this.des = des;
         this.idbrut = idbrut;
+        this.gamme= new Gamme(connect, id);
     }
     
     public Produit(Connection connect,int id)throws SQLException {
@@ -56,6 +58,7 @@ public class Produit {
             System.err.println("Erreur lors de la gestion des ressources : " + ex.getMessage());
         }
     }
+    this.gamme= new Gamme(connect, id);
    }
 
     public int getId() {
@@ -73,6 +76,11 @@ public class Produit {
     public int getIdbrut() {
         return idbrut;
     }
+
+    public Gamme getGamme() {
+        return gamme;
+    }
+    
 
     public void setRef(String ref) {
         this.ref = ref;
@@ -92,8 +100,5 @@ public class Produit {
     public String getnomtable(){
       return   "produit";
     }
-   public ArrayList getGammechild(Connection connect)throws SQLException{
-        ArrayList<Integer> listidchild = GestionBDD.listchild(connect,this.getnomtable(),this.id,"machine");       
-        return listidchild;
-    }
+   
 }

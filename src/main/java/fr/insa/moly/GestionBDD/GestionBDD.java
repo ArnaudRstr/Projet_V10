@@ -1717,7 +1717,7 @@ public static ArrayList listproduit (Connection connect)throws SQLException{
             
             ResultSet tab = affichetab.executeQuery();
             while (tab.next()!= false){
-                Produit at = new Produit(tab.getInt("id"),tab.getString("ref"),tab.getString("des"),tab.getInt("idbrut"));
+                Produit at = new Produit(connect, tab.getInt("id"),tab.getString("ref"),tab.getString("des"),tab.getInt("idbrut"));
                 listproduit.add(at);
             }
 
@@ -1964,6 +1964,11 @@ public static ArrayList listchildrealiseoperation(Connection connect,int id) thr
           
     return listchild;
 }
+
+    public Connection getConn() {
+        return conn;
+    }
+
 
     public static void main(String[] args) {
         System.out.println("Bonjour et bienvenue");
