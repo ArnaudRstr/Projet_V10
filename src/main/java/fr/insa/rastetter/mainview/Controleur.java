@@ -190,6 +190,8 @@ public class Controleur {
                     boutonsupprimer.setEnabled(true);
                     
                     final int intselect = event5.getItem().getId();
+                    Typeoperation typopsupp = event5.getItem();
+                    
                     
                     //Ouvre la fenetre supplémentaire : confirmation de suppression
                     boutonsupprimer.addClickListener(event2 -> {
@@ -229,7 +231,8 @@ public class Controleur {
                             try {
                                 System.out.println("Essai de suppression : id = "+intselect);
 
-                                delete(this.getVuePrincipale().getGestionBDD().conn,"Typeoperation",intselect);
+                                delete(this.getVuePrincipale().getGestionBDD().conn,typopsupp.getnomtable(),intselect);
+                                
                                 boutonSupp.setEnabled(true);
                             } catch (SQLException ex) {
                                 System.out.println("Pas reussi à supprimer le type d'operation");
