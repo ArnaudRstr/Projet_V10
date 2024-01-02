@@ -186,6 +186,23 @@ public class Machine {
     public Span getSpanStatut(){
         return this.spanStatut;
     }
+    public String getStatutString(){
+        
+        
+        String result = new String();
+        if (this.statut==0){
+            result = "Arrêt";
+        }
+        if (this.statut==1){
+            result = "Marche";
+        }
+        if (this.statut==2){
+            result = "Maintenance à prévoir";
+        }
+        
+        
+        return result;
+    }
     
     public String getSpanText(){
         return this.spanStatut.getText();
@@ -196,6 +213,19 @@ public class Machine {
     }
     
 
+    public void setStatutString(String stat){
+        if (stat=="Arrêt"){
+            this.statut=0;
+        }
+        if (stat=="Marche"){
+            this.statut=1;
+        }
+        if (stat=="Maintenance à prévoir"){
+            this.statut=2;
+        }
+        
+        
+    }
     public void setNom(String nom) {
         this.nom = nom;
     }

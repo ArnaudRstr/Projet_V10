@@ -1400,7 +1400,7 @@ public static void delete(Connection connect, String table, int id) throws SQLEx
     try {
         connect.setAutoCommit(false);
 
-        String sql = "DELETE FROM " + table + " WHERE id=?";
+        String sql = "DELETE FROM "+table+" WHERE id=?";
         try (PreparedStatement pst = connect.prepareStatement(sql)) {
             pst.setInt(1, id);
             pst.executeUpdate();

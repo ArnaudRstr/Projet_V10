@@ -190,6 +190,8 @@ public class Controleur {
                     boutonsupprimer.setEnabled(true);
                     
                     final int intselect = event5.getItem().getId();
+                    Typeoperation typopsupp = event5.getItem();
+                    
                     
                     //Ouvre la fenetre supplémentaire : confirmation de suppression
                     boutonsupprimer.addClickListener(event2 -> {
@@ -229,12 +231,15 @@ public class Controleur {
                             try {
                                 System.out.println("Essai de suppression : id = "+intselect);
 
-                                delete(this.getVuePrincipale().getGestionBDD().conn,"Typeoperation",intselect);
+                                delete(this.getVuePrincipale().getGestionBDD().conn,typopsupp.getnomtable(),intselect);
+                                grid.setItems(listtypeoperation(this.getVuePrincipale().getGestionBDD().conn));
                                 boutonSupp.setEnabled(true);
                             } catch (SQLException ex) {
                                 System.out.println("Pas reussi à supprimer le type d'operation");
                             }
-                     
+                                dsuppression.close();
+
+                            
                         });
                         
                   
@@ -256,6 +261,8 @@ public class Controleur {
                     
                 event5=null;
                 return;
+                
+                
                 
 
        
@@ -390,10 +397,8 @@ public class Controleur {
             Notification.show("Séléctionnez un atelier");
         }
         else {
-            
-            
-            
-            
+        
+
             
             ArrayList<Atelier> listTemp =  new ArrayList();
        
@@ -415,11 +420,16 @@ public class Controleur {
         }
         //On affiche une fenêtre d'avertissement
         
-                    FenetreAvertissementSuppression fenetreAvertissementSuppression = new FenetreAvertissementSuppression(this,nom,this.etatAtelier);
+                    FenetreAvertissementSuppression fenetreAvertissementSuppression = new FenetreAvertissementSuppression(this,"atelier",nom,this.etatAtelier);
 
-
-        
+                        
     }
+        
+        
+        
+//        System.out.println("les ateliers devraient être affichés");
+//        this.getVuePrincipale().getEntete().setComboBoxAtelier(listaltelier(this.getVuePrincipale().getGestionBDD().conn));
+        
     }
     
     
@@ -506,7 +516,7 @@ public class Controleur {
         
         
         //Penser à enlever les arrondis si on change le type de la dimension de l'atelier
-        System.out.println("Controleur : essai de mise à jour du combobox");
+        //System.out.println("Controleur : essai de mise à jour du combobox");
         //this.main.getEntete().setComboBoxAtelier(listaltelier(this.main.getGestionBDD().conn));
          
         System.out.println("Combobox mis à jour");

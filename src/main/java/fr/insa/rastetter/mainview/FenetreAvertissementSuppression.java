@@ -12,7 +12,10 @@ import com.vaadin.flow.component.html.H3;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import static fr.insa.moly.GestionBDD.GestionBDD.delete;
+import static fr.insa.moly.GestionBDD.GestionBDD.listaltelier;
+import fr.insa.moly.objet.Atelier;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -29,7 +32,7 @@ public class FenetreAvertissementSuppression extends Dialog {
     private Controleur controleur;
 
     
-public FenetreAvertissementSuppression(Controleur controleur,String text,int id){
+public FenetreAvertissementSuppression(Controleur controleur,String type,String text,int id) throws SQLException{
     
     this.controleur=controleur;
     this.contenu=new MyVerticalLayout();
@@ -61,20 +64,81 @@ public FenetreAvertissementSuppression(Controleur controleur,String text,int id)
            this.close(); 
            
            
+        if (type == "atelier"){
+            
+        
         try {
             
             
             
-            delete(this.controleur.getVuePrincipale().getGestionBDD().conn,"Atelier",id);
-            System.out.println("suppression devrait être effectuée : id atelier : "+id);
+            delete(this.controleur.getVuePrincipale().getGestionBDD().conn,type,id);
+            System.out.println("suppression devrait être effectuée : id  : "+id);
 
         } catch (SQLException ex) {
             Logger.getLogger(FenetreAvertissementSuppression.class.getName()).log(Level.SEVERE, null, ex);
+        }      
+        
+        try { //On reactualise le combobox
+            this.controleur.getVuePrincipale().getEntete().setComboBoxAtelier(listaltelier(this.controleur.getVuePrincipale().getGestionBDD().conn));
+        } catch (SQLException ex) {
+            Logger.getLogger(FenetreAvertissementSuppression.class.getName()).log(Level.SEVERE, null, ex);
         }
+        
+        
+        }
+        
+        if (type=="brut"){
+            
+               try {
+                   delete(this.controleur.getVuePrincipale().getGestionBDD().conn,type,id);
+               } catch (SQLException ex) {
+                   Logger.getLogger(FenetreAvertissementSuppression.class.getName()).log(Level.SEVERE, null, ex);
+               }
+               try {
+                   this.controleur.MenuItemBrut();
+               } catch (SQLException ex) {
+                   Logger.getLogger(FenetreAvertissementSuppression.class.getName()).log(Level.SEVERE, null, ex);
+               }
+            
+            
+        }
+        
+        if (type=="produit"){
+            
+               try {
+                   delete(this.controleur.getVuePrincipale().getGestionBDD().conn,type,id);
+               } catch (SQLException ex) {
+                   Logger.getLogger(FenetreAvertissementSuppression.class.getName()).log(Level.SEVERE, null, ex);
+               }
+               try {
+                   this.controleur.MenuItemProduit();
+               } catch (SQLException ex) {
+                   Logger.getLogger(FenetreAvertissementSuppression.class.getName()).log(Level.SEVERE, null, ex);
+               }
+            
+            
+        }
+        if (type=="machine"){
+            try {
+                   delete(this.controleur.getVuePrincipale().getGestionBDD().conn,type,id);
+               } catch (SQLException ex) {
+                   Logger.getLogger(FenetreAvertissementSuppression.class.getName()).log(Level.SEVERE, null, ex);
+               }
+               try {
+                   this.controleur.MenuItemMachine();
+               } catch (SQLException ex) {
+                   Logger.getLogger(FenetreAvertissementSuppression.class.getName()).log(Level.SEVERE, null, ex);
+               }
+            
+            
+            
+        }
+
+
        });
         
-      
-    
+        
+        
     
 }
 }

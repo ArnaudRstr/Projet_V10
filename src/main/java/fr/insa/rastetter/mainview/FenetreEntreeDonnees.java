@@ -157,6 +157,20 @@ public class FenetreEntreeDonnees extends Dialog{
 
         
         
+        ArrayList <String> listStatuts = new ArrayList();
+        
+        listStatuts.add("Arret");
+        listStatuts.add("Marche");
+        listStatuts.add("Maintenance à prévoir");
+        
+        ComboBox cbbstatut = new ComboBox();
+        cbbstatut.setItems(listStatuts);
+        cbbstatut.setPlaceholder("Statut");
+        
+        
+        
+        
+        
         MyVerticalLayout colonne1 = new MyVerticalLayout();
         MyVerticalLayout colonne2 = new MyVerticalLayout();
 
@@ -191,6 +205,7 @@ public class FenetreEntreeDonnees extends Dialog{
         colonne1.add(puissance);
         colonne2.add(coutHoraire);
         colonne2.add(statut);
+        colonne2.add(cbbstatut);
         colonne2.add(dimLongueur);
         colonne2.add(dimLargeur);
         colonne2.add(localisation);
@@ -217,31 +232,34 @@ public class FenetreEntreeDonnees extends Dialog{
        boutonEnregistrer.addClickListener(event -> {
             //Il faut encore faire un contrôle de saisie ici
             
-            String nomTemp = nom.getValue();
-            String desTemp = des.getValue();
-            String marqueTemp= marque.getValue();
-            //int idtypeoperationtemp = (int)Math.round(idTypeOperation.getValue());
+//            
             
             String idNom = (String) comboBoxTypeOperation.getValue();
             int indexEspace = idNom.indexOf(' ');
             String avantEspace = idNom.substring(0,indexEspace);
+            
             int idtypeoperationtemp = Integer.parseInt(avantEspace);
        
+            String stattemp= (String) cbbstatut.getValue();
+            int statutTemp =-1;
+            
+            if(stattemp=="Arret"){
+                statutTemp=0;
+            }
+            if(stattemp=="Marche"){
+                statutTemp=1;
+            }
+            if(stattemp=="Maintenance à prévoir"){
+                statutTemp=2;
+            }
             
             
             
-            
-            
-            double puissancetemp = puissance.getValue();        //PAS BESOIN DE TOUT çA, ON PEUT METTRE DANS LA METHODE DE CREATION DIRECTEMENT (RESTE A FAIRE)
-            double couthorairetemp= coutHoraire.getValue();
-            double dimLongtemp= dimLongueur.getValue();
-            double dimLargtemp =dimLargeur.getValue();
-            String locatemp=localisation.getValue();
-            int statuttemp= (int) Math.round(statut.getValue());
+//            
             this.close();
 
             try {
-                this.controleur.getVuePrincipale().getGestionBDD().addmachine(this.controleur.getVuePrincipale().getGestionBDD().conn,nomTemp,this.controleur.getEtatAtelier(),idtypeoperationtemp,desTemp,marqueTemp,puissancetemp,statuttemp,couthorairetemp,locatemp,dimLargtemp,dimLongtemp);
+                this.controleur.getVuePrincipale().getGestionBDD().addmachine(this.controleur.getVuePrincipale().getGestionBDD().conn,nom.getValue(),this.controleur.getEtatAtelier(),idtypeoperationtemp,des.getValue(),marque.getValue(),puissance.getValue(),statutTemp,coutHoraire.getValue(),localisation.getValue(),dimLargeur.getValue(),dimLongueur.getValue());
                 this.controleur.MenuItemMachine();
 
             } catch (SQLException ex) {
