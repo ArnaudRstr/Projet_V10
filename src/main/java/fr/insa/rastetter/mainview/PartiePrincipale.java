@@ -13,6 +13,7 @@ import com.vaadin.flow.component.html.H5;
 import com.vaadin.flow.component.html.Paragraph;
 import com.vaadin.flow.component.menubar.MenuBar;
 import com.vaadin.flow.component.notification.Notification;
+import static fr.insa.moly.GestionBDD.GestionBDD.listproduit;
 import fr.insa.moly.objet.Brut;
 import fr.insa.moly.objet.Machine;
 import fr.insa.moly.objet.Produit;
@@ -131,7 +132,9 @@ public class PartiePrincipale extends MyVerticalLayout {
             //this.add(new H2("Produits"));
             ArrayList <Produit> produitsTemp = new ArrayList();
             System.out.println("Etat du controleur avant création de la machine:"+this.controleur.getEtatAtelier());
-            produitsTemp = this.controleur.getVuePrincipale().getGestionBDD().listproduit(this.controleur.getVuePrincipale().getGestionBDD().conn);
+            //produitsTemp = this.controleur.getVuePrincipale().getGestionBDD().listproduit(this.controleur.getVuePrincipale().getGestionBDD().conn);
+            produitsTemp = listproduit(this.controleur.getVuePrincipale().getGestionBDD().conn);
+
             
             
             //machinesTemp = this.controleur.getVuePrincipale().getGestionBDD().listmachine(this.controleur.getVuePrincipale().getGestionBDD().conn);
@@ -159,7 +162,7 @@ public class PartiePrincipale extends MyVerticalLayout {
                     try {
                         this.controleur.getFenetrePartagee().setPartD(new PartieDetail(this.controleur,"produit",produitTemp));
                     } catch (SQLException ex) {
-                        Logger.getLogger(PartiePrincipale.class.getName()).log(Level.SEVERE, null, ex);
+                        System.out.println("Erreur Partie principale : Produits");
                     }
                     
                 });

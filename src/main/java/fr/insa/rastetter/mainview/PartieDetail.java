@@ -61,6 +61,10 @@ private Button boutonSupprimer;
         this.boutonModifier =new Button(new Icon("lumo","edit"));
         this.boutonSupprimer=new Button(new Icon(VaadinIcon.TRASH));
         this.listboutons.add(boutonSupprimer,boutonModifier,boutonEnregistrer);
+        
+        
+        
+        
         if (typeobjet =="machine"){
             
             contenu.add(listboutons);
@@ -118,23 +122,8 @@ private Button boutonSupprimer;
             cbbstatut.setValue(machinetemp.getStatutString());
             
             contenu.add(cbbstatut);
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
+
+          
             
             ComboBox cbtypeoperation = new ComboBox();
             
@@ -148,10 +137,14 @@ private Button boutonSupprimer;
             int index =0;
             while(index< altypeop.size()){
             
-            listajouter.add(((Typeoperation)altypeop.get(index)).getId()+" : "+ ((Typeoperation)altypeop.get(index)).getNom());
+            //listajouter.add(((Typeoperation)altypeop.get(index)).getId()+" : "+ ((Typeoperation)altypeop.get(index)).getNom());
+            listajouter.add(((Typeoperation)altypeop.get(index)).getNom());
             index++;
         }
             cbtypeoperation.setItems(listajouter);
+            
+            
+            
             //Ici il faut encore faire en sorte d'afficher l'id + le nom du type d'opération et pas uniquement le type d'op pcq ça marche pas.
             
             //On recherche le type d'operation à partir de son id.
@@ -201,6 +194,14 @@ private Button boutonSupprimer;
 
             contenu.add(nfdimlong);
             
+            
+            TextField tfloca=  new TextField();
+            tfloca.setLabel("Localisation");
+            tfloca.setReadOnly(true);
+            tfloca.setValue(machinetemp.getLocalisation());
+            tfloca.setWidthFull();
+            contenu.add(tfloca);
+            
             this.add(contenu);
             
             
@@ -215,7 +216,7 @@ private Button boutonSupprimer;
             nfdimlong.setReadOnly(false);
             cbtypeoperation.setReadOnly(false);
             cbbstatut.setReadOnly(false);
-
+            tfloca.setReadOnly(false);
             
                         
             
@@ -235,16 +236,57 @@ private Button boutonSupprimer;
             nfdimlong.setReadOnly(true); 
             cbtypeoperation.setReadOnly(true);
             cbbstatut.setReadOnly(true);
+            tfloca.setReadOnly(true);
+            
+            String nomtypeopchoix = (String) cbtypeoperation.getValue();
+            //On recherche ensuite l'identifiant du type d'op à partir de son nom. 
+            
+            int index1 =0;
+            int idtypeopchoix=-1;
+            
+            ArrayList altypeop1 = new ArrayList();
+            
+                try {
+                    altypeop1 = listtypeoperation(this.controleur.getVuePrincipale().getGestionBDD().conn);
+                } catch (SQLException ex) {
+                    Logger.getLogger(PartieDetail.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            
+                
+            while(altypeop1.size()>index1){
+               
+                if(nomtypeopchoix.equals(((Typeoperation)altypeop1.get(index1)).getNom())){
+                    
+                    idtypeopchoix=((Typeoperation)altypeop1.get(index1)).getId();
+                }
+                index1++;
+            }
+            
+            //On récupère le nouveau statut
+            
+            String nvstat = (String) cbbstatut.getValue();
+            
+            int idnvstatut = -1000;
+            
+            if (nvstat=="Arrêt"){
+                idnvstatut =0;
+            }
+            if (nvstat=="Marche"){
+                idnvstatut =1;
+            }
+            if (nvstat=="Maintenance à prévoir"){
+                idnvstatut =2;
+            }
+            
 
             
-            Notification.show("La méthode d'enregistrement n'est pas encore faite");
             
-         //Connection connect,int id,String nom,int idatelier,int idtypeoperation,String des, String marque,double puissance,int statut,double couthoraire,String localisation,double dimensionlargeur,double dimensionlongueur)   
-//            try {
-//                    //this.controleur.getVuePrincipale().getGestionBDD().updateMachine(this.controleur.getVuePrincipale().getGestionBDD().conn,machinetemp.getId(),tfnom.getValue(),1,tades.getValue(),tfmarque.getValue(),nfpuissance.getValue(),);
-//                } catch (SQLException ex) {
-//                    Logger.getLogger(PartieDetail.class.getName()).log(Level.SEVERE, null, ex);
-//                }
+         //                                                                                                                                          Connection connect,int id,String nom,int idatelier,int idtypeoperation,String des, String marque,double puissance,int statut,double couthoraire,String localisation,double dimensionlargeur,double dimensionlongueur)   
+            try {
+                    this.controleur.getVuePrincipale().getGestionBDD().updateMachine(this.controleur.getVuePrincipale().getGestionBDD().conn,machinetemp.getId(),tfnom.getValue(),this.controleur.getEtatAtelier(),idtypeopchoix,tades.getValue(),tfmarque.getValue(),nfpuissance.getValue(),idnvstatut,nfcouthoraire.getValue(),tfloca.getValue(),nfdimlarg.getValue(),nfdimlong.getValue());
+                } catch (SQLException ex) {
+                    Logger.getLogger(PartieDetail.class.getName()).log(Level.SEVERE, null, ex);
+                }
                 
                 try {
                     this.controleur.MenuItemMachine();
