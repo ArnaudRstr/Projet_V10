@@ -809,7 +809,7 @@ public static void updateMachine(Connection connect,int id,String nom,int idatel
      try {
         connect.setAutoCommit(false);
 
-        String sql = "UPDATE atelier SET `nom`=?,`idatelier`=?,`idtypeoperation`=?,`des`=?,`marque`=?,`puissance`=?,`statut`=?,`couthoraire`=?,`localisation`=?,`dimensionlargeur`=?,`dimensionlongueur`=? WHERE id=?";
+        String sql = "UPDATE machine SET `nom`=?,`idatelier`=?,`idtypeoperation`=?,`des`=?,`marque`=?,`puissance`=?,`statut`=?,`couthoraire`=?,`localisation`=?,`dimensionlargeur`=?,`dimensionlongueur`=? WHERE id=?";
         try (PreparedStatement pst = connect.prepareStatement(sql)) {
             pst.setString(1, nom);
                     pst.setInt(2, idatelier);
@@ -892,7 +892,7 @@ public static void updateBrut(Connection connect,int id, String nom, String ref,
      try {
         connect.setAutoCommit(false);
 
-        String sql = "UPDATE atelier SET nom=?, ref=?, matiere=?, stock=?, dimension=?, fournisseur=? WHERE id=?";
+        String sql = "UPDATE brut SET nom=?, ref=?, matiere=?, stock=?, dimension=?, fournisseur=? WHERE id=?";
         try (PreparedStatement pst = connect.prepareStatement(sql)) {
             pst.setString(1, nom);
             pst.setString(2, ref);
@@ -986,7 +986,7 @@ public static void updateOperateur(Connection connect,int id,String identifiant,
      try {
         connect.setAutoCommit(false);
 
-        String sql = "UPDATE atelier SET identifiant=?, motdepasse=?, nom=?, prenom=?, idatelier=?, statut=?, tel=?, mail=? WHERE id=?";
+        String sql = "UPDATE operateur SET identifiant=?, motdepasse=?, nom=?, prenom=?, idatelier=?, statut=?, tel=?, mail=? WHERE id=?";
         try (PreparedStatement pst = connect.prepareStatement(sql)) {
             pst.setString(1, nom);
                     pst.setString(1, identifiant);
@@ -1072,7 +1072,7 @@ public static void updateOperation(Connection connect,int id, int idtypeoperatio
      try {
         connect.setAutoCommit(false);
 
-        String sql = "UPDATE atelier SET idtypeoperation=?, nom=?, duree=?, outil=?, idmachine=? WHERE id=?";
+        String sql = "UPDATE operation SET idtypeoperation=?, nom=?, duree=?, outil=?, idmachine=? WHERE id=?";
         try (PreparedStatement pst = connect.prepareStatement(sql)) {
             pst.setInt(1, idtypeoperation);
                     pst.setString(2, nom);
@@ -1145,7 +1145,7 @@ public static void updateOrdre(Connection connect,int id, int idopavant, int ido
      try {
         connect.setAutoCommit(false);
 
-        String sql = "UPDATE atelier SET idopavant=?, idopapres=?, idproduit=? WHERE id=?";
+        String sql = "UPDATE ordre SET idopavant=?, idopapres=?, idproduit=? WHERE id=?";
         try (PreparedStatement pst = connect.prepareStatement(sql)) {
            pst.setInt(1, idopavant);
             pst.setInt(2, idopapres);
@@ -1218,7 +1218,7 @@ public static void updateProduit(Connection connect,int id,String ref,String des
      try {
         connect.setAutoCommit(false);
 
-        String sql = "UPDATE atelier SET ref=?, des=?, idbrut=? WHERE id=?";
+        String sql = "UPDATE produit SET ref=?, des=?, idbrut=? WHERE id=?";
         try (PreparedStatement pst = connect.prepareStatement(sql)) {
             pst.setString(1, ref);
             pst.setString(2, des);
@@ -1325,7 +1325,7 @@ public static void updateTypeOperation(Connection connect,int id, String nom)thr
      try {
         connect.setAutoCommit(false);
 
-        String sql = "UPDATE atelier SET `nom`=? WHERE id=?";
+        String sql = "UPDATE typeoperation SET `nom`=? WHERE id=?";
         try (PreparedStatement pst = connect.prepareStatement(sql)) {
             pst.setString(1, nom);
             pst.setInt(2, id);
