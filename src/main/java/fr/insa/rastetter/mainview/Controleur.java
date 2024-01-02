@@ -568,7 +568,6 @@ public class Controleur {
             this.fenetreEntreeDonnees = new FenetreEntreeDonnees(this,"brut");
             System.out.println("La fenetre devrait être crée");
             
-            
             this.MenuItemBrut();
         }
         

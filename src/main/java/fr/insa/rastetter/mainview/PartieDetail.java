@@ -239,6 +239,18 @@ private Button boutonSupprimer;
             
             Notification.show("La méthode d'enregistrement n'est pas encore faite");
             
+         //Connection connect,int id,String nom,int idatelier,int idtypeoperation,String des, String marque,double puissance,int statut,double couthoraire,String localisation,double dimensionlargeur,double dimensionlongueur)   
+//            try {
+//                    //this.controleur.getVuePrincipale().getGestionBDD().updateMachine(this.controleur.getVuePrincipale().getGestionBDD().conn,machinetemp.getId(),tfnom.getValue(),1,tades.getValue(),tfmarque.getValue(),nfpuissance.getValue(),);
+//                } catch (SQLException ex) {
+//                    Logger.getLogger(PartieDetail.class.getName()).log(Level.SEVERE, null, ex);
+//                }
+                
+                try {
+                    this.controleur.MenuItemMachine();
+                } catch (SQLException ex) {
+                    Logger.getLogger(PartieDetail.class.getName()).log(Level.SEVERE, null, ex);
+                }
             });
             
             boutonSupprimer.addClickListener(event -> {
@@ -348,8 +360,13 @@ private Button boutonSupprimer;
                 } catch (SQLException ex) {
                     Logger.getLogger(PartieDetail.class.getName()).log(Level.SEVERE, null, ex);
                 }
+                
+                try {
+                    this.controleur.MenuItemProduit();
+                } catch (SQLException ex) {
+                    Logger.getLogger(PartieDetail.class.getName()).log(Level.SEVERE, null, ex);
+                }
 
-            Notification.show("La méthode d'enregistrement n'est pas encore faite");
             
             });
             
@@ -365,11 +382,11 @@ private Button boutonSupprimer;
                 }
                 
                 //delete(this.controleur.getVuePrincipale().getGestionBDD().conn,produittemp.getnomtable(),produittemp.getId());
-//                try {
-//                    this.controleur.MenuItemProduit();
-//                } catch (SQLException ex) {
-//                    Logger.getLogger(PartieDetail.class.getName()).log(Level.SEVERE, null, ex);
-//                }
+                try {
+                    this.controleur.MenuItemProduit();
+                } catch (SQLException ex) {
+                    Logger.getLogger(PartieDetail.class.getName()).log(Level.SEVERE, null, ex);
+                }
             });
             
         }
@@ -429,7 +446,7 @@ private Button boutonSupprimer;
             contenu.add(tfdim);
             
             TextField tffourn=  new TextField();
-            tffourn.setLabel("Dimension");
+            tffourn.setLabel("Fournisseur");
             tffourn.setReadOnly(true);
             tffourn.setValue(bruttemp.getFournisseur());
             tffourn.setWidthFull();
@@ -489,6 +506,11 @@ private Button boutonSupprimer;
                     Logger.getLogger(PartieDetail.class.getName()).log(Level.SEVERE, null, ex);
                 }
             
+                try {
+                    this.controleur.MenuItemBrut();
+                } catch (SQLException ex) {
+                    Logger.getLogger(PartieDetail.class.getName()).log(Level.SEVERE, null, ex);
+                }
             
             });
             
