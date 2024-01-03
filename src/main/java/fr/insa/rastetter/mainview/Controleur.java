@@ -70,9 +70,19 @@ public class Controleur {
     }
     
     
-    public void boutonCompte() {
-        Notification.show("Compte via controleur");
-        System.out.println("compte via controleur ");        
+    public void MenuItemDeconnexion() {
+        Notification.show("Deconnexion via controleur");
+        
+        
+        
+        
+        //ICI il faudra déconnecter l'utilisateur
+        
+        this.main.setMainContent(new VueInitialeConnection(this.main));
+        this.main.entete.removeAll();
+        this.main.setEntete(new Entete());
+        
+        
     }
     
     public void MenuItemPlan() {

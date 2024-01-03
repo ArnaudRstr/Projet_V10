@@ -39,7 +39,7 @@ public class VuePrincipale extends MyVerticalLayout {
         this.mainContent.setWidthFull();
         this.mainContent.setHeightFull();
         this.getStyle().set("padding", "0px");
-        this.mainContent.getStyle().set("border", "1px solid #000000");
+        //this.mainContent.getStyle().set("border", "1px solid #000000");
         this.getStyle().set("background-color","#FFFFFF");
         this.mainContent.getStyle().set("border", "0px solid #000000");
         this.mainContent.getStyle().set("border-radius", "10px");
@@ -77,7 +77,6 @@ public class VuePrincipale extends MyVerticalLayout {
     public void setEntete(Entete entete1){
         this.entete.removeAll();
         this.entete.add(entete1);
-        this.entete=entete1;
 
     }
     

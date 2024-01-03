@@ -18,6 +18,7 @@ import com.vaadin.flow.component.notification.Notification;
 import static com.vaadin.flow.component.orderedlayout.FlexComponent.Alignment.CENTER;
 import static fr.insa.moly.GestionBDD.GestionBDD.listaltelier;
 import fr.insa.moly.objet.Atelier;
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.logging.Level;
@@ -37,9 +38,8 @@ public class Entete extends MyHorizontalLayout {
     
     
     //Boutons
-    private Button boutonCompteUtilisateur;
     
-    
+    private MenuItem menuItemCompte;
     
     
     
@@ -48,6 +48,7 @@ public class Entete extends MyHorizontalLayout {
     
     private MenuBar menuBarG;
     private MenuBar menuBarD;
+    private MenuBar menuBarM;
     private MenuBar menuFichier;
     private MenuItem menuItemMenu;
     
@@ -67,8 +68,11 @@ public class Entete extends MyHorizontalLayout {
     private MenuItem menuItemTypeOperation;
     private MenuItem menuItemOperateurs;
     private MenuItem menuItemBrut;
-
     
+    private SubMenu subMenuCompte;
+    private MenuItem menuItemDeconnexion;
+    private MenuItem menuItemNotice;
+    private MenuItem menuItemInfos;
     private ComboBox comboBoxAtelier;
     
     
@@ -88,31 +92,31 @@ public class Entete extends MyHorizontalLayout {
         this.addClassName("Custom-Entete");
         //this.getStyle().set("border", "1px solid #000000");
         this.getStyle().set("padding", "0px");
-        this.getStyle().set("border-radius", "10px");
-        this.getStyle().set("background-color","#D3D3D3");
-        this.setMargin(false);
+        this.getStyle().set("border-radius", "15px");
+        this.getStyle().set("background-color","#EFEFEF");
+        //this.getStyle().set("background-color","#D3D3D3");
+        this.setMargin(true);
 
 
         this.setWidthFull();
         
-        
-        
-        
+        String couleur1 = new String("#38998C");
+        String couleur2 = new String("#BDE767");
+        String couleur3 = new String("#1F4C83");
         
         //Configuration de la menubar Menu
         this.menuBarG = new MenuBar();
+        this.menuBarM = new MenuBar();
         this.menuBarD = new MenuBar();
+
 
         
         Icon menuIcon = new Icon(VaadinIcon.MENU);
-        menuIcon.setSize("25px");
+        menuIcon.setSize("20px");
+        menuIcon.setColor(couleur3);
         MyHorizontalLayout hlmenu = new MyHorizontalLayout();
-        hlmenu.add(menuIcon,new H5("MENU"));
-        Icon compteIcon = new Icon(VaadinIcon.USER);
-        compteIcon.setSize("25px");
-        MyHorizontalLayout hlcompte = new MyHorizontalLayout();
-        hlcompte.add(compteIcon,new H5("COMPTE"));
-        hlcompte.setAlignItems(CENTER);
+        hlmenu.add(menuIcon,new H5("Menu"));
+       
         hlmenu.setAlignItems(CENTER);
         //this.menuItemMenu= this.menuBarG.addItem(menuIcon,"Menu Principal");
         this.menuItemMenu= this.menuBarG.addItem(hlmenu);
@@ -131,7 +135,7 @@ public class Entete extends MyHorizontalLayout {
         this.menuItemOperateurs=this.subMenuMenuPrincipal.addItem("Operateurs");
 
         
-        this.menuItemAtelier=this.menuBarD.addItem(new H5("ATELIER"));
+        this.menuItemAtelier=this.menuBarM.addItem(new H5("Atelier"));
         this.subMenuAtelier=menuItemAtelier.getSubMenu();
         
         
@@ -159,19 +163,56 @@ public class Entete extends MyHorizontalLayout {
         
         
         
-
+        Icon compteIcon = new Icon(VaadinIcon.USER);
+        compteIcon.setSize("20px");
+        compteIcon.setColor(couleur3);
+        MyHorizontalLayout hlcompte = new MyHorizontalLayout();
+        hlcompte.add(compteIcon,new H5("Compte"));
+        hlcompte.setAlignItems(CENTER);
         
-
+        
+        //this.menuItemMenu= this.menuBarG.addItem(hlmenu);
+        
+        this.menuItemCompte = this.menuBarD.addItem(hlcompte);
+        
+        this.subMenuCompte=menuItemCompte.getSubMenu();
+        
+        this.menuItemDeconnexion = this.subMenuCompte.addItem("Deconnexion");
         
         
-        this.boutonCompteUtilisateur = new Button(hlcompte);
+        Icon infosIcon = new Icon(VaadinIcon.INFO_CIRCLE);
+        infosIcon.setSize("20px");
+        infosIcon.setColor(couleur3);
+        MyHorizontalLayout hlinfos = new MyHorizontalLayout();
+        hlinfos.add(infosIcon,new H5("A propos"));
+        hlinfos.setAlignItems(CENTER);
+        
+        Icon noticeIcon = new Icon(VaadinIcon.QUESTION);
+        noticeIcon.setSize("20px");
+        noticeIcon.setColor(couleur3);
+        MyHorizontalLayout hlnotice = new MyHorizontalLayout();
+        hlnotice.add(noticeIcon,new H5("Notice"));
+        hlnotice.setAlignItems(CENTER);
+        
+        
+        this.menuItemNotice= this.menuBarD.addItem(hlnotice);
+        this.menuItemInfos= this.menuBarD.addItem(hlinfos);
+        
+        
+        
+        
         Div div0 = new Div();
         div0.setWidth("100px");
         Div div1 = new Div();
-        div1.setWidth("500px");
+        div1.setWidth("300px");
         Div div2 = new Div();
-        div2.setWidth("500px");
-        this.add(menuBarG,div1,comboBoxAtelier,menuBarD,div2,boutonCompteUtilisateur,div0);
+        div2.setWidth("400px");
+        
+        
+        
+        
+        
+        this.add(menuBarG,div1,comboBoxAtelier,menuBarM,div2,menuItemCompte,menuBarD);
     
         this.getThemeList().add("spacing-xl");
         
@@ -182,11 +223,43 @@ public class Entete extends MyHorizontalLayout {
         
         
         //On renvoie l'événement vers le controleur de la vue principale
-        boutonCompteUtilisateur.addClickListener(event -> {
-            Notification.show("Option Compte sélectionnée !");
-            this.main.getControleur().boutonCompte();
+        menuItemDeconnexion.addClickListener(event -> {
+            Notification.show("Deconnexion selectionnée !");
+            this.main.getControleur().MenuItemDeconnexion();
         });
         
+        menuItemNotice.addClickListener(event -> {
+            Notification.show("Ouverture du mode d'emploi");
+            String cheminRelatif = "src/main/resources/FichierTest.pdf";
+        
+        try {
+            // Utilisation de cmd pour ouvrir le fichier avec l'application par défaut
+            ProcessBuilder processBuilder = new ProcessBuilder("cmd", "/c", "start", "", cheminRelatif);
+            processBuilder.start();
+        } catch (IOException er) {
+            er.printStackTrace();
+        }
+            
+            
+        });
+        
+        
+        
+        
+        menuItemInfos.addClickListener(event -> {
+            Notification.show("Ouverture de la section à propos");
+            String cheminRelatif = "src/main/resources/FichierTest.pdf";
+        
+        try {
+            // Utilisation de cmd pour ouvrir le fichier avec l'application par défaut
+            ProcessBuilder processBuilder = new ProcessBuilder("cmd", "/c", "start", "", cheminRelatif);
+            processBuilder.start();
+        } catch (IOException er) {
+            er.printStackTrace();
+        }
+            
+            
+        });
         
         
         
