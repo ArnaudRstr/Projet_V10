@@ -28,6 +28,7 @@ public class Produit {
         this.des = des;
         this.idbrut = idbrut;
         this.gamme= new Gamme(connect, id);
+        
     }
     
     public Produit(Connection connect,int id)throws SQLException {
@@ -93,6 +94,8 @@ public class Produit {
     public void setIdbrut(int idbrut) {
         this.idbrut = idbrut;
     }
+    
+    
     public String getString(){
         String tab = "identifiant: "+this.id + " Reférence: "+ this.ref+ " Description: "+ this.des+" Identifiant Brut: "+this.idbrut;
         return tab;
