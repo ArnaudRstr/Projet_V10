@@ -1782,31 +1782,35 @@ public static ArrayList listgammeproduit(Connection connect,int idproduit) throw
             listidavant.add(tab.getInt("idopavant"));
             listidapres.add(tab.getInt("idopapres"));
             }
-            
-            while (find==false){
-                idfirst=listidavant.get(k);
-            
-            for(int j=0;j<listidapres.size();j++){
-                if (idfirst==listidapres.get(j)){
-                    find=false;
+            if (!listidavant.isEmpty()){
+                while (find == false){
+                    idfirst=listidavant.get(k);
+
+                for(int j=0;j<listidapres.size();j++){
+                    if (idfirst==listidapres.get(j)){
+                        find=false;
+                    }
+                    else{
+                        find=true;
+                    }
                 }
-                else{
-                    find=true;
+                k=k+1;
+                }
+                ordre.add(idfirst);
+
+                for (int j=0;j<listidapres.size();j++){
+                     try ( PreparedStatement idapres = connect.prepareStatement(
+                    "select idopapres from ordre where idopavant=?")) {
+                         idapres.setInt(1, ordre.get(j));
+                         ResultSet tabidopapres = idapres.executeQuery();
+                          while (tab.next()!= false){
+                             ordre.add(tabidopapres.getInt("idopapres"));
+                          }
+                     }
                 }
             }
-            k=k+1;
-            }
-            ordre.add(idfirst);
-            
-            for (int j=0;j<listidapres.size();j++){
-                 try ( PreparedStatement idapres = connect.prepareStatement(
-                "select idopapres from ordre where idopavant=?")) {
-                     idapres.setInt(1, ordre.get(j));
-                     ResultSet tabidopapres = idapres.executeQuery();
-                      while (tab.next()!= false){
-                         ordre.add(tabidopapres.getInt("idopapres"));
-                      }
-                 }
+            else {
+                ordre = new ArrayList();
             }
             } 
   return ordre;
