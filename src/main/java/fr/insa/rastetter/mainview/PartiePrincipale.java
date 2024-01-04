@@ -299,7 +299,8 @@ public class PartiePrincipale extends MyVerticalLayout {
                 });
                 
                 
-            }
+            
+    
             
             this.menuItemAjouter.addClickListener(event -> {
             Notification.show("Option operateur sélectionnée !");
@@ -314,7 +315,7 @@ public class PartiePrincipale extends MyVerticalLayout {
             
             
             
-            
+        } 
 
             
             

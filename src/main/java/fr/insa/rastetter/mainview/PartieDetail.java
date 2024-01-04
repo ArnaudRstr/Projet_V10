@@ -616,12 +616,13 @@ private Button boutonSupprimer;
             
             TextField tfoutil = new TextField("Outil");
             contenu.add(tfoutil);
+            tfoutil.setWidthFull();
             tfoutil.setValue(operationtemp.getOutil());
             
             
             NumberField nbid = new NumberField("Identifiant");
             nbid.setValue((double)operationtemp.getId());
-            
+            nbid.setWidthFull();
             
             contenu.add(nbid);
             
@@ -629,7 +630,7 @@ private Button boutonSupprimer;
             
             NumberField nbduree = new NumberField("Durée (s)");
             nbduree.setValue(operationtemp.getDuree());
-            
+            nbduree.setWidthFull();
             
             contenu.add(nbduree);
             
@@ -639,7 +640,7 @@ private Button boutonSupprimer;
            
             ComboBox comboBoxTypeOperation = new ComboBox();
             
-            
+            comboBoxTypeOperation.setWidthFull();
             
             
             
@@ -691,7 +692,7 @@ private Button boutonSupprimer;
             nbduree.setReadOnly(true);
             comboBoxTypeOperation.setReadOnly(true);
             comboBoxMachines.setReadOnly(true); 
-            
+            comboBoxMachines.setWidthFull();
             
             boutonModifier.addClickListener(event -> {
                     

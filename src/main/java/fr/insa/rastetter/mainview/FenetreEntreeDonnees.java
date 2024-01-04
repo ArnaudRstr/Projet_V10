@@ -124,8 +124,7 @@ public class FenetreEntreeDonnees extends Dialog{
             try {
                 this.controleur.getVuePrincipale().getGestionBDD().addatelier(this.controleur.getVuePrincipale().getGestionBDD().conn,this.nom.getValue(),this.des.getValue(),(int)Math.round(this.dimLongueur.getValue()),(int) Math.round(this.dimLargeur.getValue()));
                 System.out.println("l'atelier devrait être affiché (via Fenetre)");
-                this.controleur.getVuePrincipale().getEntete().setComboBoxAtelier(listaltelier(this.controleur.getVuePrincipale().getGestionBDD().conn));
-                System.out.println("Combobox mis à jour (via Fenetre)");
+                
                 //this.controleur.MenuItemMachine();
                 //this.controleur.getEtatFenetre()
 
@@ -133,6 +132,14 @@ public class FenetreEntreeDonnees extends Dialog{
             } catch (SQLException ex) {
                 Logger.getLogger(FenetreEntreeDonnees.class.getName()).log(Level.SEVERE, null, ex);
             }
+            
+            
+            try {
+                this.controleur.getVuePrincipale().getEntete().setComboBoxAtelier(listaltelier(this.controleur.getVuePrincipale().getGestionBDD().conn));
+            } catch (SQLException ex) {
+                System.out.println("Impossible de mettre à jour le combobox");
+            }
+                System.out.println("Combobox mis à jour (via Fenetre)");
             
            
         });

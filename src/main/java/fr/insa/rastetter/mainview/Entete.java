@@ -84,7 +84,7 @@ public class Entete extends MyHorizontalLayout {
     private ArrayList <String> listDesAteliers;
     
     public Entete(){
-        
+        this.comboBoxAtelier= new ComboBox<>();
     }
     
     
@@ -92,7 +92,10 @@ public class Entete extends MyHorizontalLayout {
     
     public Entete(VuePrincipale main) throws SQLException {
         this.main = main;
+        this.comboBoxAtelier= new ComboBox<>();
         
+        
+
         this.addClassName("Custom-Entete");
         //this.getStyle().set("border", "1px solid #000000");
         this.getStyle().set("padding", "0px");
@@ -149,7 +152,6 @@ public class Entete extends MyHorizontalLayout {
         this.menuItemDetailsAtelier=this.subMenuAtelier.addItem("Details");
         this.menuItemSupprimerAtelier=this.subMenuAtelier.addItem("Supprimer");
         
-        this.comboBoxAtelier= new ComboBox<>();
         this.comboBoxAtelier.setPlaceholder("Atelier");
         
         
@@ -515,7 +517,7 @@ public class Entete extends MyHorizontalLayout {
         //System.out.println("liste ateliers à mettre dans combobox: "+listNomAtelier);
         
         
-        comboBoxAtelier.setItems(listNomAtelier);
+        this.comboBoxAtelier.setItems(listNomAtelier);
         //System.out.println("Le comboBox est mis à jour (méthode setCombobox)");
         
     }
