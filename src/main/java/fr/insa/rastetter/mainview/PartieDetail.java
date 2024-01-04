@@ -14,9 +14,12 @@ import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.textfield.NumberField;
 import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.component.textfield.TextField;
+import static fr.insa.moly.GestionBDD.GestionBDD.listmachine;
 import static fr.insa.moly.GestionBDD.GestionBDD.listtypeoperation;
+import static fr.insa.moly.GestionBDD.GestionBDD.updateOperation;
 import fr.insa.moly.objet.Brut;
 import fr.insa.moly.objet.Machine;
+import fr.insa.moly.objet.Operation;
 import fr.insa.moly.objet.Produit;
 import fr.insa.moly.objet.Typeoperation;
 import java.sql.Connection;
@@ -57,9 +60,29 @@ private Button boutonSupprimer;
         contenu.setSpacing(false);
         this.listboutons= new MyHorizontalLayout();
         
-        this.boutonEnregistrer= new Button(new Icon("lumo","checkmark"));
-        this.boutonModifier =new Button(new Icon("lumo","edit"));
-        this.boutonSupprimer=new Button(new Icon(VaadinIcon.TRASH));
+        
+        String couleur1 = new String("#38998C");
+        String couleur2 = new String("#BDE767");
+        String couleur3 = new String("#1F4C83");
+        
+        
+        Icon iconenreg = new Icon("lumo","checkmark");
+        Icon iconmodif = new Icon("lumo","edit");
+        Icon iconsupp = new Icon(VaadinIcon.TRASH);
+        
+        iconenreg.setColor(couleur1);
+        iconmodif.setColor(couleur1);
+        iconsupp.setColor(couleur1);
+        
+        this.boutonEnregistrer= new Button(iconenreg);
+        this.boutonModifier =new Button(iconmodif);
+        this.boutonSupprimer=new Button(iconsupp);
+        
+        
+        
+        
+        
+        
         this.listboutons.add(boutonSupprimer,boutonModifier,boutonEnregistrer);
         
         
@@ -575,8 +598,250 @@ private Button boutonSupprimer;
             
         }
         
+        if (typeobjet == "operation"){
+            contenu.add(listboutons);
+            this.add(contenu);
+            
+            
+            Operation operationtemp = (Operation) object;
+            
+            TextField tfnom=  new TextField();
+            tfnom.setLabel("Nom");
+            tfnom.getStyle().set("font-size","40px");
+            tfnom.setReadOnly(true);
+            tfnom.setValue(operationtemp.getNom());
+            tfnom.setWidthFull();
+            contenu.add(tfnom);
+            
+            
+            TextField tfoutil = new TextField("Outil");
+            contenu.add(tfoutil);
+            tfoutil.setValue(operationtemp.getOutil());
+            
+            
+            NumberField nbid = new NumberField("Identifiant");
+            nbid.setValue((double)operationtemp.getId());
+            
+            
+            contenu.add(nbid);
+            
+            
+            
+            NumberField nbduree = new NumberField("Durée (s)");
+            nbduree.setValue(operationtemp.getDuree());
+            
+            
+            contenu.add(nbduree);
+            
+            
+            
+            
+           
+            ComboBox comboBoxTypeOperation = new ComboBox();
+            
+            
+            
+            
+            
+            
+            
+            ArrayList<Typeoperation> listtemp = new ArrayList();
+
+            listtemp=listtypeoperation(this.controleur.getVuePrincipale().getGestionBDD().conn);
+
+            ArrayList listajouter = new ArrayList();
+
+            int index =0;
+            while(index< listtemp.size()){
+
+                listajouter.add(listtemp.get(index).getId()+" : "+listtemp.get(index).getNom());
+                index++;
+            }
+            comboBoxTypeOperation.setItems(listajouter);
+            
+            
+            comboBoxTypeOperation.setLabel("Type d'opération");
+            comboBoxTypeOperation.setValue(operationtemp.getIdtypeoperation());
+            contenu.add(comboBoxTypeOperation);
+            
+            
+            
+            ComboBox comboBoxMachines = new ComboBox();
+            comboBoxMachines.setLabel("Machine");
+            ArrayList<Machine> listmachinetemp = new ArrayList();
+
+            listmachinetemp=listmachine(this.controleur.getVuePrincipale().getGestionBDD().conn);
+
+            ArrayList listmachineajouter = new ArrayList();
+
+            int index1 =0;
+            while(index1< listmachinetemp.size()){
+
+                listmachineajouter.add(listmachinetemp.get(index1).getId()+" : "+listmachinetemp.get(index1).getNom()+" "+listmachinetemp.get(index1).getMarque());
+                index1++;
+            }
+            comboBoxMachines.setItems(listmachineajouter);
+            comboBoxMachines.setValue(operationtemp.getIdmachine());
+            contenu.add(comboBoxMachines);
+
+            
+            nbid.setReadOnly(true);
+            tfnom.setReadOnly(true);
+            tfoutil.setReadOnly(true);
+            nbduree.setReadOnly(true);
+            comboBoxTypeOperation.setReadOnly(true);
+            comboBoxMachines.setReadOnly(true); 
+            
+            
+            boutonModifier.addClickListener(event -> {
+                    
+            
+            tfnom.setReadOnly(false);
+            tfoutil.setReadOnly(false);
+            nbduree.setReadOnly(false);
+            comboBoxTypeOperation.setReadOnly(false);
+            comboBoxMachines.setReadOnly(false);
+            
+            
+                        
+            
+            
+            
+            
+            });
+            
+            boutonEnregistrer.addClickListener(event -> {
+             
+            tfnom.setReadOnly(true);
+            tfoutil.setReadOnly(true);
+            nbduree.setReadOnly(true);
+            comboBoxTypeOperation.setReadOnly(true);
+            comboBoxMachines.setReadOnly(true);
+            
+            
+            
+            
+            int indexEspace =-1;
+            int idtypeoperationtemp = -2;
+            
+            
+            
+            String idNom = String.valueOf(comboBoxTypeOperation.getValue());
+            try {
+                indexEspace = idNom.indexOf(' ');
+            }
+            catch (ArrayIndexOutOfBoundsException e){
+                ;
+            }
+            
+            if(indexEspace==-1){
+                
+               idtypeoperationtemp =  Integer.parseInt(idNom);
+            }
+            
+            else{
+                
+                String avantEspace = idNom.substring(0,indexEspace);
+                
+                idtypeoperationtemp = Integer.parseInt(avantEspace);
+                
+            }
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            int indexEspace1 =-1;
+            int idmachineselect = -2;
+            
+            String idMachine = String.valueOf(comboBoxMachines.getValue());
+            try {
+                indexEspace1 = idMachine.indexOf(' ');
+            }
+            catch (ArrayIndexOutOfBoundsException e1){
+                ;
+            }
+            System.out.println("IndexEspace1"+indexEspace1);
+            if(indexEspace1==-1){
+                
+               idmachineselect = Integer.parseInt(idMachine);
+            }
+            
+            else{
+                
+                String avantEspace1 = idMachine.substring(0,indexEspace1);
+                
+                idmachineselect = Integer.parseInt(avantEspace1);
+                
+            }
+            
+            System.out.println("id type op /"+idtypeoperationtemp+"/id machine /"+idmachineselect+"/");
+            
+
+            
+            
+          
+            
+            
+            
+            
+            
+            
+            
+                try {
+                    //updateOperation(Connection connect,int id, int idtypeoperation, String nom,double duree,String outil,int idmachine)
+                    updateOperation(this.controleur.getVuePrincipale().getGestionBDD().conn,(int) Math.round(nbid.getValue()), idtypeoperationtemp,tfnom.getValue(),nbduree.getValue(),tfoutil.getValue(),idmachineselect);
+                } catch (SQLException ex) {
+                    System.out.println("Partie détail : erreur dans la modification de l'operation");
+                }
+                
+                try {
+                    this.controleur.MenuItemOperations();
+                } catch (SQLException ex) {
+                    Logger.getLogger(PartieDetail.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            });
+            
+            
+            
+            
+            boutonSupprimer.addClickListener(event -> {
+                
+                
+                
+                try {
+                    
+                    FenetreAvertissementSuppression fenetreAvertissementSuppression = new FenetreAvertissementSuppression(this.controleur,"operation",operationtemp.getNom(),operationtemp.getId());
+
+                    //delete(this.controleur.getVuePrincipale().getGestionBDD().conn,bruttemp.getnomtable(),bruttemp.getId());
+                    // On fait apparaitre une fenetre supplémentaire
+                } catch (SQLException ex) {
+                    System.out.println("Erreur partie Detail");
+                }
+                
+            });
+            
+            
+            
+            
+        }
         
         
+        if (typeobjet == "operateurs"){
+            contenu.add(listboutons);
+            this.add(contenu);
+            
+            
+            
+            
+            
+            
+            
+        }
     }
     
 }

@@ -134,6 +134,21 @@ public FenetreAvertissementSuppression(Controleur controleur,String type,String 
             
         }
 
+        if (type=="operation"){
+            try {
+                   delete(this.controleur.getVuePrincipale().getGestionBDD().conn,type,id);
+               } catch (SQLException ex) {
+                   Logger.getLogger(FenetreAvertissementSuppression.class.getName()).log(Level.SEVERE, null, ex);
+               }
+               try {
+                   this.controleur.MenuItemOperations();
+               } catch (SQLException ex) {
+                   Logger.getLogger(FenetreAvertissementSuppression.class.getName()).log(Level.SEVERE, null, ex);
+               }
+            
+            
+            
+        }
 
        });
         

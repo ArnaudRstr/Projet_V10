@@ -64,7 +64,8 @@ public class Controleur {
     
     
     public void boutonConnect() throws SQLException{
-        this.main.setMainContent(new VuePlan());
+        //this.main.setMainContent(new VuePlan());
+        MenuItemMachine();
         this.main.setEntete(new Entete(this.main));
         
     }
@@ -113,6 +114,20 @@ public class Controleur {
         
         this.main.setMainContent(this.fenetrePartagee);
         this.etatFenetre= "produit";
+        
+        
+        
+    }
+    
+    
+    public void MenuItemOperations() throws SQLException {
+        Notification.show("Operations via controleur");
+        
+        this.fenetrePartagee =new FenetrePartagee(this,"operation");
+        //this.main.setMainContent(new FenetrePartagee(this, "machine"));
+        
+        this.main.setMainContent(this.fenetrePartagee);
+        this.etatFenetre= "operation";
         
         
         
@@ -300,6 +315,20 @@ public class Controleur {
         
         
         
+    }
+    
+    
+    
+    public void MenuItemOperateur() throws SQLException{
+        System.out.println(" Arrivé dans MenuItemOperateur");
+        this.fenetrePartagee =new FenetrePartagee(this,"operateur");
+        //this.main.setMainContent(new FenetrePartagee(this, "machine"));
+        
+        this.main.setMainContent(this.fenetrePartagee);
+        this.etatFenetre= "operateur";
+        
+        System.out.println(" Reparti dans MenuItemOperateur");
+
     }
     
     
@@ -579,6 +608,32 @@ public class Controleur {
             System.out.println("La fenetre devrait être crée");
             
             this.MenuItemBrut();
+        }
+        
+        
+        
+        if(objet =="operation"){
+        
+            System.out.println("la fenetre va être créée");
+            
+            
+            this.fenetreEntreeDonnees = new FenetreEntreeDonnees(this,"operation");
+            System.out.println("La fenetre devrait être crée");
+            
+            this.MenuItemOperations();
+        }
+        
+        
+        
+        if(objet =="operateur"){
+        
+            System.out.println("la fenetre va être créée");
+            
+            
+            this.fenetreEntreeDonnees = new FenetreEntreeDonnees(this,"operateur");
+            System.out.println("La fenetre devrait être crée");
+            
+            this.MenuItemOperateur();
         }
         
         

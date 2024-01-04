@@ -16,6 +16,8 @@ import com.vaadin.flow.component.notification.Notification;
 import static fr.insa.moly.GestionBDD.GestionBDD.listproduit;
 import fr.insa.moly.objet.Brut;
 import fr.insa.moly.objet.Machine;
+import fr.insa.moly.objet.Operateur;
+import fr.insa.moly.objet.Operation;
 import fr.insa.moly.objet.Produit;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -35,6 +37,8 @@ public class PartiePrincipale extends MyVerticalLayout {
     private Grid<Machine> gridMachines;
     private Grid<Produit> gridProduits;
     private Grid<Brut> gridBruts;
+    private Grid<Operateur> gridOperateurs;
+    private Grid<Operation> gridOperations;
     private MyHorizontalLayout hltitre;
 
     private Controleur controleur;
@@ -47,7 +51,7 @@ public class PartiePrincipale extends MyVerticalLayout {
         this.hltitre=new MyHorizontalLayout();
         
         this.menuBar=new MenuBar();
-        this.menuItemAjouter=menuBar.addItem("Ajouter");
+        this.menuItemAjouter=menuBar.addItem(new H5("Ajouter"));
         this.add(menuBar);
         
         this.menuItemAjouter.setEnabled(false);
@@ -76,10 +80,12 @@ public class PartiePrincipale extends MyVerticalLayout {
             }
             else {
                 this.menuItemAjouter.setEnabled(true);
-                Text nbelements = new Text(machinesTemp.size()+" machines dans cet atelier");
+                Text nbelements = new Text(machinesTemp.size()+" machine(s) dans cet atelier");
                 this.add(nbelements);
                 
                 this.gridMachines= new Grid<>();
+                gridMachines.addColumn(Machine::getId).setHeader(new H5("Identifiant"));
+
                 gridMachines.addColumn(Machine::getNom).setHeader(new H5("Nom"));
                 
                 gridMachines.addColumn(Machine::getMarque).setHeader(new H5("Marque"));
@@ -147,7 +153,7 @@ public class PartiePrincipale extends MyVerticalLayout {
             }
             
             else{
-                Text nbelements = new Text(produitsTemp.size()+" produits");
+                Text nbelements = new Text(produitsTemp.size()+" produit(s)");
                 this.add(nbelements);
                 this.gridProduits= new Grid<>();
                 gridProduits.addColumn(Produit::getRef).setHeader("Référence");
@@ -208,7 +214,7 @@ public class PartiePrincipale extends MyVerticalLayout {
             }
             
             else{
-                Text nbelements = new Text(brutstemp.size()+" bruts");
+                Text nbelements = new Text(brutstemp.size()+" brut(s)");
                 this.add(nbelements);
                 this.gridBruts= new Grid<>();
                 gridBruts.addColumn(Brut::getNom).setHeader(new H5("Nom"));
@@ -246,8 +252,140 @@ public class PartiePrincipale extends MyVerticalLayout {
             
         }
         
+        if (objet=="operateur"){
+            
+            this.hltitre.add(new H2("Operateurs"),menuBar);
+            this.add(hltitre);
+            this.menuItemAjouter.setEnabled(true);
+            
+            
+            //this.add(new H2("Bruts"));
+            ArrayList <Operateur> operateurstemp = new ArrayList();
+            System.out.println("Etat du controleur avant création de la machine:"+this.controleur.getEtatAtelier());
+            operateurstemp = this.controleur.getVuePrincipale().getGestionBDD().listoperateur(this.controleur.getVuePrincipale().getGestionBDD().conn);
+            
+            
+            int index =0;
+            
+            if (operateurstemp.size()==0){
+                
+                this.add(new H3("Il n'y a pas d'operateurs "));
+                
+            }
+            
+            else{
+                Text nbelements = new Text(operateurstemp.size()+" operateur(s)");
+                this.add(nbelements);
+                this.gridOperateurs= new Grid<>();
+                
 
+                gridOperateurs.setItems(operateurstemp);
+                gridOperateurs.addColumn(Operateur::getNom).setHeader(new H5("Nom"));
+
+                this.add(gridOperateurs);
+                
+                gridOperateurs.addItemClickListener(event -> {
+                    Notification.show("Ligne sélectionnée"+event.getItem().getId());
+                   
+                Operateur opTemp = event.getItem();
+                
+                
+                    try {
+                        this.controleur.getFenetrePartagee().setPartD(new PartieDetail(this.controleur,"operateur",opTemp));
+                    } catch (SQLException ex) {
+                        Logger.getLogger(PartiePrincipale.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                    
+                });
+                
+                
+            }
+            
+            this.menuItemAjouter.addClickListener(event -> {
+            Notification.show("Option operateur sélectionnée !");
+                try {
+                    this.controleur.CreationObjet("operateur");
+                } catch (SQLException ex) {
+                    System.out.println("Erreur : partie principale : Pas reussi à créer l'operateur");
+                }
+            });
+            
+        }
+            
+            
+            
+            
+
+            
+            
+            
+            
         
+
+        if (objet=="operation"){
+            
+            this.hltitre.add(new H2("Opérations"),menuBar);
+            this.add(hltitre);
+            this.menuItemAjouter.setEnabled(true);
+            
+            ArrayList <Operation> operationstemp = new ArrayList();
+            System.out.println("Etat du controleur avant création de la machine:"+this.controleur.getEtatAtelier());
+            operationstemp = this.controleur.getVuePrincipale().getGestionBDD().listoperation(this.controleur.getVuePrincipale().getGestionBDD().conn);
+            
+            
+            int index =0;
+            
+            if (operationstemp.size()==0){
+                
+                this.add(new H3("Il n'y a pas d'operations "));
+                
+            }
+            
+            else{
+                Text nbelements = new Text(operationstemp.size()+" opération(s)");
+                this.add(nbelements);
+                this.gridOperations= new Grid<>();
+                
+
+                gridOperations.setItems(operationstemp);
+                gridOperations.addColumn(Operation::getNom).setHeader(new H5("Nom"));
+                gridOperations.addColumn(Operation::getId).setHeader(new H5("Identifiant"));
+                gridOperations.addColumn(Operation::getIdmachine).setHeader(new H5("Identifiant de la machine"));
+                gridOperations.addColumn(Operation::getOutil).setHeader(new H5("Outil"));
+
+                this.add(gridOperations);
+                
+                gridOperations.addItemClickListener(event -> {
+                    Notification.show("Ligne sélectionnée"+event.getItem().getId());
+                   
+                Operation operationTemp = event.getItem();
+                
+                
+                    try {
+                        this.controleur.getFenetrePartagee().setPartD(new PartieDetail(this.controleur,"operation",operationTemp));
+                    } catch (SQLException ex) {
+                        Logger.getLogger(PartiePrincipale.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                    
+                });
+                
+                
+            }
+            
+            this.menuItemAjouter.addClickListener(event -> {
+            Notification.show("Option operation sélectionnée !");
+                try {
+                    this.controleur.CreationObjet("operation");
+                } catch (SQLException ex) {
+                    System.out.println("Erreur : partie principale : Pas reussi à créer l'operation");
+                }
+            });
+            
+        
+            
+            
+            
+        }
         
         
         

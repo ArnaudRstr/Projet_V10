@@ -11,11 +11,14 @@ import com.vaadin.flow.component.contextmenu.MenuItem;
 import com.vaadin.flow.component.contextmenu.SubMenu;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.H5;
+import com.vaadin.flow.component.html.Image;
+import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.menubar.MenuBar;
 import com.vaadin.flow.component.notification.Notification;
 import static com.vaadin.flow.component.orderedlayout.FlexComponent.Alignment.CENTER;
+import com.vaadin.flow.server.StreamResource;
 import static fr.insa.moly.GestionBDD.GestionBDD.listaltelier;
 import fr.insa.moly.objet.Atelier;
 import java.io.IOException;
@@ -59,13 +62,14 @@ public class Entete extends MyHorizontalLayout {
     private MenuItem menuItemPlan;
     private MenuItem menuItemMachine;
     private MenuItem menuItemProduit;
-    
+    private MenuItem menuItemTypeOperation;
+    private MenuItem menuItemOperations;
+
     private MenuItem menuItemAtelier;
     private SubMenu subMenuAtelier;
     private MenuItem menuItemAjouterAtelier;
     private MenuItem menuItemDetailsAtelier;
     private MenuItem menuItemSupprimerAtelier;
-    private MenuItem menuItemTypeOperation;
     private MenuItem menuItemOperateurs;
     private MenuItem menuItemBrut;
     
@@ -130,10 +134,12 @@ public class Entete extends MyHorizontalLayout {
         this.menuItemMachine = this.subMenuMenuPrincipal.addItem("Machines");
         this.menuItemProduit = this.subMenuMenuPrincipal.addItem("Produits");       
         this.menuItemBrut=this.subMenuMenuPrincipal.addItem("Bruts");
-
+        this.menuItemOperations=this.subMenuMenuPrincipal.addItem("Operations");
         this.menuItemTypeOperation=this.subMenuMenuPrincipal.addItem("Types d'opérations");
+        
         this.menuItemOperateurs=this.subMenuMenuPrincipal.addItem("Operateurs");
 
+        
         
         this.menuItemAtelier=this.menuBarM.addItem(new H5("Atelier"));
         this.subMenuAtelier=menuItemAtelier.getSubMenu();
@@ -207,12 +213,25 @@ public class Entete extends MyHorizontalLayout {
         div1.setWidth("300px");
         Div div2 = new Div();
         div2.setWidth("400px");
+        Div div3 = new Div();
+        div0.setWidth("1px");
+        
+        String imagePath = "logo.png";
+
+        // Créer une ressource de flux pour l'image
+        StreamResource resource = new StreamResource("logo.png", () ->
+                getClass().getClassLoader().getResourceAsStream(imagePath));
+
+        // Créer un composant Image avec la ressource
+        Image image = new Image(resource, "Description de l'image");
+        image.setWidth("60px");
+        
+        Span nomLogiciel = new Span("LEON");
+        nomLogiciel.getElement().getStyle().set("font-family", "Nunito");
+        nomLogiciel.getStyle().set("font-size", "25px");
         
         
-        
-        
-        
-        this.add(menuBarG,div1,comboBoxAtelier,menuBarM,div2,menuItemCompte,menuBarD);
+        this.add(menuBarG,div1,comboBoxAtelier,menuBarM,div2,menuItemCompte,menuBarD,image,nomLogiciel);
     
         this.getThemeList().add("spacing-xl");
         
@@ -297,6 +316,20 @@ public class Entete extends MyHorizontalLayout {
             
         });
         
+        menuItemOperations.addClickListener(event -> {
+            Notification.show("Option operation sélectionnée !");
+            try {
+                this.main.getControleur().MenuItemOperations();
+            } catch (SQLException ex) {
+                System.out.println("Entete : erreur :  MenuItemOperations dans le controleur");
+            }
+            
+            
+            
+            
+            
+        });
+        
         
         
         menuItemTypeOperation.addClickListener(event -> {
@@ -320,7 +353,11 @@ public class Entete extends MyHorizontalLayout {
         
         menuItemOperateurs.addClickListener(event -> {
             Notification.show("Operateurs sélectionnés !");
-            
+            try {
+                this.main.getControleur().MenuItemOperateur();
+            } catch (SQLException ex) {
+                System.out.println("Entete : erreur :  MenuItemOperateur dans le controleur");
+            }
             
             
         });

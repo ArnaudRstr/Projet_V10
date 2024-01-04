@@ -8,6 +8,7 @@ import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.html.H2;
+import com.vaadin.flow.component.html.H5;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.menubar.MenuBar;
 import com.vaadin.flow.component.notification.Notification;
@@ -16,7 +17,9 @@ import com.vaadin.flow.component.textfield.NumberField;
 import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.component.textfield.TextField;
 import static fr.insa.moly.GestionBDD.GestionBDD.listaltelier;
+import static fr.insa.moly.GestionBDD.GestionBDD.listmachine;
 import static fr.insa.moly.GestionBDD.GestionBDD.listtypeoperation;
+import fr.insa.moly.objet.Machine;
 import fr.insa.moly.objet.Typeoperation;
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -61,8 +64,8 @@ public class FenetreEntreeDonnees extends Dialog{
         this.controleur=controleur;
         this.contenuVL= new MyVerticalLayout();
         this.contenuHL= new MyHorizontalLayout();
-        this.boutonAnnuler=new Button("Annuler");
-        this.boutonEnregistrer=new Button("Enregistrer");
+        this.boutonAnnuler=new Button(new H5("Annuler"));
+        this.boutonEnregistrer=new Button(new H5("Enregistrer"));
         this.donneesText= new ArrayList();
         this.donneesNum = new ArrayList();
         this.menuBar=new MenuBar();
@@ -165,14 +168,13 @@ public class FenetreEntreeDonnees extends Dialog{
         
         ComboBox cbbstatut = new ComboBox();
         cbbstatut.setItems(listStatuts);
-        cbbstatut.setPlaceholder("Statut");
+        cbbstatut.setLabel("Statut");
         
         
         
         
         
-        MyVerticalLayout colonne1 = new MyVerticalLayout();
-        MyVerticalLayout colonne2 = new MyVerticalLayout();
+        
 
         
         ComboBox comboBoxTypeOperation = new ComboBox();
@@ -197,6 +199,9 @@ public class FenetreEntreeDonnees extends Dialog{
         
         this.setHeaderTitle("Ajouter une machine");
         
+        
+        MyVerticalLayout colonne1 = new MyVerticalLayout();
+        MyVerticalLayout colonne2 = new MyVerticalLayout();
         colonne1.add(nom);
         colonne1.add(des);
         colonne1.add(marque);
@@ -377,19 +382,217 @@ public class FenetreEntreeDonnees extends Dialog{
             
         });
         
+       }
+       
+
+        
+        
+        
+        if (objet=="operateur"){
            
            
+            this.setHeaderTitle("Ajouter un opérateur");
+
+            this.nom = new TextField("Nom");
+            //this.des = new TextArea("Description");
+            TextField tfprenom = new TextField("Prénom");
+            
+            TextField tfmdp = new TextField("Mot de passe");
+            TextField tfmail = new TextField("Adresse mail");
+            TextField tfidentifiant = new TextField("Identifiant");
+            NumberField nbidatelier = new NumberField("Identifiant de l'atelier");
+            NumberField nbstatut = new NumberField("Statut");
+            NumberField nbtel = new NumberField("Téléphone");
+
+            MyVerticalLayout colonne1 = new MyVerticalLayout();
+            MyVerticalLayout colonne2 = new MyVerticalLayout();
+            colonne1.add(nom);
+            colonne1.add(tfprenom);
+            colonne1.add(nbtel);
+            colonne1.add(tfmail);
+            colonne1.add(tfidentifiant);
+            colonne1.add(tfmdp);
+   
+            colonne2.add(nbidatelier);
+            colonne2.add(nbstatut);
+
+            this.contenuHL.add(colonne1,colonne2);
+            this.contenuVL.add(this.contenuHL);
+            
+            this.add(contenuVL);
+            this.open();
+
+            
+            
+            ArrayList listidtypeop = new ArrayList();
+            listidtypeop.add(1);
+            
+            
+            boutonFermer.addClickListener(event -> {
+            this.close();   
+        });
+
+         boutonAnnuler.addClickListener(event -> {
+            this.close();   
+        });
+        
+        boutonEnregistrer.addClickListener(event -> {
+            
+            
+            this.close();
+               try {
+                   
+                   //(Connection connect,String identifiant, String motdepasse,String nom,String prenom,int idatelier,int statut, int tel, String mail,ArrayList<Integer> listtypeoperation)
+                   //this.controleur.getVuePrincipale().getGestionBDD().addoperateur(this.controleur.getVuePrincipale().getGestionBDD().conn,tfidentifiant.getValue(),tfmdp.getValue(),nom.getValue(),tfprenom.getValue(),(int) Math.round(nbidatelier.getValue()),(int) Math.round(nbstatut.getValue()),(int) Math.round(nbtel.getValue()),tfmail.getValue(),listidtypeop);
+                   
+                   //this.controleur.getVuePrincipale().getGestionBDD().addoperateur(this.controleur.getVuePrincipale().getGestionBDD().conn,"identifiant","mdp","martin","martine",2,0,1,"mail",listidtypeop);
+
+                   this.controleur.MenuItemOperateur();
+                   
+                   System.out.println("L'operateur devrait être créé");
+               } catch (SQLException ex) {
+                   System.out.print("Fenêtre entrée de donnée : erreur lors de l'ajout de l'opérateur");
+               }
+  
+        });
            
            
            
        }
         
         
+        if (objet=="operation"){
+           
+           
+            this.setHeaderTitle("Ajouter une operation");
+
+            this.nom = new TextField("Nom");
+            TextField tfoutil = new TextField("Outil");
+            
+            
+            NumberField nbidmachine = new NumberField("Identifiant de la machine");
+            NumberField nbduree = new NumberField("Durée (s)");
+            NumberField nbidtypop = new NumberField("Identifiant du type operation");
+           
+            ComboBox comboBoxTypeOperation = new ComboBox();
+            comboBoxTypeOperation.setLabel("Type d'opération");
+            
+            
+            
+            
+            
+            ArrayList<Typeoperation> listtemp = new ArrayList();
+
+            listtemp=listtypeoperation(this.controleur.getVuePrincipale().getGestionBDD().conn);
+
+            ArrayList listajouter = new ArrayList();
+
+            int index =0;
+            while(index< listtemp.size()){
+
+                listajouter.add(listtemp.get(index).getId()+" : "+listtemp.get(index).getNom());
+                index++;
+            }
+            comboBoxTypeOperation.setItems(listajouter);
+            
+            
+            
+            
+            ComboBox comboBoxMachines = new ComboBox();
+            comboBoxMachines.setLabel("Machine");
+            ArrayList<Machine> listmachinetemp = new ArrayList();
+
+            listmachinetemp=listmachine(this.controleur.getVuePrincipale().getGestionBDD().conn);
+
+            ArrayList listmachineajouter = new ArrayList();
+
+            int index1 =0;
+            while(index1< listmachinetemp.size()){
+
+                listmachineajouter.add(listmachinetemp.get(index1).getId()+" : "+listmachinetemp.get(index1).getNom()+" "+listmachinetemp.get(index1).getMarque());
+                index1++;
+            }
+            comboBoxMachines.setItems(listmachineajouter);
+            
+            
+            
+            nom.setWidthFull();
+            tfoutil.setWidthFull();
+            nbidmachine.setWidthFull();
+            nbduree.setWidthFull();
+            nbidtypop.setWidthFull();
+            comboBoxMachines.setWidthFull();
+            comboBoxTypeOperation.setWidthFull();
+            
+            
+            
+            
+
+            contenuVL.add(nom,nbduree,comboBoxMachines,tfoutil,comboBoxTypeOperation);
+            
+            this.add(contenuVL);
+            this.setWidth("30vw");
+            this.open();
+
+            
+    
+            
+            
+            
+            boutonFermer.addClickListener(event -> {
+            this.close();   
+        });
+
+         boutonAnnuler.addClickListener(event -> {
+            this.close();   
+        });
         
+        boutonEnregistrer.addClickListener(event -> {
+            
+            
+            String idNom = (String) comboBoxTypeOperation.getValue();
+            int indexEspace = idNom.indexOf(' ');
+            String avantEspace = idNom.substring(0,indexEspace);
+            
+            int idtypeoperationtemp = Integer.parseInt(avantEspace);
+            
+            
+            
+            
+            
+            String idmachine = (String) comboBoxMachines.getValue();
+            int indexEspace1 = idmachine.indexOf(' ');
+            String avantEspace1 = idmachine.substring(0,indexEspace1);
+            
+            int idmachineselect = Integer.parseInt(avantEspace1);
+            
+            
+            
+            
+            
+            
+            this.close();
+            
+            
+               try {
+                   this.controleur.getVuePrincipale().getGestionBDD().addoperation(this.controleur.getVuePrincipale().getGestionBDD().conn,idtypeoperationtemp,nom.getValue(),nbduree.getValue(),tfoutil.getValue(),idmachineselect);
+
+                   this.controleur.MenuItemOperations();
+                   
+                   System.out.println("L'operation devrait être créé");
+               } catch (SQLException ex) {
+                   System.out.print("Fenêtre entrée de donnée : erreur lors de l'ajout de l'opération");
+               }
+  
+        });
+           
+           
+           
+       }
     
        
         
-        
+    }
 
     
        
@@ -407,11 +610,7 @@ public class FenetreEntreeDonnees extends Dialog{
        
        
        
-       
-       
-       
-        
-    }
+      
     
     
     public ArrayList getDonneesText(){
