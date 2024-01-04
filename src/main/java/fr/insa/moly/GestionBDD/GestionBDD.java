@@ -673,6 +673,60 @@ try {
 }
 }
 
+public static boolean connectionidentifiant (Connection connect, String nomtest)throws SQLException {
+   boolean existe=false;
+        try ( PreparedStatement affichetab = connect.prepareStatement(
+                "select * from operateur WHERE identifiant=?")) {
+            affichetab.setString(1, nomtest);
+            ResultSet tab = affichetab.executeQuery();
+            if(tab.next()!= false){
+               existe=true;
+            }
+
+            }
+        catch (SQLException ex) { 
+            System.out.print("rollback");
+            throw ex;
+        }
+        
+     
+    return existe;
+}
+
+public static boolean connectionmp (Connection connect, String nomtest,String mp)throws SQLException {
+   boolean existe=false;
+        try ( PreparedStatement affichetab = connect.prepareStatement(
+                "select * from operateur WHERE identifiant=? AND motdepasse=?")) {
+            affichetab.setString(1, nomtest);
+            affichetab.setString(2, mp);
+            ResultSet tab = affichetab.executeQuery();
+            if(tab.next()!= false){
+               existe=true;
+            }
+
+            }
+        catch (SQLException ex) { 
+            System.out.print("rollback");
+            throw ex;
+        }
+        
+     
+    return existe;
+}
+
+public static boolean connectionutilisateur (Connection connect, String nomtest,String mp)throws SQLException {
+   boolean existe=false;
+   
+        if (connectionidentifiant(connect,nomtest)==true){
+            existe=connectionmp(connect,nomtest,mp);
+        }
+        else{
+            System.out.println("Identifiant faux");
+        }
+     
+    return existe;
+}
+
 public static void addatelier (Connection connect,String nom, String des, int dimensionlargeur, int dimensionlongueur)throws SQLException {
     connect.setAutoCommit(false); //stope la mise à jour, elle sera fait à la fin si tout se passe bien
         try ( PreparedStatement cherchedouble = connect.prepareStatement(
