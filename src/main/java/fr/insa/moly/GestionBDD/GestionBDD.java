@@ -1702,7 +1702,7 @@ public static ArrayList listoperateur (Connection connect)throws SQLException{
         }
     for (int i=0;i<listoperateur.size();i++){
         ArrayList<Integer> listoperation = new ArrayList();
-        try ( PreparedStatement tabrealisoo = connect.prepareStatement("select idoperation from where idoperateur=?")){
+        try ( PreparedStatement tabrealisoo = connect.prepareStatement("select idoperation from realiseoo where idoperateur=?")){
             tabrealisoo.setInt(1, listoperateur.get(i).getId());
             tabrealisoo.executeUpdate();
             ResultSet tabr = tabrealisoo.executeQuery();
