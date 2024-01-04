@@ -164,7 +164,8 @@ public class Operateur {
     
      public ArrayList getGrandChildList(Connection connect)throws SQLException{
         ArrayList<String> listIdGrandChild = new ArrayList();
-        
+        listIdGrandChild.add("Rapport de suppression, en supprimant :");
+        listIdGrandChild.add(this.getString());
         
         return listIdGrandChild;
     }

@@ -34,12 +34,6 @@ public class GestionBDD {
 
    
     
-    
-    
-    
-    
-    
-    
     public Connection conn ;//Attribut de la connexion
     //Consturcteur
     public GestionBDD() throws SQLException {
@@ -65,7 +59,7 @@ public class GestionBDD {
         con.setTransactionIsolation(Connection.TRANSACTION_SERIALIZABLE);
         return con;
     }
-    
+    //3306
     public static Connection connectSurServeurM3() throws SQLException {
         return connectGeneralMySQL("92.222.25.165", 3306,
                 "m3_smoly01", "m3_smoly01",
@@ -671,6 +665,60 @@ try {
 } finally {
     this.conn.setAutoCommit(true);
 }
+}
+
+public static boolean connectionidentifiant (Connection connect, String nomtest)throws SQLException {
+   boolean existe=false;
+        try ( PreparedStatement affichetab = connect.prepareStatement(
+                "select * from operateur WHERE identifiant=?")) {
+            affichetab.setString(1, nomtest);
+            ResultSet tab = affichetab.executeQuery();
+            if(tab.next()!= false){
+               existe=true;
+            }
+
+            }
+        catch (SQLException ex) { 
+            System.out.print("rollback");
+            throw ex;
+        }
+        
+     
+    return existe;
+}
+
+public static boolean connectionmp (Connection connect, String nomtest,String mp)throws SQLException {
+   boolean existe=false;
+        try ( PreparedStatement affichetab = connect.prepareStatement(
+                "select * from operateur WHERE identifiant=? AND motdepasse=?")) {
+            affichetab.setString(1, nomtest);
+            affichetab.setString(2, mp);
+            ResultSet tab = affichetab.executeQuery();
+            if(tab.next()!= false){
+               existe=true;
+            }
+
+            }
+        catch (SQLException ex) { 
+            System.out.print("rollback");
+            throw ex;
+        }
+        
+     
+    return existe;
+}
+
+public static boolean connectionutilisateur (Connection connect, String nomtest,String mp)throws SQLException {
+   boolean existe=false;
+   
+        if (connectionidentifiant(connect,nomtest)==true){
+            existe=connectionmp(connect,nomtest,mp);
+        }
+        else{
+            System.out.println("Identifiant faux");
+        }
+     
+    return existe;
 }
 
 public static void addatelier (Connection connect,String nom, String des, int dimensionlargeur, int dimensionlongueur)throws SQLException {
@@ -1766,6 +1814,22 @@ public static ArrayList listtypeoperation (Connection connect)throws SQLExceptio
     return listtypeoperation;
 }  
 
+public static ArrayList listgammeoperation(Connection connect,int idoperation) throws SQLException{
+      ArrayList<Integer> listidproduit = new ArrayList();
+  try ( PreparedStatement affichetab = connect.prepareStatement(
+                "select idproduit from ordre where idopavant=? OR idopapres=?")) {
+                affichetab.setInt(1, idoperation);
+                affichetab.setInt(2, idoperation);
+                ResultSet tab = affichetab.executeQuery();
+            
+            while (tab.next()!= false){
+            listidproduit.add(tab.getInt("idproduit"));
+            }
+  }
+  HashSet<Integer> listSansDouble = new HashSet<>(listidproduit);
+  listidproduit= new ArrayList<>(listSansDouble);
+  return listidproduit;
+}
 public static ArrayList listgammeproduit(Connection connect,int idproduit) throws SQLException{
       ArrayList<Integer> listidavant = new ArrayList();
       ArrayList<Integer> listidapres = new ArrayList();
@@ -1857,6 +1921,7 @@ public static ArrayList listgamme(Connection connect) throws SQLException{
 }
 
 
+
 public static ArrayList listchild(Connection connect,String tabparentname,int idparent,String tabchild) throws SQLException{
     ArrayList<Integer> listchild = new ArrayList();
     
@@ -1915,6 +1980,7 @@ public static ArrayList listchildgamme(Connection connect,int idproduit) throws 
     return listchild;
 }
 
+//Donne l'id operateur qui est en lien avec un type opération
 public static ArrayList listchildrealiseOperateur(Connection connect,int id) throws SQLException{
     ArrayList<Integer> listchild = new ArrayList();
     

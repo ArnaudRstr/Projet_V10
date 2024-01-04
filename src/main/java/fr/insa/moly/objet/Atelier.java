@@ -100,7 +100,25 @@ public class Atelier {
     
     public ArrayList getGrandChildList(Connection connect)throws SQLException{
         ArrayList<String> listIdGrandChild = new ArrayList();
+        listIdGrandChild.add("Rapport de suppression, en supprimant :");
+        listIdGrandChild.add(this.getString());
         
+        ArrayList<Integer> listMachine = this.getMachinechild(connect);
+        for(int i=0; i<listMachine.size();i++){
+            Machine ma= new Machine(connect,listMachine.get(i));
+            ArrayList<String> machinechild =ma.getGrandChildList(connect);
+            
+            
+            for(int k=0;k<machinechild.size();k++){
+               listIdGrandChild.add(machinechild.get(k));
+            }
+        }
+        
+        ArrayList<Integer> listOperateur = this.getOperateurchild(connect);
+        for(int i=0; i<listOperateur.size();i++){
+            Operateur op= new Operateur(connect,listOperateur.get(i));
+            listIdGrandChild.add(op.getString());
+        }
         
         return listIdGrandChild;
     }

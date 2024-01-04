@@ -282,4 +282,26 @@ public class Machine {
         ArrayList<Integer> listidoperationchild = GestionBDD.listchild(connect,this.getnomtable(),this.id,"operation");       
         return listidoperationchild;
     }
+    
+     public ArrayList getGrandChildList(Connection connect)throws SQLException{
+        
+        ArrayList<String> listIdGrandChild = new ArrayList();
+        ArrayList<Integer> listidoperationchild =this.getOperationchild(connect);
+        listIdGrandChild.add("Rapport de suppression, en supprimant :");
+        listIdGrandChild.add(this.getString());
+        listIdGrandChild.add("Opérations Supprimées :");
+        for(int i=0;i<listidoperationchild.size();i++){
+            Operation op = new Operation(connect,listidoperationchild.get(i));
+            listIdGrandChild.add(op.getString());
+            listIdGrandChild.add("Cette opération sera enlevé de la gamme de Ces produits :");
+            ArrayList<Integer> listIdProduit = GestionBDD.listgammeoperation(connect, listidoperationchild.get(i));
+            for(int j=0; j<listIdProduit.size();j++){
+                Produit prod = new Produit(connect,listIdProduit.get(j));
+                listIdGrandChild.add(prod.getString());
+            }
+        }
+        
+        
+        return listIdGrandChild;
+    }
 }
