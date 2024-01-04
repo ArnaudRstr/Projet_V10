@@ -34,12 +34,6 @@ public class GestionBDD {
 
    
     
-    
-    
-    
-    
-    
-    
     public Connection conn ;//Attribut de la connexion
     //Consturcteur
     public GestionBDD() throws SQLException {
@@ -65,7 +59,7 @@ public class GestionBDD {
         con.setTransactionIsolation(Connection.TRANSACTION_SERIALIZABLE);
         return con;
     }
-    
+    //3306
     public static Connection connectSurServeurM3() throws SQLException {
         return connectGeneralMySQL("92.222.25.165", 3306,
                 "m3_smoly01", "m3_smoly01",
