@@ -81,8 +81,47 @@ public String getString(){
         return listidchild;
     }
     
-    public ArrayList getRealiseOOchild(Connection connect)throws SQLException{
-        ArrayList<Integer> listidchild = GestionBDD.listchild(connect,this.getnomtable(),this.id,"realiseOO");       
+    public ArrayList getOperateurchild(Connection connect)throws SQLException{
+        ArrayList<Integer> listidchild = GestionBDD.listchildrealiseOperateur(connect,this.id);       
         return listidchild;
+    }
+    
+    public ArrayList getGrandChildList(Connection connect)throws SQLException{
+        ArrayList<String> listIdGrandChild = new ArrayList();
+        listIdGrandChild.add("Rapport de suppression, en supprimant :");
+        listIdGrandChild.add(this.getString());
+        
+        ArrayList<Integer> listOperation = this.getOperationchild(connect);
+        listIdGrandChild.add("Opérations supprimées :");
+        for(int i=0 ;i<listOperation.size();i++){
+            Operation op = new Operation(connect , listOperation.get(i));
+            listIdGrandChild.add(op.getString());
+            listIdGrandChild.add("Cette opération sera enlevé de la gamme de Ces produits :");
+                ArrayList<Integer> listIdProduit = GestionBDD.listgammeoperation(connect, this.id);
+                for(int j=0; j<listIdProduit.size();j++){
+                    Produit prod = new Produit(connect,listIdProduit.get(j));
+                    listIdGrandChild.add(prod.getString());
+                }
+        }
+        
+        ArrayList<Integer> listMachine = this.getMachinechild(connect);
+        for(int i=0; i<listMachine.size();i++){
+            Machine ma= new Machine(connect,listMachine.get(i));
+            ArrayList<String> machinechild =ma.getGrandChildList(connect);
+            
+            
+            for(int k=0;k<machinechild.size();k++){
+               listIdGrandChild.add(machinechild.get(k));
+            }
+        }
+        
+        ArrayList<Integer> listOperateur = this.getOperateurchild(connect);
+        for(int i=0; i<listOperateur.size();i++){
+            Operateur op= new Operateur(connect,listOperateur.get(i));
+            listIdGrandChild.add(op.getString());
+        }
+        
+        
+        return listIdGrandChild;
     }
 }

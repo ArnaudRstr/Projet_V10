@@ -57,7 +57,7 @@ public class RapportSuppr {
             writer.write(list.get(i)+"\n");
             
         }
-            System.out.println("Contenu écrit dans le fichier avec succès !");
+            System.out.println("En confimant la suppression, voici les modification qui seront apporté");
         } catch (IOException e) {
             System.err.println("Erreur lors de l'écriture dans le fichier : " + e.getMessage());
         }

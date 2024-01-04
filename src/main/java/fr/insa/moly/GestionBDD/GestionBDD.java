@@ -1766,6 +1766,22 @@ public static ArrayList listtypeoperation (Connection connect)throws SQLExceptio
     return listtypeoperation;
 }  
 
+public static ArrayList listgammeoperation(Connection connect,int idoperation) throws SQLException{
+      ArrayList<Integer> listidproduit = new ArrayList();
+  try ( PreparedStatement affichetab = connect.prepareStatement(
+                "select idproduit from ordre where idopavant=? OR idopapres=?")) {
+                affichetab.setInt(1, idoperation);
+                affichetab.setInt(2, idoperation);
+                ResultSet tab = affichetab.executeQuery();
+            
+            while (tab.next()!= false){
+            listidproduit.add(tab.getInt("idproduit"));
+            }
+  }
+  HashSet<Integer> listSansDouble = new HashSet<>(listidproduit);
+  listidproduit= new ArrayList<>(listSansDouble);
+  return listidproduit;
+}
 public static ArrayList listgammeproduit(Connection connect,int idproduit) throws SQLException{
       ArrayList<Integer> listidavant = new ArrayList();
       ArrayList<Integer> listidapres = new ArrayList();
@@ -1857,6 +1873,7 @@ public static ArrayList listgamme(Connection connect) throws SQLException{
 }
 
 
+
 public static ArrayList listchild(Connection connect,String tabparentname,int idparent,String tabchild) throws SQLException{
     ArrayList<Integer> listchild = new ArrayList();
     
@@ -1915,6 +1932,7 @@ public static ArrayList listchildgamme(Connection connect,int idproduit) throws 
     return listchild;
 }
 
+//Donne l'id operateur qui est en lien avec un type opération
 public static ArrayList listchildrealiseOperateur(Connection connect,int id) throws SQLException{
     ArrayList<Integer> listchild = new ArrayList();
     

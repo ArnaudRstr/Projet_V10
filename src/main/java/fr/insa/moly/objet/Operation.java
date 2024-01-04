@@ -122,4 +122,18 @@ public class Operation {
         
         return listidchild;
     }
+    
+    public ArrayList getGrandChildList(Connection connect)throws SQLException{
+        ArrayList<String> listIdGrandChild = new ArrayList();
+        listIdGrandChild.add("Rapport de suppression, en supprimant :");
+        listIdGrandChild.add(this.getString());
+        
+        listIdGrandChild.add("Cette opération sera enlevé de la gamme de Ces produits :");
+            ArrayList<Integer> listIdProduit = GestionBDD.listgammeoperation(connect, this.id);
+            for(int j=0; j<listIdProduit.size();j++){
+                Produit prod = new Produit(connect,listIdProduit.get(j));
+                listIdGrandChild.add(prod.getString());
+            }
+        return listIdGrandChild;
+    }
 }

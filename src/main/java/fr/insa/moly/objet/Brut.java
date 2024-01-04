@@ -135,7 +135,16 @@ public class Brut {
     }
     
     public ArrayList getGrandChildList(Connection connect)throws SQLException{
+        
         ArrayList<String> listIdGrandChild = new ArrayList();
+        ArrayList<Integer> listidproduitchild =this.getProduitchild(connect);
+        listIdGrandChild.add("Rapport de suppression, en supprimant :");
+        listIdGrandChild.add(this.getString());
+        listIdGrandChild.add("Produits Supprimés");
+        for(int i=0;i<listidproduitchild.size();i++){
+            Produit prod = new Produit(connect,listidproduitchild.get(i));
+            listIdGrandChild.add(prod.getString());
+        }
         
         
         return listIdGrandChild;
