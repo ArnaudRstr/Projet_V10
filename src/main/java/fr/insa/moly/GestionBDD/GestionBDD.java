@@ -1003,14 +1003,18 @@ public static void addoperateur(Connection connect,String identifiant, String mo
                     System.out.println("operateur add");
                     
                     try ( ResultSet rid = pst.getGeneratedKeys()) {
-                        rid.next();
+                        if(rid.next()){
                         int id = rid.getInt(1);
 
                         for(int i=0;i<listtypeoperation.size();i++){
                             addrealiseoo(connect,id,listtypeoperation.get(i));
                         }
                         System.out.println("realiseoo add");
-                    }
+                        }
+                        else{
+                            System.out.println("addrealiseoo not read");
+                        }
+                    
                    
             } catch (SQLException ex) {
             // nothing to do : maybe the constraint was not created
@@ -1028,6 +1032,7 @@ public static void addoperateur(Connection connect,String identifiant, String mo
         } finally {
             connect.setAutoCommit(true);// on remet le refresh automatique
         }
+            }
         }
 }
 
@@ -1052,6 +1057,7 @@ public static void updateOperateur(Connection connect,int id,String identifiant,
             deleteRealiseoo(connect,"idoperateur",id);
             
             for(int i=0;i<listtypeoperation.size();i++){
+                System.out.println("addrealise");
                             addrealiseoo(connect,id,listtypeoperation.get(i));
                         }
             
@@ -1305,6 +1311,7 @@ public static void addrealiseoo(Connection connect,int idoperateur,int idtypeope
                 System.out.println("On ne peut pas l'ajouter");
             }
             else{
+                System.out.println("existe pas");
             try ( PreparedStatement pst = connect.prepareStatement(
                         "INSERT INTO `realiseoo` (idoperateur,idtypeoperation) VALUES (?,?);"
 
