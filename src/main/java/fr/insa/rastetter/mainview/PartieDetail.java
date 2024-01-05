@@ -1084,7 +1084,10 @@ private Button boutonSupprimer;
            final int idatelier =idateliertemp; 
             
             
+            ArrayList <Integer> listidtest = new ArrayList();
             
+            listidtest.add(1);
+           listidtest.add(13);
             
             
             Notification.show("La méthode d'enregistrement n'est pas encore faite");
@@ -1093,7 +1096,7 @@ private Button boutonSupprimer;
                     //this.controleur.getVuePrincipale().getGestionBDD().updateOperateur(this.controleur.getVuePrincipale().getGestionBDD().conn,operateurtemp.getId(),operateurtemp.getIdentifiant(),operateurtemp.getMotdepasse(),operateurtemp.getNom(),operateurtemp.getPrenom(),idateliertemp,idstatut,operateurtemp.getTel(),operateurtemp.getMail(),operateurtemp.getListtypeoperation());
               
             
-                    this.controleur.getVuePrincipale().getGestionBDD().updateOperateur(this.controleur.getVuePrincipale().getGestionBDD().conn,id,identifiant,mdp,nom,prenom,idateliertemp,idstatutchoix,tel,mail,typeop);
+                    this.controleur.getVuePrincipale().getGestionBDD().updateOperateur(this.controleur.getVuePrincipale().getGestionBDD().conn,id,identifiant,mdp,nom,prenom,idateliertemp,idstatutchoix,tel,mail,listidtest);
 
             
             } catch (SQLException ex) {
