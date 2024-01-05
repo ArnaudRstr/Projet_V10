@@ -16,16 +16,24 @@ import static com.vaadin.flow.component.orderedlayout.FlexComponent.Alignment.CE
 import com.vaadin.flow.component.textfield.NumberField;
 import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.component.textfield.TextField;
+import com.vaadin.flow.component.checkbox.CheckboxGroup;
+import com.vaadin.flow.component.checkbox.CheckboxGroupVariant;
+import com.vaadin.flow.component.html.Div;
+import com.vaadin.flow.component.orderedlayout.FlexComponent.Alignment;
 import static fr.insa.moly.GestionBDD.GestionBDD.listaltelier;
 import static fr.insa.moly.GestionBDD.GestionBDD.listmachine;
 import static fr.insa.moly.GestionBDD.GestionBDD.listtypeoperation;
+import fr.insa.moly.objet.Atelier;
 import fr.insa.moly.objet.Machine;
 import fr.insa.moly.objet.Typeoperation;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 /**
  *
@@ -397,7 +405,6 @@ public class FenetreEntreeDonnees extends Dialog{
         
         if (objet=="operateur"){
            
-           
             this.setHeaderTitle("Ajouter un opérateur");
 
             this.nom = new TextField("Nom");
@@ -408,21 +415,100 @@ public class FenetreEntreeDonnees extends Dialog{
             TextField tfmail = new TextField("Adresse mail");
             TextField tfidentifiant = new TextField("Identifiant");
             NumberField nbidatelier = new NumberField("Identifiant de l'atelier");
-            NumberField nbstatut = new NumberField("Statut");
             NumberField nbtel = new NumberField("Téléphone");
 
+            
+            ArrayList <String> listStatuts = new ArrayList();
+        
+            listStatuts.add("Disponible");
+            listStatuts.add("En activité");
+            listStatuts.add("En formation");
+            listStatuts.add("En congé");
+            listStatuts.add("Hors service");
+        
+            ComboBox cbbstatut = new ComboBox();
+            cbbstatut.setItems(listStatuts);
+            //cbbstatut.setWidthFull();
+            cbbstatut.setLabel("Statut");
+
+
+            
+            ComboBox cbbatelier = new ComboBox();
+            ArrayList <Atelier> listTemp = new ArrayList();
+            listTemp = listaltelier (this.controleur.getVuePrincipale().getGestionBDD().conn);
+      
+            ArrayList <String> listNomAtelier = new ArrayList<>();
+
+            int index =0;
+
+            while (index<listTemp.size()){
+                Atelier atelierTemp = (Atelier) listTemp.get(index);
+
+                listNomAtelier.add(atelierTemp.getId()+" : "+atelierTemp.getNom());
+
+                System.out.println(listNomAtelier.get(index));
+                index++;
+            }
+            cbbatelier.setItems(listNomAtelier); 
+            //cbbatelier.setWidthFull();
+            cbbatelier.setLabel("Atelier");
+            
+            
+            
+            
+            
+            Div divtypeop = new Div();
+            divtypeop.setHeight("350px");
+            CheckboxGroup<Typeoperation> cbgtypeop = new CheckboxGroup<>();
+            divtypeop.getStyle().set("overflow-y", "auto");
+            cbgtypeop.setLabel("Type(s) d'opération(s)");
+            ArrayList listtemp = listtypeoperation(this.controleur.getVuePrincipale().getGestionBDD().conn);
+      
+            cbgtypeop.setItemLabelGenerator(
+            Typeoperation -> Typeoperation.getNom());
+
+            cbgtypeop.setItems(listtemp);
+            cbgtypeop.addThemeVariants(CheckboxGroupVariant.LUMO_VERTICAL);
+
+            divtypeop.add(cbgtypeop);
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
             MyVerticalLayout colonne1 = new MyVerticalLayout();
             MyVerticalLayout colonne2 = new MyVerticalLayout();
-            colonne1.add(nom);
+            
+            
             colonne1.add(tfprenom);
+            colonne1.add(nom);
             colonne1.add(nbtel);
             colonne1.add(tfmail);
             colonne1.add(tfidentifiant);
             colonne1.add(tfmdp);
    
-            colonne2.add(nbidatelier);
-            colonne2.add(nbstatut);
-
+            colonne2.add(cbbstatut);
+            colonne2.add(cbbatelier);
+            colonne2.add(divtypeop);
+            colonne2.setAlignItems(Alignment.CENTER);
             this.contenuHL.add(colonne1,colonne2);
             this.contenuVL.add(this.contenuHL);
             
@@ -435,6 +521,26 @@ public class FenetreEntreeDonnees extends Dialog{
             listidtypeop.add(1);
             
             
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
             boutonFermer.addClickListener(event -> {
             this.close();   
         });
@@ -445,12 +551,72 @@ public class FenetreEntreeDonnees extends Dialog{
         
         boutonEnregistrer.addClickListener(event -> {
             
+            String statut = (String) cbbstatut.getValue();
+            int idstatut=-1;
+        
+        
+            if(statut=="En congé"){
+            idstatut=0;
+            }
+            if(statut=="En activité"){
+            idstatut=1;
+            }
+            if(statut=="En formation"){
+                idstatut=2;
+            }
+            if(statut=="Disponible"){
+                idstatut=3;
+            }
+            if(statut=="Hors service"){
+                idstatut=4;
+            }
+            
+            
+            int indexEspace =-1;
+            int idateliertemp = -2;
+
+            String NomAtelier = String.valueOf(cbbatelier.getValue());
+            try {
+                indexEspace = NomAtelier.indexOf(' ');
+            }
+            catch (ArrayIndexOutOfBoundsException e){
+                ;
+            }
+            if(indexEspace==-1){
+                
+               idateliertemp =  Integer.parseInt(NomAtelier);
+            }
+            else{
+                
+                String avantEspace = NomAtelier.substring(0,indexEspace);
+                
+                idateliertemp = Integer.parseInt(avantEspace);   
+            }
+            
+           final int idatelier =idateliertemp; 
+            
+            
+            
+           
+           Set<Typeoperation> selectedItems = cbgtypeop.getSelectedItems();
+           
+           
+           List<Integer> selected = selectedItems.stream()
+            .map(Typeoperation::getId) 
+            .collect(Collectors.toList());
+           
+           ArrayList<Integer> listId = new ArrayList<>(selected);
+           
+           System.out.println(listId);
+            
+            
+            
             
             this.close();
                try {
                    
                    //(Connection connect,String identifiant, String motdepasse,String nom,String prenom,int idatelier,int statut, int tel, String mail,ArrayList<Integer> listtypeoperation)
-                   this.controleur.getVuePrincipale().getGestionBDD().addoperateur(this.controleur.getVuePrincipale().getGestionBDD().conn,tfidentifiant.getValue(),tfmdp.getValue(),nom.getValue(),tfprenom.getValue(),(int) Math.round(nbidatelier.getValue()),(int) Math.round(nbstatut.getValue()),(int) Math.round(nbtel.getValue()),tfmail.getValue(),listidtypeop);
+                   this.controleur.getVuePrincipale().getGestionBDD().addoperateur(this.controleur.getVuePrincipale().getGestionBDD().conn,tfidentifiant.getValue(),tfmdp.getValue(),nom.getValue(),tfprenom.getValue(),idateliertemp,idstatut,(int) Math.round(nbtel.getValue()),tfmail.getValue(),listId);
                    
                    //this.controleur.getVuePrincipale().getGestionBDD().addoperateur(this.controleur.getVuePrincipale().getGestionBDD().conn,"identifiant","mdp","martin","martine",2,0,1,"mail",listidtypeop);
 

@@ -5,7 +5,10 @@
 package fr.insa.rastetter.mainview;
 
 import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.checkbox.CheckboxGroup;
+import com.vaadin.flow.component.checkbox.CheckboxGroupVariant;
 import com.vaadin.flow.component.combobox.ComboBox;
+import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.component.html.H4;
 import com.vaadin.flow.component.icon.Icon;
@@ -28,8 +31,10 @@ import fr.insa.moly.objet.Typeoperation;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 
 /**
@@ -914,9 +919,9 @@ private Button boutonSupprimer;
             if(statut=="Hors service"){
                 idstatut=4;
             }
+            cbbstatut.setValue(idstatut);
             
-            
-            final int idstatut1 = idstatut;
+           
             
             
             
@@ -956,6 +961,53 @@ private Button boutonSupprimer;
                 }
             
             
+                
+               Div divtypeop = new Div();
+            divtypeop.setHeight("350px");
+            CheckboxGroup<Typeoperation> cbgtypeop = new CheckboxGroup<>();
+            divtypeop.getStyle().set("overflow-y", "auto");
+            cbgtypeop.setLabel("Type(s) d'opération(s)");
+            ArrayList<Typeoperation> listtemptypop = listtypeoperation(this.controleur.getVuePrincipale().getGestionBDD().conn);
+      
+            cbgtypeop.setItemLabelGenerator(
+            Typeoperation -> Typeoperation.getNom());
+
+            cbgtypeop.setItems(listtemptypop);
+            cbgtypeop.addThemeVariants(CheckboxGroupVariant.LUMO_VERTICAL);
+
+            divtypeop.add(cbgtypeop); 
+            
+            
+
+//            List <Integer> listidselect=operateurtemp.getListtypeoperation();
+//            
+//            List<Typeoperation> selectedTypeoperations = (List<Typeoperation>) listtemptypop.stream()
+//                    
+//                    
+//                .filter(typeoperation -> listidselect.contains(((Typeoperation)typeoperation).getId()))
+//                .collect(Collectors.toList());
+            
+
+               List<Integer> listidselect = operateurtemp.getListtypeoperation();
+               
+            System.out.println("Liste des types operations de l'operateur"+listidselect);
+            
+            
+            
+        List<Typeoperation> selectedTypeoperations = listtemptypop.stream()
+            .filter(typeoperation -> listidselect.contains(((Typeoperation)typeoperation).getId()))
+            .collect(Collectors.toList()); 
+            
+        
+        
+            //cbgtypeop.select(selectedTypeoperations.toArray(new Typeoperation[0]));
+            cbgtypeop.select(selectedTypeoperations);    
+                
+              contenu.add(cbgtypeop ); 
+                
+                
+                
+                
             boutonModifier.addClickListener(event -> {
             
             cbbstatut.setReadOnly(false);
@@ -971,6 +1023,31 @@ private Button boutonSupprimer;
                     
             cbbstatut.setReadOnly(true);
             cbbatelier.setReadOnly(true);
+            
+             String stringstatut =(String) cbbstatut.getValue();
+            
+            
+            int idstatut2=-1;
+        
+        
+            if(stringstatut=="En congé"){
+            idstatut2=0;
+            }
+            if(stringstatut=="En activité"){
+            idstatut2=1;
+            }
+            if(stringstatut=="En formation"){
+                idstatut2=2;
+            }
+            if(stringstatut=="Disponible"){
+                idstatut2=3;
+            }
+            if(stringstatut=="Hors service"){
+                idstatut2=4;
+            }
+            
+            final int idstatutchoix = idstatut2;
+            
             
             
             
@@ -1011,7 +1088,7 @@ private Button boutonSupprimer;
                     //this.controleur.getVuePrincipale().getGestionBDD().updateOperateur(this.controleur.getVuePrincipale().getGestionBDD().conn,operateurtemp.getId(),operateurtemp.getIdentifiant(),operateurtemp.getMotdepasse(),operateurtemp.getNom(),operateurtemp.getPrenom(),idateliertemp,idstatut,operateurtemp.getTel(),operateurtemp.getMail(),operateurtemp.getListtypeoperation());
               
             
-                    this.controleur.getVuePrincipale().getGestionBDD().updateOperateur(this.controleur.getVuePrincipale().getGestionBDD().conn,id,identifiant,mdp,nom,prenom,idateliertemp,idstatut1,tel,mail,typeop);
+                    this.controleur.getVuePrincipale().getGestionBDD().updateOperateur(this.controleur.getVuePrincipale().getGestionBDD().conn,id,identifiant,mdp,nom,prenom,idateliertemp,idstatutchoix,tel,mail,typeop);
 
             
             } catch (SQLException ex) {

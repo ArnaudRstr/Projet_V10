@@ -1009,6 +1009,7 @@ public static void addoperateur(Connection connect,String identifiant, String mo
                         for(int i=0;i<listtypeoperation.size();i++){
                             addrealiseoo(connect,id,listtypeoperation.get(i));
                         }
+                        System.out.println("realiseoo add");
                     }
                    
             } catch (SQLException ex) {

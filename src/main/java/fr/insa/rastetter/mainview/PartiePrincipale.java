@@ -14,6 +14,7 @@ import com.vaadin.flow.component.html.Paragraph;
 import com.vaadin.flow.component.menubar.MenuBar;
 import com.vaadin.flow.component.notification.Notification;
 import static fr.insa.moly.GestionBDD.GestionBDD.listproduit;
+import fr.insa.moly.objet.Atelier;
 import fr.insa.moly.objet.Brut;
 import fr.insa.moly.objet.Machine;
 import fr.insa.moly.objet.Operateur;
@@ -21,6 +22,7 @@ import fr.insa.moly.objet.Operation;
 import fr.insa.moly.objet.Produit;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -84,13 +86,17 @@ public class PartiePrincipale extends MyVerticalLayout {
                 this.add(nbelements);
                 
                 this.gridMachines= new Grid<>();
-                gridMachines.addColumn(Machine::getId).setHeader(new H5("Identifiant"));
+                gridMachines.addColumn(Machine::getId).setHeader(new H5("Identifiant"))
+                       .setComparator(Comparator.comparingInt(Machine::getId));
 
-                gridMachines.addColumn(Machine::getNom).setHeader(new H5("Nom"));
+                gridMachines.addColumn(Machine::getNom).setHeader(new H5("Nom"))
+                        .setComparator(Comparator.comparing(Machine::getNom, Comparator.naturalOrder()));
                 
-                gridMachines.addColumn(Machine::getMarque).setHeader(new H5("Marque"));
+                gridMachines.addColumn(Machine::getMarque).setHeader(new H5("Marque"))
+                         .setComparator(Comparator.comparing(Machine::getMarque, Comparator.naturalOrder()));
                 //gridMachines.addColumn(Machine::getStatut).setHeader("Statut");
-                gridMachines.addColumn(Machine::getStatutString).setHeader(new H5("Statut"));
+                gridMachines.addColumn(Machine::getStatutString).setHeader(new H5("Statut"))
+                         .setComparator(Comparator.comparing(Machine::getStatutString, Comparator.naturalOrder()));
                 gridMachines.setItems(machinesTemp);
                 this.add(gridMachines);
                 
@@ -217,9 +223,11 @@ public class PartiePrincipale extends MyVerticalLayout {
                 Text nbelements = new Text(brutstemp.size()+" brut(s)");
                 this.add(nbelements);
                 this.gridBruts= new Grid<>();
-                gridBruts.addColumn(Brut::getNom).setHeader(new H5("Nom"));
+                gridBruts.addColumn(Brut::getNom).setHeader(new H5("Nom"))
+                        .setComparator(Comparator.comparing(Brut::getNom, Comparator.naturalOrder()));
                 gridBruts.addColumn(Brut::getRef).setHeader(new H5("Référence"));
-                gridBruts.addColumn(Brut::getStock).setHeader(new H5("En stock"));
+                gridBruts.addColumn(Brut::getStock).setHeader(new H5("En stock"))
+                        .setComparator(Comparator.comparingInt(Brut::getStock));
 
                 gridBruts.setItems(brutstemp);
                 this.add(gridBruts);
@@ -280,13 +288,27 @@ public class PartiePrincipale extends MyVerticalLayout {
                 
 
                 gridOperateurs.setItems(operateurstemp);
-                gridOperateurs.addColumn(Operateur::getId).setHeader(new H5("Identifiant"));
+                gridOperateurs.addColumn(Operateur::getId).setHeader(new H5("Identifiant"))
+                        .setComparator(Comparator.comparingInt(Operateur::getId));
                 gridOperateurs.addColumn(Operateur::getNom).setHeader(new H5("Nom"));
                 gridOperateurs.addColumn(Operateur::getPrenom).setHeader(new H5("Prénom"));
                 gridOperateurs.addColumn(Operateur::getTel).setHeader(new H5("Téléphone"));
                 gridOperateurs.addColumn(Operateur::getMail).setHeader(new H5("Adresse mail"));
-                gridOperateurs.addColumn(Operateur::getStatutString).setHeader(new H5("Statut"));
-
+                gridOperateurs.addColumn(Operateur::getStatutString).setHeader(new H5("Statut"))
+                        .setComparator(Comparator.comparing(Operateur::getStatutString, Comparator.naturalOrder()));
+                
+                gridOperateurs.addColumn(operateur -> {
+                try {
+                    return operateur.getAtelierString(this.controleur);
+                } catch (SQLException ex) {
+                    Logger.getLogger(PartiePrincipale.class.getName()).log(Level.SEVERE, null, ex);
+                    return null; // Retourne quelque chose de convenable en cas d'erreur
+                }
+                }).setHeader(new H5("Atelier"))
+                        .setComparator(Comparator.comparingInt(Operateur::getIdatelier));
+              
+                
+                gridOperateurs.addColumn(Operateur::getListtypeoperation).setHeader(new H5("Types d'operation"));
 
                 this.add(gridOperateurs);
                 
@@ -355,10 +377,15 @@ public class PartiePrincipale extends MyVerticalLayout {
                 
 
                 gridOperations.setItems(operationstemp);
-                gridOperations.addColumn(Operation::getNom).setHeader(new H5("Nom"));
-                gridOperations.addColumn(Operation::getId).setHeader(new H5("Identifiant"));
-                gridOperations.addColumn(Operation::getIdmachine).setHeader(new H5("Identifiant de la machine"));
-                gridOperations.addColumn(Operation::getOutil).setHeader(new H5("Outil"));
+                gridOperations.addColumn(Operation::getId).setHeader(new H5("Identifiant"))
+                        .setComparator(Comparator.comparingInt(Operation::getId));
+                gridOperations.addColumn(Operation::getNom).setHeader(new H5("Nom"))
+                        .setComparator(Comparator.comparing(Operation::getNom, Comparator.naturalOrder()));
+                
+                gridOperations.addColumn(Operation::getIdmachine).setHeader(new H5("Identifiant de la machine"))
+                        .setComparator(Comparator.comparingInt(Operation::getIdmachine));
+                gridOperations.addColumn(Operation::getOutil).setHeader(new H5("Outil"))
+                        .setComparator(Comparator.comparing(Operation::getOutil, Comparator.naturalOrder()));
 
                 this.add(gridOperations);
                 
@@ -387,10 +414,7 @@ public class PartiePrincipale extends MyVerticalLayout {
                     System.out.println("Erreur : partie principale : Pas reussi à créer l'operation");
                 }
             });
-            
-        
-            
-            
+
             
         }
         
