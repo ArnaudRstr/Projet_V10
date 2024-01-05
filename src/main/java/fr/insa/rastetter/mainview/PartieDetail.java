@@ -75,8 +75,11 @@ private Button boutonSupprimer;
         
         
         Icon iconenreg = new Icon("lumo","checkmark");
+        iconenreg.setSize("30px");
         Icon iconmodif = new Icon("lumo","edit");
+        iconmodif.setSize("30px");
         Icon iconsupp = new Icon(VaadinIcon.TRASH);
+        iconsupp.setSize("30px");
         
         iconenreg.setColor(couleur1);
         iconmodif.setColor(couleur1);
@@ -87,11 +90,12 @@ private Button boutonSupprimer;
         this.boutonSupprimer=new Button(iconsupp);
         
         
+        Div div0 = new Div();
+        div0.setWidth("200px");
         
         
         
-        
-        this.listboutons.add(boutonSupprimer,boutonModifier,boutonEnregistrer);
+        this.listboutons.add(new H2(" Détail"),div0,boutonSupprimer,boutonModifier,boutonEnregistrer);
         
         
         
@@ -974,7 +978,7 @@ private Button boutonSupprimer;
 
             cbgtypeop.setItems(listtemptypop);
             cbgtypeop.addThemeVariants(CheckboxGroupVariant.LUMO_VERTICAL);
-
+            cbgtypeop.setReadOnly(true);
             divtypeop.add(cbgtypeop); 
             
             
@@ -1012,7 +1016,7 @@ private Button boutonSupprimer;
             
             cbbstatut.setReadOnly(false);
             cbbatelier.setReadOnly(false);
-            
+            cbgtypeop.setReadOnly(false);
                         
             
             
@@ -1023,6 +1027,7 @@ private Button boutonSupprimer;
                     
             cbbstatut.setReadOnly(true);
             cbbatelier.setReadOnly(true);
+            cbgtypeop.setReadOnly(true);
             
              String stringstatut =(String) cbbstatut.getValue();
             

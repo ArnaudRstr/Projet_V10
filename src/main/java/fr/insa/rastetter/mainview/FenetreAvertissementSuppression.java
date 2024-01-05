@@ -151,11 +151,11 @@ public FenetreAvertissementSuppression(Controleur controleur,String type,String 
         }
         
         if (type=="operateur"){
-//            try {
-//                   delete(this.controleur.getVuePrincipale().getGestionBDD().conn,type,id);
-//               } catch (SQLException ex) {
-//                   System.out.println("erreur dans la suppression de l'operateur");
-//               }
+            try {
+                   delete(this.controleur.getVuePrincipale().getGestionBDD().conn,type,id);
+               } catch (SQLException ex) {
+                   System.out.println("erreur dans la suppression de l'operateur");
+               }
                try {
                    this.controleur.MenuItemOperateur();
                } catch (SQLException ex) {

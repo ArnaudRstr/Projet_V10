@@ -308,7 +308,7 @@ public class PartiePrincipale extends MyVerticalLayout {
                         .setComparator(Comparator.comparingInt(Operateur::getIdatelier));
               
                 
-                gridOperateurs.addColumn(Operateur::getListtypeoperation).setHeader(new H5("Types d'operation"));
+                gridOperateurs.addColumn(Operateur::getListtypeoperation).setHeader(new H5("Types d'operations"));
 
                 this.add(gridOperateurs);
                 

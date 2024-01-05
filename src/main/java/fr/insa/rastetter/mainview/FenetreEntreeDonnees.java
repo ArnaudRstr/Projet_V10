@@ -472,25 +472,7 @@ public class FenetreEntreeDonnees extends Dialog{
 
             divtypeop.add(cbgtypeop);
             
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
+
             
             
             
@@ -521,24 +503,7 @@ public class FenetreEntreeDonnees extends Dialog{
             listidtypeop.add(1);
             
             
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
+          
             
             
             boutonFermer.addClickListener(event -> {

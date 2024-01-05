@@ -75,6 +75,8 @@ public class Entete extends MyHorizontalLayout {
     
     private SubMenu subMenuCompte;
     private MenuItem menuItemDeconnexion;
+    private MenuItem menuItemInfosCompte;
+
     private MenuItem menuItemNotice;
     private MenuItem menuItemInfos;
     private ComboBox comboBoxAtelier;
@@ -186,6 +188,8 @@ public class Entete extends MyHorizontalLayout {
         this.subMenuCompte=menuItemCompte.getSubMenu();
         
         this.menuItemDeconnexion = this.subMenuCompte.addItem("Deconnexion");
+        this.menuItemInfosCompte=this.subMenuCompte.addItem("Informations");
+        
         
         
         Icon infosIcon = new Icon(VaadinIcon.INFO_CIRCLE);
@@ -248,6 +252,15 @@ public class Entete extends MyHorizontalLayout {
             Notification.show("Deconnexion selectionnée !");
             this.main.getControleur().MenuItemDeconnexion();
         });
+        
+        
+        
+        menuItemInfosCompte.addClickListener(event -> {
+            Notification.show("Infos compte selectionné !");
+            this.main.getControleur().MenuItemInfosCompte();
+        });
+        
+        
         
         menuItemNotice.addClickListener(event -> {
             Notification.show("Ouverture du mode d'emploi");

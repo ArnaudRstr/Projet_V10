@@ -10,7 +10,10 @@ import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.component.html.H3;
+import com.vaadin.flow.component.html.H5;
 import com.vaadin.flow.component.icon.Icon;
+import com.vaadin.flow.component.icon.VaadinIcon;
+import com.vaadin.flow.component.menubar.MenuBar;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.textfield.NumberField;
@@ -85,6 +88,107 @@ public class Controleur {
         
         
     }
+    
+    
+    public void MenuItemInfosCompte() {
+        Notification.show("Deconnexion via controleur");
+        
+        Dialog dcompte = new Dialog();
+        MyVerticalLayout vlcontenu = new MyVerticalLayout();
+        vlcontenu.setWidthFull();
+        Button boutonEnregistrer=new Button(new H5("Enregistrer"));
+        Button boutonFermer = new Button(new Icon("lumo","cross"));
+        dcompte.getFooter().add(boutonEnregistrer);
+        
+        dcompte.setWidth("30vw");
+        
+        //On récupèrera les infos de la personne connectée ici
+        
+        
+        TextField tfnom = new TextField("Nom");
+        tfnom.setReadOnly(true);
+        tfnom.setWidthFull();
+        TextField tfprenom = new TextField("Prénom");
+        tfprenom.setReadOnly(true);
+        tfprenom.setWidthFull();
+        TextField tfmdp = new TextField("Mot de passe");
+        tfmdp.setReadOnly(true);
+        tfmdp.setWidthFull();
+        TextField tfmail = new TextField("Adresse mail");
+        tfmail.setReadOnly(true);
+        tfmail.setWidthFull();
+        TextField tfidentifiant = new TextField("Identifiant");
+        tfidentifiant.setReadOnly(true);
+        tfidentifiant.setWidthFull();
+        
+        
+        
+        
+        
+        String couleur1 = new String("#38998C");
+        String couleur2 = new String("#BDE767");
+        String couleur3 = new String("#1F4C83");
+        
+        
+        Icon iconenreg = new Icon("lumo","checkmark");
+        Icon iconmodif = new Icon("lumo","edit");
+        Icon iconsupp = new Icon(VaadinIcon.TRASH);
+        
+        iconenreg.setColor(couleur1);
+        iconmodif.setColor(couleur1);
+        iconsupp.setColor(couleur1);
+        
+         
+        
+        Button boutonModifier =new Button(new H5("Modifier"));
+        
+        
+        dcompte.setHeaderTitle("Informations du compte");
+        dcompte.getHeader().add(boutonFermer);
+        vlcontenu.add(boutonModifier,tfnom,tfprenom,tfmdp,tfmail,tfidentifiant);
+        
+        dcompte.add(vlcontenu);
+        dcompte.open();
+
+        
+        
+        
+        boutonModifier.addClickListener(event -> {
+            tfnom.setReadOnly(false);
+            tfprenom.setReadOnly(false);
+            tfmdp.setReadOnly(false);
+            tfmail.setReadOnly(false);
+            tfidentifiant.setReadOnly(false);      
+                
+            });
+        
+        boutonFermer.addClickListener(event -> {
+            dcompte.close();
+            tfnom.setReadOnly(true);
+            tfprenom.setReadOnly(true);
+            tfmdp.setReadOnly(true);
+            tfmail.setReadOnly(true);
+            tfidentifiant.setReadOnly(true);  
+                
+            });
+        
+        
+        boutonEnregistrer.addClickListener(event -> {
+            tfnom.setReadOnly(true);
+            tfprenom.setReadOnly(true);
+            tfmdp.setReadOnly(true);
+            tfmail.setReadOnly(true);
+            tfidentifiant.setReadOnly(true);          
+                
+            
+            Notification.show("Pas encore d'enregistrement des modifs");
+            
+            
+            dcompte.close();
+            });
+        
+    }
+    
     
     public void MenuItemPlan() {
         this.main.setMainContent(new VuePlan());
