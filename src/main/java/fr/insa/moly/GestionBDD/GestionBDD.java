@@ -1024,7 +1024,7 @@ public static void addoperateur(Connection connect,String identifiant, String mo
             }
         try { // creation d'un requete 
             connect.commit(); // valide le refresh
-            System.out.print("le refresh fonctionne") ;
+            System.out.print("le refresh fonctionne opearateur") ;
         } catch (SQLException ex) { // en cas d'erreur on "rollback" on retourne avant 
             connect.rollback();
             System.out.print("rollback");
@@ -1057,7 +1057,7 @@ public static void updateOperateur(Connection connect,int id,String identifiant,
             deleteRealiseoo(connect,"idoperateur",id);
             
             for(int i=0;i<listtypeoperation.size();i++){
-                System.out.println("addrealise");
+                System.out.println("addrealise execute");
                             addrealiseoo(connect,id,listtypeoperation.get(i));
                         }
             
@@ -1328,7 +1328,7 @@ public static void addrealiseoo(Connection connect,int idoperateur,int idtypeope
             }
         try { // creation d'un requete 
             connect.commit(); // valide le refresh
-            System.out.print("le refresh fonctionne") ;
+            System.out.print("le refresh fonctionne realiseoo") ;
         } catch (SQLException ex) { // en cas d'erreur on "rollback" on retourne avant 
             connect.rollback();
             System.out.print("rollback");
