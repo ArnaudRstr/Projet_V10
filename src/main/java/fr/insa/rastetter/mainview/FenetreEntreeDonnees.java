@@ -749,7 +749,7 @@ public class FenetreEntreeDonnees extends Dialog{
             
                try {
                    this.controleur.getVuePrincipale().getGestionBDD().addoperation(this.controleur.getVuePrincipale().getGestionBDD().conn,idtypeoperationtemp,nom.getValue(),nbduree.getValue(),tfoutil.getValue(),idmachineselect);
-
+                    System.out.println("addop fait");
                    this.controleur.MenuItemOperations();
                    
                    System.out.println("L'operation devrait être créé");

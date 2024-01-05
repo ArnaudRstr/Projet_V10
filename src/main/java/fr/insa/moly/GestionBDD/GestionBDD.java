@@ -1822,28 +1822,20 @@ public static ArrayList listtypeoperation (Connection connect)throws SQLExceptio
 public static ArrayList listRealiseooOperateur (Connection connect,int idoperateur)throws SQLException{
     ArrayList<Typeoperation> listtypeoperation = new ArrayList();
     
-    connect.setAutoCommit(false); //stope la mise à jour, elle sera fait à la fin si tout se passe bien
+    
         try ( PreparedStatement affichetab = connect.prepareStatement(
                 "select idtypeoperation from realiseoo WHERE idoperateur=?")) {
             affichetab.setInt(1, idoperateur);
             ResultSet tab = affichetab.executeQuery();
             while (tab.next()!= false){
+                System.out.println("typeoperation non vide");
                 Typeoperation at = new Typeoperation(connect,tab.getInt("idtypeoperation"));
                 listtypeoperation.add(at);
             }
 
             }
-        try { // creation d'un requete 
-            connect.commit(); // valide le refresh
-            System.out.println("le refresh fonctionne dans listrealiseoooperation") ;
-        } catch (SQLException ex) { // en cas d'erreur on "rollback" on retourne avant 
-            connect.rollback();
-            System.out.print("rollback");
-            throw ex;
-        } finally {
-            connect.setAutoCommit(true);// on remet le refresh automatique
-            
-        }
+        System.out.println("try select done");
+        
         
      
     return listtypeoperation;
