@@ -14,11 +14,14 @@ import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.textfield.NumberField;
 import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.component.textfield.TextField;
+import static fr.insa.moly.GestionBDD.GestionBDD.listaltelier;
 import static fr.insa.moly.GestionBDD.GestionBDD.listmachine;
 import static fr.insa.moly.GestionBDD.GestionBDD.listtypeoperation;
 import static fr.insa.moly.GestionBDD.GestionBDD.updateOperation;
+import fr.insa.moly.objet.Atelier;
 import fr.insa.moly.objet.Brut;
 import fr.insa.moly.objet.Machine;
+import fr.insa.moly.objet.Operateur;
 import fr.insa.moly.objet.Operation;
 import fr.insa.moly.objet.Produit;
 import fr.insa.moly.objet.Typeoperation;
@@ -832,10 +835,213 @@ private Button boutonSupprimer;
         }
         
         
-        if (typeobjet == "operateurs"){
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        if (typeobjet == "operateur"){
             contenu.add(listboutons);
             this.add(contenu);
             
+            Operateur operateurtemp = (Operateur) object;
+            
+            final int id =operateurtemp.getId();
+            final String identifiant = operateurtemp.getIdentifiant();
+            final String mdp =operateurtemp.getMotdepasse();
+            final String nom =operateurtemp.getNom();
+            final String prenom =operateurtemp.getPrenom();
+            
+            final int tel = operateurtemp.getTel();
+            final String mail = operateurtemp.getMail();
+            final ArrayList typeop =operateurtemp.getListtypeoperation();
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+            ArrayList <String> listStatuts = new ArrayList();
+        
+            listStatuts.add("Disponible");
+            listStatuts.add("En activité");
+            listStatuts.add("En formation");
+            listStatuts.add("En congé");
+            listStatuts.add("Hors service");
+        
+            ComboBox cbbstatut = new ComboBox();
+            cbbstatut.setItems(listStatuts);
+            cbbstatut.setReadOnly(true);
+            cbbstatut.setWidthFull();
+            cbbstatut.setLabel("Statut");
+
+            contenu.add(cbbstatut);
+            
+            
+            
+            
+            
+            
+            String statut = (String) cbbstatut.getValue();
+            int idstatut=-1;
+        
+        
+            if(statut=="En congé"){
+            idstatut=0;
+            }
+            if(statut=="En activité"){
+            idstatut=1;
+            }
+            if(statut=="En formation"){
+                idstatut=2;
+            }
+            if(statut=="Disponible"){
+                idstatut=3;
+            }
+            if(statut=="Hors service"){
+                idstatut=4;
+            }
+            
+            
+            final int idstatut1 = idstatut;
+            
+            
+            
+            
+            
+            
+            ComboBox cbbatelier = new ComboBox();
+            ArrayList <Atelier> listTemp = new ArrayList();
+            listTemp = listaltelier (this.controleur.getVuePrincipale().getGestionBDD().conn);
+      
+            ArrayList <String> listNomAtelier = new ArrayList<>();
+
+            int index =0;
+
+            while (index<listTemp.size()){
+                Atelier atelierTemp = (Atelier) listTemp.get(index);
+
+                listNomAtelier.add(atelierTemp.getId()+" : "+atelierTemp.getNom());
+
+                System.out.println(listNomAtelier.get(index));
+                index++;
+            }
+            cbbatelier.setItems(listNomAtelier); 
+            cbbatelier.setReadOnly(true);
+            cbbatelier.setWidthFull();
+            cbbatelier.setLabel("Atelier");
+            contenu.add(cbbatelier);
+            
+            
+            
+            
+            cbbstatut.setValue(operateurtemp.getStatutString());
+                try {
+                    cbbatelier.setValue(operateurtemp.getAtelierString(this.controleur));
+                } catch (SQLException ex) {
+                    System.out.println("Pas reussi à récupérer l'atelier de l'opérateur");
+                }
+            
+            
+            boutonModifier.addClickListener(event -> {
+            
+            cbbstatut.setReadOnly(false);
+            cbbatelier.setReadOnly(false);
+            
+                        
+            
+            
+            
+            });
+            
+            boutonEnregistrer.addClickListener(event -> {
+                    
+            cbbstatut.setReadOnly(true);
+            cbbatelier.setReadOnly(true);
+            
+            
+            
+            
+            
+            
+            
+            int indexEspace =-1;
+            int idateliertemp = -2;
+
+            String NomAtelier = String.valueOf(cbbatelier.getValue());
+            try {
+                indexEspace = NomAtelier.indexOf(' ');
+            }
+            catch (ArrayIndexOutOfBoundsException e){
+                ;
+            }
+            if(indexEspace==-1){
+                
+               idateliertemp =  Integer.parseInt(NomAtelier);
+            }
+            else{
+                
+                String avantEspace = NomAtelier.substring(0,indexEspace);
+                
+                idateliertemp = Integer.parseInt(avantEspace);   
+            }
+            
+           final int idatelier =idateliertemp; 
+            
+            
+            
+            
+            
+            Notification.show("La méthode d'enregistrement n'est pas encore faite");
+            
+            try {
+                    //this.controleur.getVuePrincipale().getGestionBDD().updateOperateur(this.controleur.getVuePrincipale().getGestionBDD().conn,operateurtemp.getId(),operateurtemp.getIdentifiant(),operateurtemp.getMotdepasse(),operateurtemp.getNom(),operateurtemp.getPrenom(),idateliertemp,idstatut,operateurtemp.getTel(),operateurtemp.getMail(),operateurtemp.getListtypeoperation());
+              
+            
+                    this.controleur.getVuePrincipale().getGestionBDD().updateOperateur(this.controleur.getVuePrincipale().getGestionBDD().conn,id,identifiant,mdp,nom,prenom,idateliertemp,idstatut1,tel,mail,typeop);
+
+            
+            } catch (SQLException ex) {
+                    Logger.getLogger(PartieDetail.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            
+                try {
+                    this.controleur.MenuItemOperateur();
+                } catch (SQLException ex) {
+                    Logger.getLogger(PartieDetail.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            
+            });
+//            
+//            
+            boutonSupprimer.addClickListener(event -> {
+                
+                
+                
+                try {
+                    
+                    FenetreAvertissementSuppression fenetreAvertissementSuppression = new FenetreAvertissementSuppression(this.controleur,"operateur",operateurtemp.getNom(),operateurtemp.getId());
+
+                    //delete(this.controleur.getVuePrincipale().getGestionBDD().conn,bruttemp.getnomtable(),bruttemp.getId());
+                    // On fait apparaitre une fenetre supplémentaire
+                } catch (SQLException ex) {
+                    System.out.println("Erreur partie Detail");
+                }
+                
+            });
             
             
             

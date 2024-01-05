@@ -1445,7 +1445,7 @@ public static void updateGamme(Connection connect,Gamme gamme)throws SQLExceptio
 
 //ATTENTION ne fonctionne pas avec gamme(ordre) et realiseoo (ne peuvent pas être supprimés seulement modifiés)
 public static void delete(Connection connect, String table, int id) throws SQLException {
-    try {
+    //try {
         connect.setAutoCommit(false);
 
         String sql = "DELETE FROM "+table+" WHERE id=?";
@@ -1459,20 +1459,20 @@ public static void delete(Connection connect, String table, int id) throws SQLEx
             System.out.println("Rollback. Erreur : " + ex.getMessage());
             throw ex;
         }
-    } finally {
-        try {
-            if (connect != null) {
-                connect.setAutoCommit(true);
-                connect.close();
-            }
-        } catch (SQLException ex) {
-            System.err.println("Erreur lors de la gestion des ressources : " + ex.getMessage());
-        }
-    }
+//    } finally {
+//        try {
+//            if (connect != null) {
+//                connect.setAutoCommit(true);
+//                connect.close();
+//            }
+//        } catch (SQLException ex) {
+//            System.err.println("Erreur lors de la gestion des ressources : " + ex.getMessage());
+//        }
+//    }
 }
 
 public static void deleteRealiseoo(Connection connect, String colonne, int idcolonne) throws SQLException {
-    try {
+    //try {
         connect.setAutoCommit(false);
 
         String sql = "DELETE FROM realiseoo WHERE " + colonne+ "=?";
@@ -1480,22 +1480,22 @@ public static void deleteRealiseoo(Connection connect, String colonne, int idcol
             pst.setInt(1, idcolonne);
             pst.executeUpdate();
             connect.commit();
-            System.out.println("Le DELETE a été exécuté avec succès.");
+            System.out.println("Le DELETE realiseoo a été exécuté avec succès.");
         } catch (SQLException ex) {
             connect.rollback();
             System.out.println("Rollback. Erreur : " + ex.getMessage());
             throw ex;
         }
-    } finally {
-        try {
-            if (connect != null) {
-                connect.setAutoCommit(true);
-                connect.close();
-            }
-        } catch (SQLException ex) {
-            System.err.println("Erreur lors de la gestion des ressources : " + ex.getMessage());
-        }
-    }
+//    } finally {
+//        try {
+//            if (connect != null) {
+//                connect.setAutoCommit(true);
+//                connect.close();
+//            }
+//        } catch (SQLException ex) {
+//            System.err.println("Erreur lors de la gestion des ressources : " + ex.getMessage());
+//        }
+//    }
 }
 
 public static void deleteOrdre(Connection connect, int idproduit) throws SQLException {
@@ -1507,7 +1507,7 @@ public static void deleteOrdre(Connection connect, int idproduit) throws SQLExce
             pst.setInt(1, idproduit);
             pst.executeUpdate();
             connect.commit();
-            System.out.println("Le DELETE a été exécuté avec succès.");
+            System.out.println("Le DELETE ordre a été exécuté avec succès.");
         } catch (SQLException ex) {
             connect.rollback();
             System.out.println("Rollback. Erreur : " + ex.getMessage());
@@ -1689,7 +1689,7 @@ public static ArrayList listoperateur (Connection connect)throws SQLException{
     ArrayList<Operateur> listoperateur = new ArrayList();
     ArrayList<Integer> listoperationvide = new ArrayList();
     connect.setAutoCommit(false); //stope la mise à jour, elle sera fait à la fin si tout se passe  bien
-    
+    System.out.println("arrivé dans listoperateur");
         try ( PreparedStatement affichetab = connect.prepareStatement(
                 "select * from operateur")) {
             
@@ -1700,6 +1700,8 @@ public static ArrayList listoperateur (Connection connect)throws SQLException{
                 
             }
         }
+        
+        System.out.println("arrivé etape 2");
     for (int i=0;i<listoperateur.size();i++){
         ArrayList<Integer> listoperation = new ArrayList();
         try ( PreparedStatement tabrealisoo = connect.prepareStatement("select idoperation from realiseoo where idoperateur=?")){
@@ -1711,13 +1713,19 @@ public static ArrayList listoperateur (Connection connect)throws SQLException{
             }
             listoperateur.get(i).setListoperation(listoperation);
         }
+        catch (SQLException ex){
+            ;
+        }
+        
+        
+        
             }
         try { // creation d'un requete 
             connect.commit(); // valide le refresh
-            System.out.print("le refresh fonctionne") ;
+            System.out.println("le refresh fonctionne") ;
         } catch (SQLException ex) { // en cas d'erreur on "rollback" on retourne avant 
             connect.rollback();
-            System.out.print("rollback");
+            System.out.println("rollback");
             throw ex;
         } finally {
             connect.setAutoCommit(true);// on remet le refresh automatique

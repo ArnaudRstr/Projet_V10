@@ -257,7 +257,7 @@ public class PartiePrincipale extends MyVerticalLayout {
             this.hltitre.add(new H2("Operateurs"),menuBar);
             this.add(hltitre);
             this.menuItemAjouter.setEnabled(true);
-            
+            //this.getStyle().set("padding", "25px");
             
             //this.add(new H2("Bruts"));
             ArrayList <Operateur> operateurstemp = new ArrayList();
@@ -280,7 +280,13 @@ public class PartiePrincipale extends MyVerticalLayout {
                 
 
                 gridOperateurs.setItems(operateurstemp);
+                gridOperateurs.addColumn(Operateur::getId).setHeader(new H5("Identifiant"));
                 gridOperateurs.addColumn(Operateur::getNom).setHeader(new H5("Nom"));
+                gridOperateurs.addColumn(Operateur::getPrenom).setHeader(new H5("Prénom"));
+                gridOperateurs.addColumn(Operateur::getTel).setHeader(new H5("Téléphone"));
+                gridOperateurs.addColumn(Operateur::getMail).setHeader(new H5("Adresse mail"));
+                gridOperateurs.addColumn(Operateur::getStatutString).setHeader(new H5("Statut"));
+
 
                 this.add(gridOperateurs);
                 

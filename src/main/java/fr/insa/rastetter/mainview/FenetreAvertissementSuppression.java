@@ -75,7 +75,7 @@ public FenetreAvertissementSuppression(Controleur controleur,String type,String 
             System.out.println("suppression devrait être effectuée : id  : "+id);
 
         } catch (SQLException ex) {
-            Logger.getLogger(FenetreAvertissementSuppression.class.getName()).log(Level.SEVERE, null, ex);
+                   System.out.println("erreur dans la suppression de l'atelier");
         }      
         
         try { //On reactualise le combobox
@@ -108,7 +108,7 @@ public FenetreAvertissementSuppression(Controleur controleur,String type,String 
                try {
                    delete(this.controleur.getVuePrincipale().getGestionBDD().conn,type,id);
                } catch (SQLException ex) {
-                   Logger.getLogger(FenetreAvertissementSuppression.class.getName()).log(Level.SEVERE, null, ex);
+                   System.out.println("erreur dans la suppression du produit");
                }
                try {
                    this.controleur.MenuItemProduit();
@@ -122,7 +122,7 @@ public FenetreAvertissementSuppression(Controleur controleur,String type,String 
             try {
                    delete(this.controleur.getVuePrincipale().getGestionBDD().conn,type,id);
                } catch (SQLException ex) {
-                   Logger.getLogger(FenetreAvertissementSuppression.class.getName()).log(Level.SEVERE, null, ex);
+                   System.out.println("erreur dans la suppression de la machine");
                }
                try {
                    this.controleur.MenuItemMachine();
@@ -138,10 +138,26 @@ public FenetreAvertissementSuppression(Controleur controleur,String type,String 
             try {
                    delete(this.controleur.getVuePrincipale().getGestionBDD().conn,type,id);
                } catch (SQLException ex) {
-                   Logger.getLogger(FenetreAvertissementSuppression.class.getName()).log(Level.SEVERE, null, ex);
+                   System.out.println("erreur dans la suppression de l'operation");
                }
                try {
                    this.controleur.MenuItemOperations();
+               } catch (SQLException ex) {
+                   Logger.getLogger(FenetreAvertissementSuppression.class.getName()).log(Level.SEVERE, null, ex);
+               }
+            
+            
+            
+        }
+        
+        if (type=="operateur"){
+//            try {
+//                   delete(this.controleur.getVuePrincipale().getGestionBDD().conn,type,id);
+//               } catch (SQLException ex) {
+//                   System.out.println("erreur dans la suppression de l'operateur");
+//               }
+               try {
+                   this.controleur.MenuItemOperateur();
                } catch (SQLException ex) {
                    Logger.getLogger(FenetreAvertissementSuppression.class.getName()).log(Level.SEVERE, null, ex);
                }

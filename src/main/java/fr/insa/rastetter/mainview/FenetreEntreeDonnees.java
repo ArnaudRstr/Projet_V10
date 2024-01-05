@@ -450,7 +450,7 @@ public class FenetreEntreeDonnees extends Dialog{
                try {
                    
                    //(Connection connect,String identifiant, String motdepasse,String nom,String prenom,int idatelier,int statut, int tel, String mail,ArrayList<Integer> listtypeoperation)
-                   //this.controleur.getVuePrincipale().getGestionBDD().addoperateur(this.controleur.getVuePrincipale().getGestionBDD().conn,tfidentifiant.getValue(),tfmdp.getValue(),nom.getValue(),tfprenom.getValue(),(int) Math.round(nbidatelier.getValue()),(int) Math.round(nbstatut.getValue()),(int) Math.round(nbtel.getValue()),tfmail.getValue(),listidtypeop);
+                   this.controleur.getVuePrincipale().getGestionBDD().addoperateur(this.controleur.getVuePrincipale().getGestionBDD().conn,tfidentifiant.getValue(),tfmdp.getValue(),nom.getValue(),tfprenom.getValue(),(int) Math.round(nbidatelier.getValue()),(int) Math.round(nbstatut.getValue()),(int) Math.round(nbtel.getValue()),tfmail.getValue(),listidtypeop);
                    
                    //this.controleur.getVuePrincipale().getGestionBDD().addoperateur(this.controleur.getVuePrincipale().getGestionBDD().conn,"identifiant","mdp","martin","martine",2,0,1,"mail",listidtypeop);
 

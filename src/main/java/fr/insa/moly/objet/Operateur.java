@@ -5,6 +5,8 @@
 package fr.insa.moly.objet;
 
 import fr.insa.moly.GestionBDD.GestionBDD;
+import static fr.insa.moly.GestionBDD.GestionBDD.listaltelier;
+import fr.insa.rastetter.mainview.Controleur;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -107,6 +109,59 @@ public class Operateur {
         return statut;
     }
 
+    public String getStatutString(){
+        String stringstatut = "";
+        
+        
+        if(statut==0){
+            stringstatut="En congé";
+        }
+        if(statut==1){
+            stringstatut="En activité";
+        }
+        if(statut==2){
+            stringstatut="En formation";
+        }
+        if(statut==3){
+            stringstatut="Disponible";
+        }
+        if(statut==4){
+            stringstatut="Hors service";
+        }
+        
+  
+        return stringstatut;
+    }
+    
+    
+    
+    public String getAtelierString(Controleur controleur) throws SQLException{
+        String stringatelier = "";
+        
+        ArrayList <Atelier> listateliertemp = new ArrayList();
+        listateliertemp = listaltelier (controleur.getVuePrincipale().getGestionBDD().conn);
+        int index =0;
+        boolean valid =false;
+        while (index<listateliertemp.size()||valid==false){
+            Atelier atelierTemp = (Atelier) listateliertemp.get(index);
+            
+            
+            if (this.idatelier==atelierTemp.getId()){
+                stringatelier = atelierTemp.getId()+" : "+atelierTemp.getNom();
+                valid=true;
+            }
+            index++;
+        }
+        
+        
+        
+        
+        
+        
+        
+        return stringatelier;
+    }
+    
     public int getTel() {
         return tel;
     }
@@ -141,6 +196,37 @@ public class Operateur {
 
     public void setStatut(int statut) {
         this.statut = statut;
+    }
+    
+    
+    
+    public void setStatutString(String statut){
+        
+        int idstatut=-1;
+        
+        
+        if(statut=="En congé"){
+            idstatut=0;
+        }
+        if(statut=="En activité"){
+            idstatut=1;
+        }
+        if(statut=="En formation"){
+            idstatut=2;
+        }
+        if(statut=="Disponible"){
+            idstatut=3;
+        }
+        if(statut=="Hors service"){
+            idstatut=4;
+        }
+        
+        
+        
+        
+        
+        this.statut=idstatut;
+        
     }
 
     public void setTel(int tel) {
