@@ -1704,7 +1704,7 @@ public static ArrayList listMachineAtelier (Connection connect, int idAtelierRec
 public static ArrayList listoperateur (Connection connect)throws SQLException{
     ArrayList<Operateur> listoperateur = new ArrayList();
     ArrayList<Integer> listoperationvide = new ArrayList();
-    connect.setAutoCommit(false); //stope la mise à jour, elle sera fait à la fin si tout se passe  bien
+   
     System.out.println("arrivé dans listoperateur");
         try ( PreparedStatement affichetab = connect.prepareStatement(
                 "select * from operateur")) {
@@ -1718,26 +1718,15 @@ public static ArrayList listoperateur (Connection connect)throws SQLException{
         }
         
         System.out.println("arrivé etape 2");
+        
     for (int i=0;i<listoperateur.size();i++){
         ArrayList<Integer> listoperation = new ArrayList();
         listoperation=listRealiseooOperateur(connect,listoperateur.get(i).getId());
             listoperateur.get(i).setListoperation(listoperation);
-        
-        
-        
-        
+    
             }
     System.out.println("etape 2 finit");
-        try { // creation d'un requete 
-            connect.commit(); // valide le refresh
-            System.out.println("le refresh fonctionne") ;
-        } catch (SQLException ex) { // en cas d'erreur on "rollback" on retourne avant 
-            connect.rollback();
-            System.out.println("rollback");
-            throw ex;
-        } finally {
-            connect.setAutoCommit(true);// on remet le refresh automatique
-        }
+        
         
      
     return listoperateur;
@@ -1853,6 +1842,7 @@ public static ArrayList listRealiseooOperateur (Connection connect,int idoperate
             throw ex;
         } finally {
             connect.setAutoCommit(true);// on remet le refresh automatique
+            
         }
         
      
