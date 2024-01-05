@@ -322,7 +322,7 @@ public class Controleur {
     public void MenuItemOperateur() throws SQLException{
         System.out.println(" Arrivé dans MenuItemOperateur");
         this.fenetrePartagee =new FenetrePartagee(this,"operateur");
-        
+        System.out.println(" pas de probleme pour fenetre partagee");
         
         //this.main.setMainContent(new FenetrePartagee(this, "machine"));
         

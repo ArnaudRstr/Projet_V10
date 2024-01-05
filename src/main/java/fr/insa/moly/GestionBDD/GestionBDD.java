@@ -969,6 +969,7 @@ public static void updateBrut(Connection connect,int id, String nom, String ref,
 }
 
 public static void addoperateur(Connection connect,String identifiant, String motdepasse,String nom,String prenom,int idatelier,int statut, int tel, String mail,ArrayList<Integer> listtypeoperation)throws SQLException {
+    System.out.print(listtypeoperation.get(0));
     connect.setAutoCommit(false); //stope la mise à jour, elle sera fait à la fin si tout se passe bien
         try ( PreparedStatement cherchedouble = connect.prepareStatement(
                 "select id from operateur where identifiant=? and motdepasse=? and nom=? and prenom=? and idatelier=? and statut=? and tel=? and mail=?")) {
@@ -989,8 +990,7 @@ public static void addoperateur(Connection connect,String identifiant, String mo
             try ( PreparedStatement pst = connect.prepareStatement(
                         "INSERT INTO `operateur` (identifiant,motdepasse,nom,prenom,idatelier,statut,tel,mail) VALUES (?,?,?,?,?,?,?,?);"
 
-            )){
-                    pst.setString(1, nom);
+            ,Statement.RETURN_GENERATED_KEYS)){
                     pst.setString(1, identifiant);
                     pst.setString(2, motdepasse);
                     pst.setString(3, nom);
@@ -1003,10 +1003,12 @@ public static void addoperateur(Connection connect,String identifiant, String mo
                     System.out.println("operateur add");
                     
                     try ( ResultSet rid = pst.getGeneratedKeys()) {
+                        System.out.println("id recupérer");
                         if(rid.next()){
                         int id = rid.getInt(1);
 
                         for(int i=0;i<listtypeoperation.size();i++){
+                            System.out.println("realiseoo va etre appelé");
                             addrealiseoo(connect,id,listtypeoperation.get(i));
                         }
                         System.out.println("realiseoo add");
@@ -1017,9 +1019,11 @@ public static void addoperateur(Connection connect,String identifiant, String mo
                     
                    
             } catch (SQLException ex) {
-            // nothing to do : maybe the constraint was not created
-            System.out.println("nothing");
-            }
+                // nothing to do : maybe the constraint was not created
+                System.out.println("clé non optenu");
+                ex.printStackTrace();
+                System.out.println("Erreur SQL : " + ex.getMessage());
+                }
             
             }
         try { // creation d'un requete 
@@ -1037,6 +1041,7 @@ public static void addoperateur(Connection connect,String identifiant, String mo
 }
 
 public static void updateOperateur(Connection connect,int id,String identifiant, String motdepasse,String nom,String prenom,int idatelier,int statut, int tel, String mail,ArrayList<Integer> listtypeoperation)throws SQLException {
+  
      try {
         connect.setAutoCommit(false);
 
@@ -1054,13 +1059,17 @@ public static void updateOperateur(Connection connect,int id,String identifiant,
             pst.setInt(9, id);
             pst.executeUpdate();
             
-            deleteRealiseoo(connect,"idoperateur",id);
             
+            deleteRealiseoo(connect,"idoperateur",id);
+            if (!listtypeoperation.isEmpty()){
             for(int i=0;i<listtypeoperation.size();i++){
                 System.out.println("addrealise execute");
                             addrealiseoo(connect,id,listtypeoperation.get(i));
                         }
-            
+            }
+            else {
+                System.out.println("list vide");
+            }
             connect.commit();
             System.out.println("Le update a été exécuté avec succès.");
         } catch (SQLException ex) {
@@ -1079,48 +1088,47 @@ public static void updateOperateur(Connection connect,int id,String identifiant,
     }
 }
 
-public static void addoperation(Connection connect,int idtypeoperation, String nom,double duree,String outil,int idmachine)throws SQLException {
-    connect.setAutoCommit(false); //stope la mise à jour, elle sera fait à la fin si tout se passe bien
-        try ( PreparedStatement cherchedouble = connect.prepareStatement(
-                "select id from operation where idtypeoperation=? and nom=? and duree=? and outil=? and idmachine=?")) {
-            cherchedouble.setInt(1, idtypeoperation);
-            cherchedouble.setString(2, nom);
-            cherchedouble.setDouble(3, duree);
-            cherchedouble.setString(4, outil);
-            cherchedouble.setInt(5, idmachine);
-            ResultSet test = cherchedouble.executeQuery();
-            if (test.next()!= false){
-                System.out.println("Attention, il existe déjà");
-            }
-            else{
-            try ( PreparedStatement pst = connect.prepareStatement(
-                        "INSERT INTO `operation` (idtypeoperation,nom,duree,outil,idmachine) VALUES (?,?,?,?,?);"
+public static void addoperation(Connection connect, int idtypeoperation, String nom, double duree, String outil, int idmachine) throws SQLException {
+    connect.setAutoCommit(false);
 
-            )){
+    try (PreparedStatement cherchedouble = connect.prepareStatement(
+            "SELECT id FROM operation WHERE idtypeoperation=? AND nom=? AND duree=? AND outil=? AND idmachine=?")) {
+        cherchedouble.setInt(1, idtypeoperation);
+        cherchedouble.setString(2, nom);
+        cherchedouble.setDouble(3, duree);
+        cherchedouble.setString(4, outil);
+        cherchedouble.setInt(5, idmachine);
+
+        try (ResultSet test = cherchedouble.executeQuery()) {
+            if (test.next()) {
+                System.out.println("Attention, il existe déjà");
+            } else {
+                try (PreparedStatement pst = connect.prepareStatement(
+                        "INSERT INTO operation (idtypeoperation, nom, duree, outil, idmachine) VALUES (?,?,?,?,?)")) {
                     pst.setInt(1, idtypeoperation);
                     pst.setString(2, nom);
                     pst.setDouble(3, duree);
                     pst.setString(4, outil);
                     pst.setInt(5, idmachine);
+
                     pst.executeUpdate();
                     System.out.println("operation add");
-
-            } catch (SQLException ex) {
-            // nothing to do : maybe the constraint was not created
-            System.out.println("nothing");
+                } catch (SQLException ex) {
+                    System.out.println("nothing");
+                }
             }
-            }
-        try { // creation d'un requete 
-            connect.commit(); // valide le refresh
-            System.out.print("le refresh fonctionne") ;
-        } catch (SQLException ex) { // en cas d'erreur on "rollback" on retourne avant 
+        }
+        try {
+            connect.commit();
+            System.out.print("le refresh fonctionne");
+        } catch (SQLException ex) {
             connect.rollback();
             System.out.print("rollback");
             throw ex;
         } finally {
-            connect.setAutoCommit(true);// on remet le refresh automatique
+            connect.setAutoCommit(true);
         }
-        }
+    }
 }
 
 public static void updateOperation(Connection connect,int id, int idtypeoperation, String nom,double duree,String outil,int idmachine)throws SQLException {
@@ -1298,45 +1306,45 @@ public static void updateProduit(Connection connect,int id,String ref,String des
     }
 }
 
-public static void addrealiseoo(Connection connect,int idoperateur,int idtypeoperation)throws SQLException{
+public static void addrealiseoo(Connection connect, int idoperateur, int idtypeoperation) throws SQLException {
+    connect.setAutoCommit(false); // stoppe la mise à jour, elle sera faite à la fin si tout se passe bien
     
-    connect.setAutoCommit(false); //stope la mise à jour, elle sera fait à la fin si tout se passe bien
-        try ( PreparedStatement cherchedouble = connect.prepareStatement(
-                "select id from realiseoo where idoperateur=? and idtypeoperation=?")) {
-            cherchedouble.setInt(1, idoperateur);
-            cherchedouble.setInt(2, idtypeoperation);
-            ResultSet test = cherchedouble.executeQuery();
-            if (test.next()!= false){
-                System.out.println("Attention, il existe déjà");
-                System.out.println("On ne peut pas l'ajouter");
-            }
-            else{
-                System.out.println("existe pas");
-            try ( PreparedStatement pst = connect.prepareStatement(
-                        "INSERT INTO `realiseoo` (idoperateur,idtypeoperation) VALUES (?,?);"
+    try (PreparedStatement cherchedouble = connect.prepareStatement(
+            "SELECT * FROM realiseoo WHERE idoperateur=? AND idtypeoperation=?")) {
+        cherchedouble.setInt(1, idoperateur);
+        cherchedouble.setInt(2, idtypeoperation);
 
-            )){
-                    pst.setInt(1, idoperateur);
-                    pst.setInt(2, idtypeoperation);
-                    pst.executeUpdate();
-                    System.out.println("realiseoo add");
+        ResultSet test = cherchedouble.executeQuery();
 
+        if (!test.next()) {
+            System.out.println("existe pas");
+
+            try (PreparedStatement pst = connect.prepareStatement(
+                    "INSERT INTO realiseoo (idoperateur, idtypeoperation) VALUES (?, ?)")) {
+                pst.setInt(1, idoperateur);
+                pst.setInt(2, idtypeoperation);
+                pst.executeUpdate();
+                System.out.println("realiseoo add");
             } catch (SQLException ex) {
-            // nothing to do : maybe the constraint was not created
-            System.out.println("nothing");
+                // nothing to do: maybe the constraint was not created
+                System.out.println("nothing");
             }
-            }
-        try { // creation d'un requete 
+        } else {
+            System.out.println("Attention, il existe déjà");
+            System.out.println("On ne peut pas l'ajouter");
+        }
+    } finally {
+        try {
             connect.commit(); // valide le refresh
-            System.out.print("le refresh fonctionne realiseoo") ;
-        } catch (SQLException ex) { // en cas d'erreur on "rollback" on retourne avant 
+            System.out.println("le refresh fonctionne realiseoo");
+        } catch (SQLException ex) {
             connect.rollback();
             System.out.print("rollback");
             throw ex;
         } finally {
-            connect.setAutoCommit(true);// on remet le refresh automatique
+            connect.setAutoCommit(true); // on remet le refresh automatique
         }
-}
+    }
 }
 
 public static void addtypeoperation(Connection connect,String nom)throws SQLException{
@@ -1712,22 +1720,14 @@ public static ArrayList listoperateur (Connection connect)throws SQLException{
         System.out.println("arrivé etape 2");
     for (int i=0;i<listoperateur.size();i++){
         ArrayList<Integer> listoperation = new ArrayList();
-        try ( PreparedStatement tabrealisoo = connect.prepareStatement("select idoperation from realiseoo where idoperateur=?")){
-            tabrealisoo.setInt(1, listoperateur.get(i).getId());
-            tabrealisoo.executeUpdate();
-            ResultSet tabr = tabrealisoo.executeQuery();
-            while (tabr.next()!= false){
-                listoperation.add(tabr.getInt("idoperation"));
-            }
+        listoperation=listRealiseooOperateur(connect,listoperateur.get(i).getId());
             listoperateur.get(i).setListoperation(listoperation);
-        }
-        catch (SQLException ex){
-            ;
-        }
+        
         
         
         
             }
+    System.out.println("etape 2 finit");
         try { // creation d'un requete 
             connect.commit(); // valide le refresh
             System.out.println("le refresh fonctionne") ;
@@ -1818,6 +1818,35 @@ public static ArrayList listtypeoperation (Connection connect)throws SQLExceptio
         try { // creation d'un requete 
             connect.commit(); // valide le refresh
             System.out.print("le refresh fonctionne") ;
+        } catch (SQLException ex) { // en cas d'erreur on "rollback" on retourne avant 
+            connect.rollback();
+            System.out.print("rollback");
+            throw ex;
+        } finally {
+            connect.setAutoCommit(true);// on remet le refresh automatique
+        }
+        
+     
+    return listtypeoperation;
+}  
+
+public static ArrayList listRealiseooOperateur (Connection connect,int idoperateur)throws SQLException{
+    ArrayList<Typeoperation> listtypeoperation = new ArrayList();
+    
+    connect.setAutoCommit(false); //stope la mise à jour, elle sera fait à la fin si tout se passe bien
+        try ( PreparedStatement affichetab = connect.prepareStatement(
+                "select idtypeoperation from realiseoo WHERE idoperateur=?")) {
+            affichetab.setInt(1, idoperateur);
+            ResultSet tab = affichetab.executeQuery();
+            while (tab.next()!= false){
+                Typeoperation at = new Typeoperation(connect,tab.getInt("idtypeoperation"));
+                listtypeoperation.add(at);
+            }
+
+            }
+        try { // creation d'un requete 
+            connect.commit(); // valide le refresh
+            System.out.println("le refresh fonctionne dans listrealiseoooperation") ;
         } catch (SQLException ex) { // en cas d'erreur on "rollback" on retourne avant 
             connect.rollback();
             System.out.print("rollback");
