@@ -12,6 +12,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.stream.Collectors;
 
 /**
  *
@@ -69,6 +70,10 @@ public class Operateur {
         }
         
         this.listtypeoperation = GestionBDD.listgammeproduit(connect,id);
+        
+        
+        
+        
         
     } finally {
         try {

@@ -21,11 +21,14 @@ import fr.insa.moly.objet.Machine;
 import fr.insa.moly.objet.Operateur;
 import fr.insa.moly.objet.Operation;
 import fr.insa.moly.objet.Produit;
+import fr.insa.moly.objet.Typeoperation;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 /**
  *
@@ -312,8 +315,16 @@ public class PartiePrincipale extends MyVerticalLayout {
                         .setComparator(Comparator.comparingInt(Operateur::getIdatelier));
               
                 
-                gridOperateurs.addColumn(Operateur::getListtypeoperation).setHeader(new H5("Types d'operations"));
 
+                gridOperateurs.addColumn(operateur -> {
+                    List<Typeoperation> listTypeOperation = operateur.getListtypeoperation();
+                    return listTypeOperation.stream()
+                            .map(Typeoperation::getNom)
+                            .collect(Collectors.joining(", "));
+                })
+                .setHeader(new H5("Types d'opérations"));
+                
+                
                 this.add(gridOperateurs);
                 
                 gridOperateurs.addItemClickListener(event -> {

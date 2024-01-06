@@ -29,7 +29,7 @@ public class Typeoperation {
         try {
         connect.setAutoCommit(false);
 
-        String sql = "select * from atelier WHERE id=?";
+        String sql = "select * from typeoperation WHERE id=?";
         try (PreparedStatement pst = connect.prepareStatement(sql)) {
             pst.setInt(1, id);
             ResultSet resultat = pst.executeQuery();

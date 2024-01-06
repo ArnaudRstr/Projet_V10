@@ -966,8 +966,9 @@ private Button boutonSupprimer;
             
             
                 
-               Div divtypeop = new Div();
+            Div divtypeop = new Div();
             divtypeop.setHeight("350px");
+            
             CheckboxGroup<Typeoperation> cbgtypeop = new CheckboxGroup<>();
             divtypeop.getStyle().set("overflow-y", "auto");
             cbgtypeop.setLabel("Type(s) d'opération(s)");
@@ -978,37 +979,25 @@ private Button boutonSupprimer;
 
             cbgtypeop.setItems(listtemptypop);
             cbgtypeop.addThemeVariants(CheckboxGroupVariant.LUMO_VERTICAL);
-            cbgtypeop.setReadOnly(true);
-            divtypeop.add(cbgtypeop); 
+            //cbgtypeop.setReadOnly(true);
             
-            
+ 
+            ArrayList<Typeoperation> listtypeoperation = operateurtemp.getListtypeoperation();
 
-//            List <Integer> listidselect=operateurtemp.getListtypeoperation();
-//            
-//            List<Typeoperation> selectedTypeoperations = (List<Typeoperation>) listtemptypop.stream()
-//                    
-//                    
-//                .filter(typeoperation -> listidselect.contains(((Typeoperation)typeoperation).getId()))
-//                .collect(Collectors.toList());
+     
+            String typesOperations = listtypeoperation.stream()
+            .map(Typeoperation::getNom) // Supposons que Typeoperation a une méthode getNom()
+            .collect(Collectors.joining(", "));
+           System.out.println("Types d'opérations : " + typesOperations);
+    
+            cbgtypeop.setItems(listtypeoperation);    
+            cbgtypeop.select(listtypeoperation);    
+            cbgtypeop.select(listtypeoperation.get(0));
             
-               ArrayList<Integer> listtypeoperation = operateurtemp.getListtypeoperation();
-               
-               List<Integer> listidselect =  operateurtemp.getListtypeoperation();
-               
-            System.out.println("Liste des types operations de l'operateur"+listtypeoperation);
-            System.out.println("Le type de la liste est : " + listtypeoperation.getClass().getSimpleName());
-            System.out.println("Le type d'un élément de liste est : " + listtypeoperation.get(0).getClass().getSimpleName());
             
-        List<Typeoperation> selectedTypeoperations = listtemptypop.stream()
-            .filter(typeoperation -> listidselect.contains((typeoperation).getId()))
-            .collect(Collectors.toList()); 
             
-        
-        
-            //cbgtypeop.select(selectedTypeoperations.toArray(new Typeoperation[0]));
-            cbgtypeop.select(selectedTypeoperations);    
-                
-              contenu.add(cbgtypeop ); 
+            divtypeop.add(cbgtypeop); 
+            contenu.add(divtypeop); 
                 
                 
                 
