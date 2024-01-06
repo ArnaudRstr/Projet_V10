@@ -35,6 +35,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import static fr.insa.moly.GestionBDD.GestionBDD.listAtelier;
+import java.util.Set;
 
 
 /**
@@ -979,22 +980,26 @@ private Button boutonSupprimer;
 
             cbgtypeop.setItems(listtemptypop);
             cbgtypeop.addThemeVariants(CheckboxGroupVariant.LUMO_VERTICAL);
-            //cbgtypeop.setReadOnly(true);
+            cbgtypeop.setReadOnly(true);
             
  
-            ArrayList<Typeoperation> listtypeoperation = operateurtemp.getListtypeoperation();
+            ArrayList<Typeoperation> listtypeoperationoperateur = operateurtemp.getListtypeoperation();
 
-     
-            String typesOperations = listtypeoperation.stream()
-            .map(Typeoperation::getNom) // Supposons que Typeoperation a une méthode getNom()
-            .collect(Collectors.joining(", "));
-           System.out.println("Types d'opérations : " + typesOperations);
+            
+            cbgtypeop.setItems(listtemptypop);    
+
+            for (int i=0;i<listtemptypop.size();i++){
+                
+                for(int j =0;j<listtypeoperationoperateur.size();j++){
+                    
+                    if(listtemptypop.get(i).getId()==listtypeoperationoperateur.get(j).getId()){
+                        
+                        cbgtypeop.select(listtemptypop.get(i));
+                    }
+                }
+            }
     
-            cbgtypeop.setItems(listtypeoperation);    
-            cbgtypeop.select(listtypeoperation);    
-            cbgtypeop.select(listtypeoperation.get(0));
-            
-            
+
             
             divtypeop.add(cbgtypeop); 
             contenu.add(divtypeop); 
@@ -1073,11 +1078,24 @@ private Button boutonSupprimer;
             
            final int idatelier =idateliertemp; 
             
+           
+           
+           
+           
+           
+           
+           
+           Set<Typeoperation> selectedItems = cbgtypeop.getSelectedItems();
+            ArrayList<Typeoperation> listtypeop = new ArrayList<>(selectedItems);
+           
+           
+           
+           
+           
+           
+           
             
-            ArrayList <Integer> listidtest = new ArrayList();
             
-            listidtest.add(1);
-            listidtest.add(13);
             
             
             Notification.show("La méthode d'enregistrement n'est pas encore faite");
@@ -1086,7 +1104,7 @@ private Button boutonSupprimer;
                     //this.controleur.getVuePrincipale().getGestionBDD().updateOperateur(this.controleur.getVuePrincipale().getGestionBDD().conn,operateurtemp.getId(),operateurtemp.getIdentifiant(),operateurtemp.getMotdepasse(),operateurtemp.getNom(),operateurtemp.getPrenom(),idateliertemp,idstatut,operateurtemp.getTel(),operateurtemp.getMail(),operateurtemp.getListtypeoperation());
               
             
-                    this.controleur.getVuePrincipale().getGestionBDD().updateOperateur(this.controleur.getVuePrincipale().getGestionBDD().conn,id,identifiant,mdp,nom,prenom,idateliertemp,idstatutchoix,tel,mail,listidtest);
+                    this.controleur.getVuePrincipale().getGestionBDD().updateOperateur(this.controleur.getVuePrincipale().getGestionBDD().conn,id,identifiant,mdp,nom,prenom,idateliertemp,idstatutchoix,tel,mail,listtypeop);
 
             
             } catch (SQLException ex) {
