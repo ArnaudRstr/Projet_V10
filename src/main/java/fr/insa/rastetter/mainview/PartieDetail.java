@@ -900,13 +900,16 @@ private Button boutonSupprimer;
              div.setHeight("30px");
             Div div5 = new Div();
             div5.setHeight("20px");
-             
-            H2 hnom = new H2(operateurtemp.getNom());
+            Div div4 = new Div();
+            div4.setHeight("20px"); 
+            
+            H2 hnom = new H2(operateurtemp.getNom()+" "+operateurtemp.getPrenom());
+            
             
             H3 ttel = new H3("Téléphone : +33 0"+String.valueOf(operateurtemp.getTel()));
             H3 tmail = new H3("Mail : "+String.valueOf(operateurtemp.getMail()));
 
-            contenu.add(div,ttel,div5,tmail,cbbstatut);
+            contenu.add(div,hnom,div4,ttel,div5,tmail,cbbstatut);
             
             
             
@@ -1020,11 +1023,10 @@ private Button boutonSupprimer;
             cbbstatut.setReadOnly(false);
             cbbatelier.setReadOnly(false);
             cbgtypeop.setReadOnly(false);
-                        
-            
-            
+
             
             });
+            
             
             boutonEnregistrer.addClickListener(event -> {
                     

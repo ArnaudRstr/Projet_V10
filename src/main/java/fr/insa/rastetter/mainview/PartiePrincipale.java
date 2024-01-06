@@ -328,7 +328,7 @@ public class PartiePrincipale extends MyVerticalLayout {
                 this.add(gridOperateurs);
                 
                 gridOperateurs.addItemClickListener(event -> {
-                    Notification.show("Ligne sélectionnée"+event.getItem().getId());
+                    Notification.show("Ligne sélectionnée "+event.getItem().getId());
                    
                 Operateur opTemp = event.getItem();
                 
