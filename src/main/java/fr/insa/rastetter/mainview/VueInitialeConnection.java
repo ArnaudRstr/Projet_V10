@@ -4,12 +4,14 @@
  */
 package fr.insa.rastetter.mainview;
 
+import com.vaadin.flow.component.Text;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.H5;
 import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.login.LoginForm;
 import com.vaadin.flow.component.login.LoginI18n;
+import com.vaadin.flow.component.login.LoginOverlay;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.server.StreamResource;
@@ -122,8 +124,6 @@ public class VueInitialeConnection extends MyVerticalLayout{
         i18nForm .setUsername("Nom d'utilisateur");
         i18nForm .setPassword("Mot de passe");
         i18nForm .setSubmit("Se connecter");
-        
-        
         i18nForm .setForgotPassword("");
         i18n .setForm(i18nForm );
 
@@ -132,21 +132,25 @@ public class VueInitialeConnection extends MyVerticalLayout{
         i18nErrorMessage.setMessage(
                 "Vérifiez que le nom d'utilisateur et le mot de passe sont corrects et réessayez.");
         i18n.setErrorMessage(i18nErrorMessage);
+        i18n.setAdditionalInformation("Si vous rencontrez des problèmes de connexion, contactez l'admin sidonie.moly@leon.fr ou arnaud.rastetter@leon.fr ");   
 
+        
+        
         LoginForm loginForm = new LoginForm();
         loginForm.setI18n(i18n);
-        i18n.setAdditionalInformation(
-        "Contactez l'admin sidonie.moly@leon.fr ou arnaud.rastetter@leon.fr si vous rencontrez des problèmes de connexion");   
         loginForm.setEnabled(true);
+        
+        
+        
         
         //On crée un VL pour le login (car le composant login change de taille selon les actions, et décale donc tout le reste)
         MyVerticalLayout vlLogin = new MyVerticalLayout(); 
         vlLogin.setHeight("500px");
         vlLogin.add(loginForm);
+        
         //vlLogin.getStyle().set("border", "1px solid #000000");
         vlLogin.setAlignItems(FlexComponent.Alignment.CENTER);
         vlLogin.getStyle().set("padding", "0px");
-        
         
         
         
@@ -155,37 +159,38 @@ public class VueInitialeConnection extends MyVerticalLayout{
             
             String login = event.getUsername();
             String mdp = event.getPassword();
-            System.out.println(login+mdp);
+            System.out.println(login+" " +mdp);
             
             //Pour se connecter sans login valide 
-            try {
-                this.main.getControleur().boutonConnect();
-            } catch (SQLException ex) {
-                Logger.getLogger(VueInitialeConnection.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            
-            
-            //Pour se connecter avec le login et le mdp nécessaire
 //            try {
-//                //On va tester de se connecter ici
-//                
-//                if (connectionutilisateur(this.controleur.getVuePrincipale().getGestionBDD().getConn(),login,mdp)==true){
-//                    try {
-//                        this.main.getControleur().boutonConnect();
-//                    } catch (SQLException ex) {
-//                        System.out.println("impossible de se connecter");
-//                    }
-//                    
-//                    
-//                }
-//                else{
-//                    Notification.show("Connection impossible");
-//                    loginForm.setError(true);
-                    //loginForm.setEnabled(true);
-//                }
+//                this.main.getControleur().boutonConnect();
 //            } catch (SQLException ex) {
 //                Logger.getLogger(VueInitialeConnection.class.getName()).log(Level.SEVERE, null, ex);
 //            }
+            
+            
+            //Pour se connecter avec le login et le mdp nécessaire
+            try {
+                //On va tester de se connecter ici
+                
+                if (connectionutilisateur(this.controleur.getVuePrincipale().getGestionBDD().getConn(),login,mdp)==true){
+                    try {
+                        System.out.println("Identifiants corrects");
+                        this.main.getControleur().boutonConnect();
+                    } catch (SQLException ex) {
+                        System.out.println("impossible de se connecter");
+                    }
+                    this.controleur.setIdentifiantUtilisateur(login);
+                    
+                }
+                else{
+                    Notification.show("Connection impossible");
+                    loginForm.setError(true);
+                    loginForm.setEnabled(true);
+                }
+            } catch (SQLException ex) {
+                Logger.getLogger(VueInitialeConnection.class.getName()).log(Level.SEVERE, null, ex);
+            }
 
             
             
@@ -195,6 +200,7 @@ public class VueInitialeConnection extends MyVerticalLayout{
         
         
         this.VLcontenu.add(vlLogin);
+        //this.add(new Text("Si vous rencontrez des problèmes de connexion, contactez l'admin sidonie.moly@leon.fr ou arnaud.rastetter@leon.fr "));
         
 
         

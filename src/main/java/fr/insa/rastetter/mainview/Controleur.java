@@ -31,6 +31,8 @@ import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import static fr.insa.moly.GestionBDD.GestionBDD.listAtelier;
+import static fr.insa.moly.GestionBDD.GestionBDD.listoperateur;
+import fr.insa.moly.objet.Operateur;
 
 /**
  *
@@ -46,6 +48,9 @@ public class Controleur {
     private int etatAtelier;
     private String etatFenetre;
     
+    
+    private String identifiantutilisateur;
+    
     private FenetrePartagee fenetrePartagee;
     
     private FenetreEntreeDonnees fenetreEntreeDonnees;
@@ -58,6 +63,8 @@ public class Controleur {
         this.etatAtelier = etat;
         this.etatFenetre = etatFenetre;
         this.fenetrePartagee=new FenetrePartagee(this);
+        this.identifiantutilisateur="";
+        
                
     }
     
@@ -90,7 +97,7 @@ public class Controleur {
     }
     
     
-    public void MenuItemInfosCompte() {
+    public void MenuItemInfosCompte() throws SQLException {
         Notification.show("Deconnexion via controleur");
         
         Dialog dcompte = new Dialog();
@@ -103,24 +110,53 @@ public class Controleur {
         dcompte.setWidth("30vw");
         
         //On récupèrera les infos de la personne connectée ici
+        ArrayList <Operateur> listoperateurs = new ArrayList();
         
+        listoperateurs = listoperateur (this.main.getGestionBDD().getConn());
+        
+        //On recherche la personne grâce à l'identifiant (attribut du controleur)
+        int i =0;
+        boolean valide = false;
+        
+        Operateur operateurconnecte = new Operateur();
+        while(i<listoperateurs.size()||valide == false){
+            if(listoperateurs.get(i).getIdentifiant().equals(this.identifiantutilisateur)){
+                operateurconnecte= (Operateur) listoperateurs.get(i);
+                valide = true;
+            }
+            i++;
+            
+        }
+        
+        
+        
+        
+        this.identifiantutilisateur=operateurconnecte.getIdentifiant();
         
         TextField tfnom = new TextField("Nom");
         tfnom.setReadOnly(true);
         tfnom.setWidthFull();
+        tfnom.setValue(operateurconnecte.getNom());
         TextField tfprenom = new TextField("Prénom");
         tfprenom.setReadOnly(true);
+        tfprenom.setValue(operateurconnecte.getPrenom());
         tfprenom.setWidthFull();
         TextField tfmdp = new TextField("Mot de passe");
         tfmdp.setReadOnly(true);
+        tfmdp.setValue(operateurconnecte.getMotdepasse());
         tfmdp.setWidthFull();
         TextField tfmail = new TextField("Adresse mail");
         tfmail.setReadOnly(true);
+        tfmail.setValue(operateurconnecte.getMail());
         tfmail.setWidthFull();
         TextField tfidentifiant = new TextField("Identifiant");
         tfidentifiant.setReadOnly(true);
         tfidentifiant.setWidthFull();
-        
+        tfidentifiant.setValue(operateurconnecte.getIdentifiant());
+        NumberField nftel=new NumberField("Téléphone");
+        nftel.setReadOnly(true);
+        nftel.setWidthFull();
+        nftel.setValue((double)operateurconnecte.getTel());
         
         
         
@@ -145,12 +181,15 @@ public class Controleur {
         
         dcompte.setHeaderTitle("Informations du compte");
         dcompte.getHeader().add(boutonFermer);
-        vlcontenu.add(boutonModifier,tfnom,tfprenom,tfmdp,tfmail,tfidentifiant);
-        
+        vlcontenu.add(boutonModifier,tfnom,tfprenom,nftel,tfmail,tfidentifiant,tfmdp);
+        vlcontenu.setSpacing(false);
         dcompte.add(vlcontenu);
         dcompte.open();
 
-        
+        final int id=operateurconnecte.getId();
+        final int idateliertemp = operateurconnecte.getIdatelier();
+        final int idstatutchoix = operateurconnecte.getStatut();
+        final ArrayList <Typeoperation> listtypeop = operateurconnecte.getListtypeoperation();
         
         
         boutonModifier.addClickListener(event -> {
@@ -158,7 +197,8 @@ public class Controleur {
             tfprenom.setReadOnly(false);
             tfmdp.setReadOnly(false);
             tfmail.setReadOnly(false);
-            tfidentifiant.setReadOnly(false);      
+            tfidentifiant.setReadOnly(false);  
+            nftel.setReadOnly(false);
                 
             });
         
@@ -169,6 +209,7 @@ public class Controleur {
             tfmdp.setReadOnly(true);
             tfmail.setReadOnly(true);
             tfidentifiant.setReadOnly(true);  
+            nftel.setReadOnly(true);
                 
             });
         
@@ -178,11 +219,18 @@ public class Controleur {
             tfprenom.setReadOnly(true);
             tfmdp.setReadOnly(true);
             tfmail.setReadOnly(true);
-            tfidentifiant.setReadOnly(true);          
+            tfidentifiant.setReadOnly(true);  
+            nftel.setReadOnly(true);
+            
+            
                 
+            try {
+                this.getVuePrincipale().getGestionBDD().updateOperateur(this.getVuePrincipale().getGestionBDD().conn,id,tfidentifiant.getValue(),tfmdp.getValue(),tfnom.getValue(),tfprenom.getValue(),idateliertemp,idstatutchoix,(int) Math.round(nftel.getValue()),tfmail.getValue(),listtypeop);
+            } catch (SQLException ex) {
+                System.out.println("Pas reussi à modifier l'operateur");
+            }
             
-            Notification.show("Pas encore d'enregistrement des modifs");
-            
+                        
             
             dcompte.close();
             });
@@ -790,4 +838,11 @@ public class Controleur {
     }
     
     
+    public String getIdentifiantUtilisateur(){
+        return this.identifiantutilisateur;
+    }
+    
+    public void setIdentifiantUtilisateur(String identifiant){
+        this.identifiantutilisateur=identifiant;
+    }
 }

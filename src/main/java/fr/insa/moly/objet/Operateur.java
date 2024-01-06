@@ -41,6 +41,10 @@ public class Operateur {
         this.mail = mail;
         this.listtypeoperation = listtypeoperation;
     }
+    
+    public Operateur(){
+        this.id=-1;
+    }
 
     public Operateur(Connection connect,int id)throws SQLException {
        this.id=id;

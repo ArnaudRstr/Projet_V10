@@ -257,7 +257,11 @@ public class Entete extends MyHorizontalLayout {
         
         menuItemInfosCompte.addClickListener(event -> {
             Notification.show("Infos compte selectionné !");
-            this.main.getControleur().MenuItemInfosCompte();
+            try {
+                this.main.getControleur().MenuItemInfosCompte();
+            } catch (SQLException ex) {
+                System.out.println("Entete : pas reussi à aller dans MenuIteminfoscompte");
+            }
         });
         
         

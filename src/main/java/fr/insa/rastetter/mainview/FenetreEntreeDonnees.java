@@ -296,6 +296,9 @@ public class FenetreEntreeDonnees extends Dialog{
        
        
        
+    
+    
+    
        if (objet=="produit"){
            
            System.out.println("Creation de produit");
@@ -306,7 +309,7 @@ public class FenetreEntreeDonnees extends Dialog{
             this.des = new TextArea("Description");
             TextField tfref = new TextField("Référence");
             NumberField nbidbrut = new NumberField("Identifiant du brut");
-            
+            this.setWidth("40vw");
 
 
 
