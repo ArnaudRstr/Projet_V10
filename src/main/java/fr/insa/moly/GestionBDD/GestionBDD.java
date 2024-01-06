@@ -1234,7 +1234,7 @@ public static void updateOrdre(Connection connect,int id, int idopavant, int ido
 }
 
 //Attention cette fonction ne prend pas en compte l'ajoue de la gamme voir addordre
-public static void addproduit(Connection connect,String ref,String des,int idbrut)throws SQLException{
+public static void addproduit(Connection connect,String ref,String des,int idbrut, ArrayList<Operation> listoperation)throws SQLException{
     
     connect.setAutoCommit(false); //stope la mise à jour, elle sera fait à la fin si tout se passe bien
         try ( PreparedStatement cherchedouble = connect.prepareStatement(
@@ -1249,7 +1249,7 @@ public static void addproduit(Connection connect,String ref,String des,int idbru
             }
             else{
             try ( PreparedStatement pst = connect.prepareStatement(
-                        "INSERT INTO `produit` (ref,des,idbrut) VALUES (?,?,?);"
+                        "INSERT INTO `produit` (ref,des,idbrut) VALUES (?,?,?);",Statement.RETURN_GENERATED_KEYS
 
             )){
                     pst.setString(1, ref);
@@ -1257,6 +1257,27 @@ public static void addproduit(Connection connect,String ref,String des,int idbru
                     pst.setInt(3, idbrut);
                     pst.executeUpdate();
                     System.out.println("produit add");
+                    try ( ResultSet rid = pst.getGeneratedKeys()) {
+                        System.out.println("id recupérer");
+                        if(rid.next()){
+                        int id = rid.getInt(1);
+                        
+                        Gamme gam =new Gamme(listoperation,id);
+                        addgamme(connect,gam);
+
+                       
+                        }
+                        else{
+                            System.out.println("addrealiseoo not read");
+                        }
+                    
+                   
+            } catch (SQLException ex) {
+                // nothing to do : maybe the constraint was not created
+                System.out.println("clé non optenu");
+                ex.printStackTrace();
+                System.out.println("Erreur SQL : " + ex.getMessage());
+                }
 
             } catch (SQLException ex) {
             // nothing to do : maybe the constraint was not created
