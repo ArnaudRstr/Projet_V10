@@ -115,13 +115,7 @@ public class Operation {
     public String getnomtable(){
       return   "operation";
     }
-    
-    public ArrayList getGammechild(Connection connect)throws SQLException{
-        ArrayList<Integer> listidchild = GestionBDD.listchildgamme(connect,this.id); 
-       
-        
-        return listidchild;
-    }
+
     
     public ArrayList getGrandChildList(Connection connect)throws SQLException{
         ArrayList<String> listIdGrandChild = new ArrayList();

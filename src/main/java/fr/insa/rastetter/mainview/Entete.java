@@ -19,13 +19,13 @@ import com.vaadin.flow.component.menubar.MenuBar;
 import com.vaadin.flow.component.notification.Notification;
 import static com.vaadin.flow.component.orderedlayout.FlexComponent.Alignment.CENTER;
 import com.vaadin.flow.server.StreamResource;
-import static fr.insa.moly.GestionBDD.GestionBDD.listaltelier;
 import fr.insa.moly.objet.Atelier;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import static fr.insa.moly.GestionBDD.GestionBDD.listAtelier;
 /**
  *
  * @author arnaud
@@ -169,7 +169,7 @@ public class Entete extends MyHorizontalLayout {
  
         
         
-        this.setComboBoxAtelier(listaltelier(this.main.getGestionBDD().conn));
+        this.setComboBoxAtelier(listAtelier(this.main.getGestionBDD().conn));
         
         
         

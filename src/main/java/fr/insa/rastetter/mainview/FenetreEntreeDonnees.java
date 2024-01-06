@@ -20,7 +20,6 @@ import com.vaadin.flow.component.checkbox.CheckboxGroup;
 import com.vaadin.flow.component.checkbox.CheckboxGroupVariant;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.orderedlayout.FlexComponent.Alignment;
-import static fr.insa.moly.GestionBDD.GestionBDD.listaltelier;
 import static fr.insa.moly.GestionBDD.GestionBDD.listmachine;
 import static fr.insa.moly.GestionBDD.GestionBDD.listtypeoperation;
 import fr.insa.moly.objet.Atelier;
@@ -34,6 +33,7 @@ import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
+import static fr.insa.moly.GestionBDD.GestionBDD.listAtelier;
 
 /**
  *
@@ -143,7 +143,7 @@ public class FenetreEntreeDonnees extends Dialog{
             
             
             try {
-                this.controleur.getVuePrincipale().getEntete().setComboBoxAtelier(listaltelier(this.controleur.getVuePrincipale().getGestionBDD().conn));
+                this.controleur.getVuePrincipale().getEntete().setComboBoxAtelier(listAtelier(this.controleur.getVuePrincipale().getGestionBDD().conn));
             } catch (SQLException ex) {
                 System.out.println("Impossible de mettre à jour le combobox");
             }
@@ -435,7 +435,7 @@ public class FenetreEntreeDonnees extends Dialog{
             
             ComboBox cbbatelier = new ComboBox();
             ArrayList <Atelier> listTemp = new ArrayList();
-            listTemp = listaltelier (this.controleur.getVuePrincipale().getGestionBDD().conn);
+            listTemp = listAtelier (this.controleur.getVuePrincipale().getGestionBDD().conn);
       
             ArrayList <String> listNomAtelier = new ArrayList<>();
 
