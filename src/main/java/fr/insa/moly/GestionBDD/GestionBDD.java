@@ -1203,7 +1203,7 @@ public static void addordre(Connection connect,int idopavant, int idopapres,int 
         }
 }
 
-
+//ne pas utiliser
 public static void updateOrdre(Connection connect,int id, int idopavant, int idopapres,int idproduit)throws SQLException {
      try {
         connect.setAutoCommit(false);
@@ -1298,7 +1298,7 @@ public static void addproduit(Connection connect,String ref,String des,int idbru
 }
 
 //Attention cette fonction ne prend pas en compte l'update de la gamme voir updateOrdre
-public static void updateProduit(Connection connect,int id,String ref,String des,int idbrut)throws SQLException {
+public static void updateProduit(Connection connect,int id,String ref,String des,int idbrut,ArrayList<Operation> listoperation)throws SQLException {
      try {
         connect.setAutoCommit(false);
 
@@ -1325,6 +1325,10 @@ public static void updateProduit(Connection connect,int id,String ref,String des
             System.err.println("Erreur lors de la gestion des ressources : " + ex.getMessage());
         }
     }
+    
+     deleteOrdre(connect,id);
+     Gamme gam =new Gamme(listoperation,id);
+     addgamme(connect,gam);
 }
 
 public static void addrealiseoo(Connection connect, int idoperateur, int idtypeoperation) throws SQLException {
@@ -1539,7 +1543,7 @@ public static void deleteOrdre(Connection connect, int idproduit) throws SQLExce
     try {
         connect.setAutoCommit(false);
 
-        String sql = "DELETE FROM realiseoo WHERE idproduit=?";
+        String sql = "DELETE FROM ordre WHERE idproduit=?";
         try (PreparedStatement pst = connect.prepareStatement(sql)) {
             pst.setInt(1, idproduit);
             pst.executeUpdate();
