@@ -1100,16 +1100,16 @@ private Button boutonSupprimer;
             
             Notification.show("La méthode d'enregistrement n'est pas encore faite");
             
-            try {
-                    //this.controleur.getVuePrincipale().getGestionBDD().updateOperateur(this.controleur.getVuePrincipale().getGestionBDD().conn,operateurtemp.getId(),operateurtemp.getIdentifiant(),operateurtemp.getMotdepasse(),operateurtemp.getNom(),operateurtemp.getPrenom(),idateliertemp,idstatut,operateurtemp.getTel(),operateurtemp.getMail(),operateurtemp.getListtypeoperation());
-              
-            
-                    this.controleur.getVuePrincipale().getGestionBDD().updateOperateur(this.controleur.getVuePrincipale().getGestionBDD().conn,id,identifiant,mdp,nom,prenom,idateliertemp,idstatutchoix,tel,mail,listtypeop);
-
-            
-            } catch (SQLException ex) {
-                    Logger.getLogger(PartieDetail.class.getName()).log(Level.SEVERE, null, ex);
-                }
+//            try {
+//                    //this.controleur.getVuePrincipale().getGestionBDD().updateOperateur(this.controleur.getVuePrincipale().getGestionBDD().conn,operateurtemp.getId(),operateurtemp.getIdentifiant(),operateurtemp.getMotdepasse(),operateurtemp.getNom(),operateurtemp.getPrenom(),idateliertemp,idstatut,operateurtemp.getTel(),operateurtemp.getMail(),operateurtemp.getListtypeoperation());
+//              
+//            
+//                    this.controleur.getVuePrincipale().getGestionBDD().updateOperateur(this.controleur.getVuePrincipale().getGestionBDD().conn,id,identifiant,mdp,nom,prenom,idateliertemp,idstatutchoix,tel,mail,listtypeop);
+//
+//            
+//            } catch (SQLException ex) {
+//                    Logger.getLogger(PartieDetail.class.getName()).log(Level.SEVERE, null, ex);
+//                }
             
                 try {
                     this.controleur.MenuItemOperateur();
