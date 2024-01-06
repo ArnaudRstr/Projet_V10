@@ -13,6 +13,7 @@ import com.vaadin.flow.component.html.H5;
 import com.vaadin.flow.component.html.Paragraph;
 import com.vaadin.flow.component.menubar.MenuBar;
 import com.vaadin.flow.component.notification.Notification;
+import fr.insa.moly.GestionBDD.GestionBDD;
 import static fr.insa.moly.GestionBDD.GestionBDD.listproduit;
 import fr.insa.moly.objet.Atelier;
 import fr.insa.moly.objet.Brut;
@@ -270,7 +271,7 @@ public class PartiePrincipale extends MyVerticalLayout {
             //this.add(new H2("Bruts"));
             ArrayList <Operateur> operateurstemp = new ArrayList();
             System.out.println("Etat du controleur avant création de la machine:"+this.controleur.getEtatAtelier());
-            operateurstemp = this.controleur.getVuePrincipale().getGestionBDD().listoperateur(this.controleur.getVuePrincipale().getGestionBDD().conn);
+            operateurstemp = GestionBDD.listoperateur(this.controleur.getVuePrincipale().getGestionBDD().conn);
             
             
             int index =0;
@@ -282,6 +283,7 @@ public class PartiePrincipale extends MyVerticalLayout {
             }
             
             else{
+                
                 Text nbelements = new Text(operateurstemp.size()+" operateur(s)");
                 this.add(nbelements);
                 this.gridOperateurs= new Grid<>();
@@ -299,7 +301,9 @@ public class PartiePrincipale extends MyVerticalLayout {
                 
                 gridOperateurs.addColumn(operateur -> {
                 try {
+                    
                     return operateur.getAtelierString(this.controleur);
+                    
                 } catch (SQLException ex) {
                     Logger.getLogger(PartiePrincipale.class.getName()).log(Level.SEVERE, null, ex);
                     return null; // Retourne quelque chose de convenable en cas d'erreur
