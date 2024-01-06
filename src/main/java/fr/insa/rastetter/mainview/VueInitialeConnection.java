@@ -5,9 +5,6 @@
 package fr.insa.rastetter.mainview;
 
 import com.vaadin.flow.component.button.Button;
-import com.vaadin.flow.component.charts.model.Tooltip;
-import com.vaadin.flow.component.html.Div;
-import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.component.html.H5;
 import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.html.Span;
@@ -22,6 +19,8 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import fr.insa.moly.GestionBDD.GestionBDD;
+import static fr.insa.moly.GestionBDD.GestionBDD.connectionutilisateur;
 
 
 /**
@@ -33,13 +32,14 @@ public class VueInitialeConnection extends MyVerticalLayout{
     public VuePrincipale main;
     public MyHorizontalLayout HLBoutons;
     public MyVerticalLayout VLcontenu;
+    public Controleur controleur;
     
     private Button connectButton;
     
-    public VueInitialeConnection(VuePrincipale main){
+    public VueInitialeConnection(VuePrincipale main, Controleur controleur){
         
         this.main = main;
-        
+        this.controleur = controleur;
 
         
         this.getStyle().set("padding", "0px");
@@ -124,7 +124,7 @@ public class VueInitialeConnection extends MyVerticalLayout{
         i18nForm .setSubmit("Se connecter");
         
         
-        i18nForm .setForgotPassword("Mot de passe oublié?");
+        i18nForm .setForgotPassword("");
         i18n .setForm(i18nForm );
 
         LoginI18n.ErrorMessage i18nErrorMessage = i18n.getErrorMessage();
@@ -135,7 +135,10 @@ public class VueInitialeConnection extends MyVerticalLayout{
 
         LoginForm loginForm = new LoginForm();
         loginForm.setI18n(i18n);
-              
+        i18n.setAdditionalInformation(
+        "Contactez l'admin sidonie.moly@leon.fr ou arnaud.rastetter@leon.fr si vous rencontrez des problèmes de connexion");   
+        loginForm.setEnabled(true);
+        
         //On crée un VL pour le login (car le composant login change de taille selon les actions, et décale donc tout le reste)
         MyVerticalLayout vlLogin = new MyVerticalLayout(); 
         vlLogin.setHeight("500px");
@@ -145,21 +148,46 @@ public class VueInitialeConnection extends MyVerticalLayout{
         vlLogin.getStyle().set("padding", "0px");
         
         
+        
+        
+        //CONNEXION ICI
         loginForm.addLoginListener(event -> {
             
-            String nomutilisateur = event.getUsername();
-            String motdepasse = event.getPassword();
-            System.out.println(nomutilisateur);
+            String login = event.getUsername();
+            String mdp = event.getPassword();
+            System.out.println(login+mdp);
             
-            //On va tester de se connecter ici
-            
-            
-            //EN attendant on autorise la connection avec tout texte => on ajoute l'action de l'autre bouton
+            //Pour se connecter sans login valide 
             try {
                 this.main.getControleur().boutonConnect();
             } catch (SQLException ex) {
                 Logger.getLogger(VueInitialeConnection.class.getName()).log(Level.SEVERE, null, ex);
             }
+            
+            
+            //Pour se connecter avec le login et le mdp nécessaire
+//            try {
+//                //On va tester de se connecter ici
+//                
+//                if (connectionutilisateur(this.controleur.getVuePrincipale().getGestionBDD().getConn(),login,mdp)==true){
+//                    try {
+//                        this.main.getControleur().boutonConnect();
+//                    } catch (SQLException ex) {
+//                        System.out.println("impossible de se connecter");
+//                    }
+//                    
+//                    
+//                }
+//                else{
+//                    Notification.show("Connection impossible");
+//                    loginForm.setError(true);
+                    //loginForm.setEnabled(true);
+//                }
+//            } catch (SQLException ex) {
+//                Logger.getLogger(VueInitialeConnection.class.getName()).log(Level.SEVERE, null, ex);
+//            }
+
+            
             
         });
         

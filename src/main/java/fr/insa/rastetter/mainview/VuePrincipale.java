@@ -60,7 +60,9 @@ public class VuePrincipale extends MyVerticalLayout {
         
         
         
-        this.setMainContent(new VueInitialeConnection(this));
+        
+        
+        this.setMainContent(new VueInitialeConnection(this,this.controleur));
         
         
         

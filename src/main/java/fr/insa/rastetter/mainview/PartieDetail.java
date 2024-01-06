@@ -347,13 +347,17 @@ private Button boutonSupprimer;
         }
         
         
+        
+        
+        
+        
+        
+        
+        
         if (typeobjet == "produit"){
             contenu.add(listboutons);
             this.add(contenu);
-            MyHorizontalLayout hlref = new MyHorizontalLayout();
-            MyHorizontalLayout hlid = new MyHorizontalLayout();
-            MyHorizontalLayout hldes = new MyHorizontalLayout();
-            MyHorizontalLayout hlidbut = new MyHorizontalLayout();
+            
             
             Produit produittemp = (Produit) object;
             

@@ -82,7 +82,7 @@ public class Controleur {
         
         //ICI il faudra déconnecter l'utilisateur
         
-        this.main.setMainContent(new VueInitialeConnection(this.main));
+        this.main.setMainContent(new VueInitialeConnection(this.main,this));
         this.main.entete.removeAll();
         this.main.setEntete(new Entete());
         
