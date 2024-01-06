@@ -171,6 +171,7 @@ public class Operateur {
     }
 
     public ArrayList<Integer> getListtypeoperation() {
+
         return listtypeoperation;
     }
 

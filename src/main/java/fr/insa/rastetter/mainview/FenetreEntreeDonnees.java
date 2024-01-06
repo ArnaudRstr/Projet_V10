@@ -573,10 +573,11 @@ public class FenetreEntreeDonnees extends Dialog{
            ArrayList<Integer> listId = new ArrayList<>(selected);
            
            System.out.println(listId);
+           
            ArrayList <Integer>listidtest = new ArrayList();
            
-           listidtest.add(1);
-           listidtest.add(13);
+           listidtest.add((int)1);
+           listidtest.add((int)13);
             
             
             this.close();
@@ -587,13 +588,17 @@ public class FenetreEntreeDonnees extends Dialog{
                    
                    //this.controleur.getVuePrincipale().getGestionBDD().addoperateur(this.controleur.getVuePrincipale().getGestionBDD().conn,"identifiant","mdp","martin","martine",2,0,1,"mail",listidtypeop);
 
-                   this.controleur.MenuItemOperateur();
                    
-                   System.out.println("L'operateur devrait être créé");
                } catch (SQLException ex) {
                    System.out.print("Fenêtre entrée de donnée : erreur lors de l'ajout de l'opérateur");
                }
-  
+                try {
+                    this.controleur.MenuItemOperateur();
+                } catch (SQLException ex) {
+                    System.out.println("Erreur Fenetre entrée de donnée : pas reussi à actualiser la page");
+                }
+                   
+                   System.out.println("L'operateur devrait être créé");
         });
            
            

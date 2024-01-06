@@ -991,15 +991,16 @@ private Button boutonSupprimer;
 //                .filter(typeoperation -> listidselect.contains(((Typeoperation)typeoperation).getId()))
 //                .collect(Collectors.toList());
             
-
-               List<Integer> listidselect = operateurtemp.getListtypeoperation();
+               ArrayList<Integer> listtypeoperation = operateurtemp.getListtypeoperation();
                
-            System.out.println("Liste des types operations de l'operateur"+listidselect);
-            
-            
+               List<Integer> listidselect =  operateurtemp.getListtypeoperation();
+               
+            System.out.println("Liste des types operations de l'operateur"+listtypeoperation);
+            System.out.println("Le type de la liste est : " + listtypeoperation.getClass().getSimpleName());
+            System.out.println("Le type d'un élément de liste est : " + listtypeoperation.get(0).getClass().getSimpleName());
             
         List<Typeoperation> selectedTypeoperations = listtemptypop.stream()
-            .filter(typeoperation -> listidselect.contains(((Typeoperation)typeoperation).getId()))
+            .filter(typeoperation -> listidselect.contains((typeoperation).getId()))
             .collect(Collectors.toList()); 
             
         
@@ -1087,7 +1088,7 @@ private Button boutonSupprimer;
             ArrayList <Integer> listidtest = new ArrayList();
             
             listidtest.add(1);
-           listidtest.add(13);
+            listidtest.add(13);
             
             
             Notification.show("La méthode d'enregistrement n'est pas encore faite");

@@ -969,7 +969,7 @@ public static void updateBrut(Connection connect,int id, String nom, String ref,
 }
 
 public static void addoperateur(Connection connect,String identifiant, String motdepasse,String nom,String prenom,int idatelier,int statut, int tel, String mail,ArrayList<Integer> listtypeoperation)throws SQLException {
-    System.out.print(listtypeoperation.get(0));
+    System.out.print("1: " +listtypeoperation);
     connect.setAutoCommit(false); //stope la mise à jour, elle sera fait à la fin si tout se passe bien
         try ( PreparedStatement cherchedouble = connect.prepareStatement(
                 "select id from operateur where identifiant=? and motdepasse=? and nom=? and prenom=? and idatelier=? and statut=? and tel=? and mail=?")) {
@@ -1009,7 +1009,7 @@ public static void addoperateur(Connection connect,String identifiant, String mo
 
                         for(int i=0;i<listtypeoperation.size();i++){
                             System.out.println("realiseoo va etre appelé");
-                            addrealiseoo(connect,id,listtypeoperation.get(i));
+                            addrealiseoo(connect,id,(int)listtypeoperation.get(i));
                         }
                         System.out.println("realiseoo add");
                         }
@@ -1028,7 +1028,7 @@ public static void addoperateur(Connection connect,String identifiant, String mo
             }
         try { // creation d'un requete 
             connect.commit(); // valide le refresh
-            System.out.print("le refresh fonctionne opearateur") ;
+            System.out.print("le refresh fonctionne operateur") ;
         } catch (SQLException ex) { // en cas d'erreur on "rollback" on retourne avant 
             connect.rollback();
             System.out.print("rollback");
