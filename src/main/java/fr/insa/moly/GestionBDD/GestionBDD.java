@@ -59,7 +59,7 @@ public class GestionBDD {
         con.setTransactionIsolation(Connection.TRANSACTION_SERIALIZABLE);
         return con;
     }
-    //3306
+    
     public static Connection connectSurServeurM3() throws SQLException {
         return connectGeneralMySQL("92.222.25.165", 3306,
                 "m3_smoly01", "m3_smoly01",
@@ -148,8 +148,7 @@ catch (SQLException ex) {
             throw new Error("Connection impossible", ex);
         }
     }
-
-   
+  
 public void deleteBDDTest()throws SQLException {
         this.conn.setAutoCommit(false); //stope la mise à jour, elle sera fait à la fin si tout se passe bien
  //On supprime tout les clés étrangères
