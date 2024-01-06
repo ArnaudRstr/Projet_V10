@@ -1040,7 +1040,7 @@ public static void addoperateur(Connection connect,String identifiant, String mo
         }
 }
 
-public static void updateOperateur(Connection connect,int id,String identifiant, String motdepasse,String nom,String prenom,int idatelier,int statut, int tel, String mail,ArrayList<Integer> listtypeoperation)throws SQLException {
+public static void updateOperateur(Connection connect,int id,String identifiant, String motdepasse,String nom,String prenom,int idatelier,int statut, int tel, String mail,ArrayList<Typeoperation> listtypeoperation)throws SQLException {
   
      try {
         connect.setAutoCommit(false);
@@ -1064,7 +1064,7 @@ public static void updateOperateur(Connection connect,int id,String identifiant,
             if (!listtypeoperation.isEmpty()){
             for(int i=0;i<listtypeoperation.size();i++){
                 System.out.println("addrealise execute");
-                            addrealiseoo(connect,id,listtypeoperation.get(i));
+                            addrealiseoo(connect,id,listtypeoperation.get(i).getId());
                         }
             }
             else {
