@@ -415,7 +415,7 @@ public class FenetreEntreeDonnees extends Dialog{
             TextField tfmail = new TextField("Adresse mail");
             TextField tfidentifiant = new TextField("Identifiant");
             NumberField nbidatelier = new NumberField("Identifiant de l'atelier");
-            NumberField nbtel = new NumberField("Téléphone");
+            NumberField nbtel = new NumberField("Téléphone (+33 0)");
 
             
             ArrayList <String> listStatuts = new ArrayList();

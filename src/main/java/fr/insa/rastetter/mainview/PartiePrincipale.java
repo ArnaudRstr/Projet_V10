@@ -297,10 +297,9 @@ public class PartiePrincipale extends MyVerticalLayout {
                         .setComparator(Comparator.comparingInt(Operateur::getId));
                 gridOperateurs.addColumn(Operateur::getNom).setHeader(new H5("Nom"));
                 gridOperateurs.addColumn(Operateur::getPrenom).setHeader(new H5("Prénom"));
-                gridOperateurs.addColumn(Operateur::getTel).setHeader(new H5("Téléphone"));
-                gridOperateurs.addColumn(Operateur::getMail).setHeader(new H5("Adresse mail"));
-                gridOperateurs.addColumn(Operateur::getStatutString).setHeader(new H5("Statut"))
-                        .setComparator(Comparator.comparing(Operateur::getStatutString, Comparator.naturalOrder()));
+                //gridOperateurs.addColumn(Operateur::getTel).setHeader(new H5("Téléphone"));
+                //gridOperateurs.addColumn(Operateur::getMail).setHeader(new H5("Adresse mail"));
+                
                 
                 gridOperateurs.addColumn(operateur -> {
                 try {
@@ -314,15 +313,16 @@ public class PartiePrincipale extends MyVerticalLayout {
                 }).setHeader(new H5("Atelier"))
                         .setComparator(Comparator.comparingInt(Operateur::getIdatelier));
               
-                
+                gridOperateurs.addColumn(Operateur::getStatutString).setHeader(new H5("Statut"))
+                        .setComparator(Comparator.comparing(Operateur::getStatutString, Comparator.naturalOrder()));
 
-                gridOperateurs.addColumn(operateur -> {
-                    List<Typeoperation> listTypeOperation = operateur.getListtypeoperation();
-                    return listTypeOperation.stream()
-                            .map(Typeoperation::getNom)
-                            .collect(Collectors.joining(", "));
-                })
-                .setHeader(new H5("Types d'opérations"));
+//                gridOperateurs.addColumn(operateur -> {
+//                    List<Typeoperation> listTypeOperation = operateur.getListtypeoperation();
+//                    return listTypeOperation.stream()
+//                            .map(Typeoperation::getNom)
+//                            .collect(Collectors.joining(", "));
+//                })
+//                .setHeader(new H5("Types d'opérations"));
                 
                 
                 this.add(gridOperateurs);

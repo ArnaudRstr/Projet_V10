@@ -10,6 +10,7 @@ import com.vaadin.flow.component.checkbox.CheckboxGroupVariant;
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.H2;
+import com.vaadin.flow.component.html.H3;
 import com.vaadin.flow.component.html.H4;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
@@ -27,13 +28,10 @@ import fr.insa.moly.objet.Operateur;
 import fr.insa.moly.objet.Operation;
 import fr.insa.moly.objet.Produit;
 import fr.insa.moly.objet.Typeoperation;
-import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.util.stream.Collectors;
 import static fr.insa.moly.GestionBDD.GestionBDD.listAtelier;
 import java.util.Set;
 
@@ -898,7 +896,17 @@ private Button boutonSupprimer;
             cbbstatut.setWidthFull();
             cbbstatut.setLabel("Statut");
 
-            contenu.add(cbbstatut);
+            Div div = new Div();
+             div.setHeight("30px");
+            Div div5 = new Div();
+            div5.setHeight("20px");
+             
+            H2 hnom = new H2(operateurtemp.getNom());
+            
+            H3 ttel = new H3("Téléphone : +33 0"+String.valueOf(operateurtemp.getTel()));
+            H3 tmail = new H3("Mail : "+String.valueOf(operateurtemp.getMail()));
+
+            contenu.add(div,ttel,div5,tmail,cbbstatut);
             
             
             
@@ -968,7 +976,7 @@ private Button boutonSupprimer;
             
                 
             Div divtypeop = new Div();
-            divtypeop.setHeight("350px");
+            divtypeop.setHeight("500px");
             
             CheckboxGroup<Typeoperation> cbgtypeop = new CheckboxGroup<>();
             divtypeop.getStyle().set("overflow-y", "auto");
