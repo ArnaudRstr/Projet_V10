@@ -27,9 +27,9 @@ public class Operateur {
     private int statut;
     private int tel;
     private String mail;
-    private ArrayList<Integer> listtypeoperation;
+    private ArrayList<Typeoperation> listtypeoperation;
 
-    public Operateur(int id, String identifiant, String motdepasse, String nom, String prenom, int idatelier, int statut, int tel, String mail,ArrayList<Integer> listtypeoperation) {
+    public Operateur(int id, String identifiant, String motdepasse, String nom, String prenom, int idatelier, int statut, int tel, String mail,ArrayList<Typeoperation> listtypeoperation) {
         this.id = id;
         this.identifiant = identifiant;
         this.motdepasse = motdepasse;
@@ -170,7 +170,7 @@ public class Operateur {
         return mail;
     }
 
-    public ArrayList<Integer> getListtypeoperation() {
+    public ArrayList<Typeoperation> getListtypeoperation() {
 
         return listtypeoperation;
     }
@@ -238,7 +238,7 @@ public class Operateur {
         this.mail = mail;
     }
 
-    public void setListoperation(ArrayList<Integer> listtypeoperation) {
+    public void setListoperation(ArrayList<Typeoperation> listtypeoperation) {
         this.listtypeoperation = listtypeoperation;
     }
     public String getString(){

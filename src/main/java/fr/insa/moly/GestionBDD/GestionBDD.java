@@ -1701,9 +1701,9 @@ public static ArrayList listMachineAtelier (Connection connect, int idAtelierRec
     return listmachine;
 }  
 
-public static ArrayList listoperateur (Connection connect)throws SQLException{
+public static ArrayList<Operateur> listoperateur (Connection connect)throws SQLException{
     ArrayList<Operateur> listoperateur = new ArrayList();
-    ArrayList<Integer> listoperationvide = new ArrayList();
+    ArrayList<Typeoperation> listoperationvide = new ArrayList();
    
     System.out.println("arrivé dans listoperateur");
         try ( PreparedStatement affichetab = connect.prepareStatement(
@@ -1720,7 +1720,7 @@ public static ArrayList listoperateur (Connection connect)throws SQLException{
         System.out.println("arrivé etape 2");
         
     for (int i=0;i<listoperateur.size();i++){
-        ArrayList<Integer> listoperation = new ArrayList();
+        ArrayList<Typeoperation> listoperation = new ArrayList();
         listoperation=listRealiseooOperateur(connect,listoperateur.get(i).getId());
             listoperateur.get(i).setListoperation(listoperation);
     
@@ -1819,7 +1819,7 @@ public static ArrayList listtypeoperation (Connection connect)throws SQLExceptio
     return listtypeoperation;
 }  
 
-public static ArrayList listRealiseooOperateur (Connection connect,int idoperateur)throws SQLException{
+public static ArrayList<Typeoperation> listRealiseooOperateur (Connection connect,int idoperateur)throws SQLException{
     ArrayList<Typeoperation> listtypeoperation = new ArrayList();
     
     
