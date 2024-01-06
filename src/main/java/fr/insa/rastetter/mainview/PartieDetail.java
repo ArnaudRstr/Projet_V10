@@ -17,7 +17,6 @@ import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.textfield.NumberField;
 import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.component.textfield.TextField;
-import static fr.insa.moly.GestionBDD.GestionBDD.listaltelier;
 import static fr.insa.moly.GestionBDD.GestionBDD.listmachine;
 import static fr.insa.moly.GestionBDD.GestionBDD.listtypeoperation;
 import static fr.insa.moly.GestionBDD.GestionBDD.updateOperation;
@@ -35,6 +34,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
+import static fr.insa.moly.GestionBDD.GestionBDD.listAtelier;
 
 
 /**
@@ -934,7 +934,7 @@ private Button boutonSupprimer;
             
             ComboBox cbbatelier = new ComboBox();
             ArrayList <Atelier> listTemp = new ArrayList();
-            listTemp = listaltelier (this.controleur.getVuePrincipale().getGestionBDD().conn);
+            listTemp = listAtelier (this.controleur.getVuePrincipale().getGestionBDD().conn);
       
             ArrayList <String> listNomAtelier = new ArrayList<>();
 

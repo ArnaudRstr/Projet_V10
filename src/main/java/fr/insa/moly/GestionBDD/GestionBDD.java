@@ -1582,8 +1582,8 @@ public static int askidproduit(Connection connect)throws SQLException{
     return idproduit;
 }
  
-    
-public static ArrayList listaltelier (Connection connect)throws SQLException{
+//Renvoit la liste des ateliers de la base de donné en objet Atelier
+public static ArrayList<Atelier> listAtelier (Connection connect)throws SQLException{
     ArrayList<Atelier> listatelier = new ArrayList();
     
     connect.setAutoCommit(false); //stope la mise à jour, elle sera fait à la fin si tout se passe bien
@@ -1612,7 +1612,8 @@ public static ArrayList listaltelier (Connection connect)throws SQLException{
     return listatelier;
 }  
 
-public static ArrayList listbrut (Connection connect)throws SQLException{
+//renvoit la list des bruts de la base de donnée en ArrayList<Brut> 
+public static ArrayList<Brut> listBrut (Connection connect)throws SQLException{
     ArrayList<Brut> listbrut = new ArrayList();
     
     connect.setAutoCommit(false); //stope la mise à jour, elle sera fait à la fin si tout se passe bien
@@ -1641,7 +1642,8 @@ public static ArrayList listbrut (Connection connect)throws SQLException{
     return listbrut;
 }   
 
-public static ArrayList listmachine (Connection connect)throws SQLException{
+//renvoit la liste de toutes les machines de la base de donnée en ArrayList<Machine>
+public static ArrayList<Machine> listmachine (Connection connect)throws SQLException{
     ArrayList<Machine> listmachine = new ArrayList();
     
     connect.setAutoCommit(false); //stope la mise à jour, elle sera fait à la fin si tout se passe bien
@@ -1670,7 +1672,8 @@ public static ArrayList listmachine (Connection connect)throws SQLException{
     return listmachine;
 }  
 
-public static ArrayList listMachineAtelier (Connection connect, int idAtelierRecherche)throws SQLException{
+//renvoit la liste des machines d'un atelier particulier en ArrayList<Machine>
+public static ArrayList<Machine> listMachineAtelier (Connection connect, int idAtelierRecherche)throws SQLException{
     ArrayList<Machine> listmachine = new ArrayList();
     
     
@@ -1702,6 +1705,7 @@ public static ArrayList listMachineAtelier (Connection connect, int idAtelierRec
     return listmachine;
 }  
 
+//renvoit la liste de tous les operateurs de la base de donnée en ArrayList<Operateur>
 public static ArrayList<Operateur> listoperateur (Connection connect)throws SQLException{
     ArrayList<Operateur> listoperateur = new ArrayList();
     ArrayList<Typeoperation> listoperationvide = new ArrayList();
@@ -1721,18 +1725,10 @@ public static ArrayList<Operateur> listoperateur (Connection connect)throws SQLE
         //System.out.println("arrivé etape 2");
         
     for (int i=0;i<listoperateur.size();i++){
-        ArrayList<Typeoperation> listoperation = new ArrayList();
-        listoperation=listRealiseooOperateur(connect,(int)listoperateur.get(i).getId());
-            listoperateur.get(i).setListoperation(listoperation);
-            
-            
-            
-            
-            String typesOperations = listoperation.stream()
-            .map(Typeoperation::getNom)
-            .collect(Collectors.joining(", "));
 
-    //System.out.println("Types d'opérations via listoperateur : " + typesOperations);
+                ArrayList<Typeoperation> listtypeoperation = new ArrayList();
+        listtypeoperation=listRealiseooOperateur(connect,listoperateur.get(i).getId());
+            listoperateur.get(i).setListtypeoperation(listtypeoperation);
     
             }
     //System.out.println("etape 2 finit");
@@ -1741,8 +1737,9 @@ public static ArrayList<Operateur> listoperateur (Connection connect)throws SQLE
      
     return listoperateur;
 }  
-        
-public static ArrayList listoperation (Connection connect)throws SQLException{
+
+//renvoit la liste de toutes les opérations de la base de donnée en ArrayList<Operation>
+public static ArrayList<Operation> listoperation (Connection connect)throws SQLException{
     ArrayList<Operation> listoperation = new ArrayList();
     
     connect.setAutoCommit(false); //stope la mise à jour, elle sera fait à la fin si tout se passe bien
@@ -1771,7 +1768,8 @@ public static ArrayList listoperation (Connection connect)throws SQLException{
     return listoperation;
 }  
 
-public static ArrayList listproduit (Connection connect)throws SQLException{
+//renvoit la liste de tous les produits de la base de donnée en ArrayList<Produit>
+public static ArrayList<Produit> listproduit (Connection connect)throws SQLException{
     ArrayList<Produit> listproduit = new ArrayList();
     
     connect.setAutoCommit(false); //stope la mise à jour, elle sera fait à la fin si tout se passe bien
@@ -1800,7 +1798,8 @@ public static ArrayList listproduit (Connection connect)throws SQLException{
     return listproduit;
 }  
 
-public static ArrayList listtypeoperation (Connection connect)throws SQLException{
+//renvoit la liste de tous les types d'opérations de la base de donnée en ArrayList<Typeoperation> 
+public static ArrayList<Typeoperation> listtypeoperation (Connection connect)throws SQLException{
     ArrayList<Typeoperation> listtypeoperation = new ArrayList();
     
     connect.setAutoCommit(false); //stope la mise à jour, elle sera fait à la fin si tout se passe bien
@@ -1829,6 +1828,7 @@ public static ArrayList listtypeoperation (Connection connect)throws SQLExceptio
     return listtypeoperation;
 }  
 
+//renvoit la liste des types d'opération réalisable par un opérateur particulier en ArrayList<Typeoperation>
 public static ArrayList<Typeoperation> listRealiseooOperateur (Connection connect,int idoperateur)throws SQLException{
     ArrayList<Typeoperation> listtypeoperation = new ArrayList();
     
@@ -1863,7 +1863,8 @@ public static ArrayList<Typeoperation> listRealiseooOperateur (Connection connec
     return listtypeoperation;
 }  
 
-public static ArrayList listgammeoperation(Connection connect,int idoperation) throws SQLException{
+//renvoit la liste des id des produits qui on dans leur gamme une opération particulière en ArrayList<Integer>
+public static ArrayList<Integer> listgammeoperation(Connection connect,int idoperation) throws SQLException{
       ArrayList<Integer> listidproduit = new ArrayList();
   try ( PreparedStatement affichetab = connect.prepareStatement(
                 "select idproduit from ordre where idopavant=? OR idopapres=?")) {
@@ -1879,7 +1880,9 @@ public static ArrayList listgammeoperation(Connection connect,int idoperation) t
   listidproduit= new ArrayList<>(listSansDouble);
   return listidproduit;
 }
-public static ArrayList listgammeproduit(Connection connect,int idproduit) throws SQLException{
+
+//renvoit la liste des id des opérations dans l'ordre (gamme) d'un produit particulier en ArrayList<Integer>
+public static ArrayList<Integer> listgammeproduit(Connection connect,int idproduit) throws SQLException{
       ArrayList<Integer> listidavant = new ArrayList();
       ArrayList<Integer> listidapres = new ArrayList();
       ArrayList<Integer> ordre = new ArrayList();
@@ -1928,7 +1931,9 @@ public static ArrayList listgammeproduit(Connection connect,int idproduit) throw
             } 
   return ordre;
 }
-public static ArrayList listgamme(Connection connect) throws SQLException{
+
+//renvoit la liste de toutes les gammes de la base de donnée en ArrayList<Gamme> 
+public static ArrayList<Gamme> listgamme(Connection connect) throws SQLException{
     
       ArrayList<Gamme> listgamme = new ArrayList();
       ArrayList<Integer> listidproduit = new ArrayList();
@@ -1970,8 +1975,8 @@ public static ArrayList listgamme(Connection connect) throws SQLException{
 }
 
 
-
-public static ArrayList listchild(Connection connect,String tabparentname,int idparent,String tabchild) throws SQLException{
+//renvoit les id des enfants dans une table d'un elément particulier d'un table en ArrayList<Integer>
+public static ArrayList<Integer> listchild(Connection connect,String tabparentname,int idparent,String tabchild) throws SQLException{
     ArrayList<Integer> listchild = new ArrayList();
     
     connect.setAutoCommit(false); //stope la mise à jour, elle sera fait à la fin si tout se passe bien
@@ -2001,36 +2006,8 @@ public static ArrayList listchild(Connection connect,String tabparentname,int id
     return listchild;
 }
 
-public static ArrayList listchildgamme(Connection connect,int idproduit) throws SQLException{
-    ArrayList<Integer> listchild = new ArrayList();
-    
-    connect.setAutoCommit(false); //stope la mise à jour, elle sera fait à la fin si tout se passe bien
-        try ( PreparedStatement idtab = connect.prepareStatement(
-                "select idproduit from ordre where idopavant=? OR idopapres=?")) {
-            idtab.setInt(1, idproduit);
-            idtab.setInt(2,idproduit);
-            ResultSet tab = idtab.executeQuery();
-            while (tab.next()!= false){
-                listchild.add(tab.getInt("idproduit"));
-            }
-
-            }
-        try { // creation d'un requete 
-            connect.commit(); // valide le refresh
-            System.out.print("le refresh fonctionne") ;
-        } catch (SQLException ex) { // en cas d'erreur on "rollback" on retourne avant 
-            connect.rollback();
-            System.out.print("rollback");
-            throw ex;
-        } finally {
-            connect.setAutoCommit(true);// on remet le refresh automatique
-        }
-          
-    return listchild;
-}
-
-//Donne l'id operateur qui est en lien avec un type opération
-public static ArrayList listchildrealiseOperateur(Connection connect,int id) throws SQLException{
+//Donne la liste des id operateurs qui sont en lien avec un type opération en ArrayList<Integer>
+public static ArrayList<Integer> listchildrealiseOperateur(Connection connect,int id) throws SQLException{
     ArrayList<Integer> listchild = new ArrayList();
     
     connect.setAutoCommit(false); //stope la mise à jour, elle sera fait à la fin si tout se passe bien
@@ -2057,7 +2034,8 @@ public static ArrayList listchildrealiseOperateur(Connection connect,int id) thr
     return listchild;
 }
 
-public static ArrayList listchildrealiseoperation(Connection connect,int id) throws SQLException{
+//renvoit les id des types opérateurs en lien avec un opérateur en ArrayList<Integer>
+public static ArrayList<Integer> listChildRealiseOperation(Connection connect,int id) throws SQLException{
     ArrayList<Integer> listchild = new ArrayList();
     
     connect.setAutoCommit(false); //stope la mise à jour, elle sera fait à la fin si tout se passe bien

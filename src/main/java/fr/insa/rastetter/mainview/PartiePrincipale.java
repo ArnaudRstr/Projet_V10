@@ -206,7 +206,7 @@ public class PartiePrincipale extends MyVerticalLayout {
             //this.add(new H2("Bruts"));
             ArrayList <Brut> brutstemp = new ArrayList();
             System.out.println("Etat du controleur avant création de la machine:"+this.controleur.getEtatAtelier());
-            brutstemp = this.controleur.getVuePrincipale().getGestionBDD().listbrut(this.controleur.getVuePrincipale().getGestionBDD().conn);
+            brutstemp = this.controleur.getVuePrincipale().getGestionBDD().listBrut(this.controleur.getVuePrincipale().getGestionBDD().conn);
             
             
             

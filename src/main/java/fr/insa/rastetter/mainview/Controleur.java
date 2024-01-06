@@ -22,7 +22,6 @@ import com.vaadin.flow.component.textfield.TextField;
 import static fr.insa.moly.GestionBDD.GestionBDD.addtypeoperation;
 import static fr.insa.moly.GestionBDD.GestionBDD.delete;
 import fr.insa.moly.objet.Atelier;
-import static fr.insa.moly.GestionBDD.GestionBDD.listaltelier;
 import static fr.insa.moly.GestionBDD.GestionBDD.listtypeoperation;
 import fr.insa.moly.objet.Machine;
 import fr.insa.moly.objet.Typeoperation;
@@ -31,6 +30,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import static fr.insa.moly.GestionBDD.GestionBDD.listAtelier;
 
 /**
  *
@@ -480,7 +480,7 @@ public class Controleur {
 
         ArrayList<Atelier> listTemp =  new ArrayList();
        
-        listTemp=listaltelier(this.getVuePrincipale().getGestionBDD().conn);
+        listTemp=listAtelier(this.getVuePrincipale().getGestionBDD().conn);
         
         int index =0;
         while (index<listTemp.size()){
@@ -552,7 +552,7 @@ public class Controleur {
             
             ArrayList<Atelier> listTemp =  new ArrayList();
        
-        listTemp=listaltelier(this.getVuePrincipale().getGestionBDD().conn);
+        listTemp=listAtelier(this.getVuePrincipale().getGestionBDD().conn);
         String nom = new String();
         int index =0;
         while (index<listTemp.size()){
@@ -671,7 +671,7 @@ public class Controleur {
          
         System.out.println("Combobox mis à jour");
         int index =0;
-        ArrayList<Atelier> listTemp= listaltelier(this.main.getGestionBDD().conn);
+        ArrayList<Atelier> listTemp= listAtelier(this.main.getGestionBDD().conn);
         
         
         while (index<listTemp.size()){

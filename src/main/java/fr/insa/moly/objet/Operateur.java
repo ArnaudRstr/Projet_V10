@@ -5,14 +5,13 @@
 package fr.insa.moly.objet;
 
 import fr.insa.moly.GestionBDD.GestionBDD;
-import static fr.insa.moly.GestionBDD.GestionBDD.listaltelier;
 import fr.insa.rastetter.mainview.Controleur;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.stream.Collectors;
+import static fr.insa.moly.GestionBDD.GestionBDD.listAtelier;
 
 /**
  *
@@ -68,8 +67,16 @@ public class Operateur {
             System.out.println("Rollback. Erreur : " + ex.getMessage());
             throw ex;
         }
+        ArrayList<Integer> listidtypeoperation = GestionBDD.listgammeproduit(connect,id);
         
-        this.listtypeoperation = GestionBDD.listgammeproduit(connect,id);
+         for (int i=0; i<listidtypeoperation.size() ;i++){
+             Typeoperation op = new Typeoperation(connect,listidtypeoperation.get(i));
+            this.listtypeoperation.add(op) ;
+         }
+        
+         
+         
+         //this.listtypeoperation = GestionBDD.listgammeproduit(connect,id);
         
         
         
@@ -144,7 +151,7 @@ public class Operateur {
         String stringatelier = "";
         
         ArrayList <Atelier> listateliertemp = new ArrayList();
-        listateliertemp = listaltelier (controleur.getVuePrincipale().getGestionBDD().conn);
+        listateliertemp = listAtelier (controleur.getVuePrincipale().getGestionBDD().conn);
         int index =0;
         boolean valid =false;
         while (index<listateliertemp.size()||valid==false){
@@ -243,7 +250,7 @@ public class Operateur {
         this.mail = mail;
     }
 
-    public void setListoperation(ArrayList<Typeoperation> listtypeoperation) {
+    public void setListtypeoperation(ArrayList<Typeoperation> listtypeoperation) {
         this.listtypeoperation = listtypeoperation;
     }
     public String getString(){

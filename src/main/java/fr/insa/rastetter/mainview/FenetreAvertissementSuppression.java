@@ -12,12 +12,12 @@ import com.vaadin.flow.component.html.H3;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import static fr.insa.moly.GestionBDD.GestionBDD.delete;
-import static fr.insa.moly.GestionBDD.GestionBDD.listaltelier;
 import fr.insa.moly.objet.Atelier;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import static fr.insa.moly.GestionBDD.GestionBDD.listAtelier;
 
 /**
  *
@@ -79,7 +79,7 @@ public FenetreAvertissementSuppression(Controleur controleur,String type,String 
         }      
         
         try { //On reactualise le combobox
-            this.controleur.getVuePrincipale().getEntete().setComboBoxAtelier(listaltelier(this.controleur.getVuePrincipale().getGestionBDD().conn));
+            this.controleur.getVuePrincipale().getEntete().setComboBoxAtelier(listAtelier(this.controleur.getVuePrincipale().getGestionBDD().conn));
         } catch (SQLException ex) {
             Logger.getLogger(FenetreAvertissementSuppression.class.getName()).log(Level.SEVERE, null, ex);
         }
