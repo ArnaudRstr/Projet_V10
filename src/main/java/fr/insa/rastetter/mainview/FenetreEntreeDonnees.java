@@ -564,13 +564,13 @@ public class FenetreEntreeDonnees extends Dialog{
             
            
            Set<Typeoperation> selectedItems = cbgtypeop.getSelectedItems();
-           
+            ArrayList<Typeoperation> listtypeop = new ArrayList<>(selectedItems);
+
            
            List<Integer> selected = selectedItems.stream()
             .map(Typeoperation::getId) 
             .collect(Collectors.toList());
            
-           ArrayList<Typeoperation> listtypeop = new ArrayList<>(selectedItems);
            
            System.out.println(listtypeop);
            
