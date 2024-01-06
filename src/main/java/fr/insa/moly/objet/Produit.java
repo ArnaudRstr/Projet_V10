@@ -22,12 +22,12 @@ public class Produit {
     private int idbrut;
     private Gamme gamme ;
 
-    public Produit(Connection connect, int id, String ref, String des, int idbrut) throws SQLException {
+    public Produit(Connection connect, int id, String ref, String des, int idbrut,ArrayList<Operation> listOperation) throws SQLException {
         this.id = id;
         this.ref = ref;
         this.des = des;
         this.idbrut = idbrut;
-        this.gamme= new Gamme(connect, id);
+        this.gamme= new Gamme(listOperation, id);
         
     }
     
