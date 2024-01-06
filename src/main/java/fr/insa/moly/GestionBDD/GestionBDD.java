@@ -1430,8 +1430,8 @@ public static void addgamme(Connection connect,Gamme gamme) throws SQLException{
                         "INSERT INTO `ordre` (idopavant,idopapres,idproduit) VALUES (?,?,?);"
 
             )){
-                    pst.setInt(1, gamme.getList().get(i));
-                    pst.setInt(2, gamme.getList().get(i+1));
+                    pst.setInt(1, gamme.getList().get(i).getId());
+                    pst.setInt(2, gamme.getList().get(i+1).getId());
                     pst.setInt(3, gamme.getIdproduit());
                     pst.executeUpdate();
       
@@ -1770,6 +1770,7 @@ public static ArrayList<Operation> listoperation (Connection connect)throws SQLE
 //renvoit la liste de tous les produits de la base de donnée en ArrayList<Produit>
 public static ArrayList<Produit> listproduit (Connection connect)throws SQLException{
     ArrayList<Produit> listproduit = new ArrayList();
+    ArrayList<Operation> listoperation =new ArrayList();
     
     connect.setAutoCommit(false); //stope la mise à jour, elle sera fait à la fin si tout se passe bien
         try ( PreparedStatement affichetab = connect.prepareStatement(
@@ -1777,7 +1778,7 @@ public static ArrayList<Produit> listproduit (Connection connect)throws SQLExcep
             
             ResultSet tab = affichetab.executeQuery();
             while (tab.next()!= false){
-                Produit at = new Produit(connect, tab.getInt("id"),tab.getString("ref"),tab.getString("des"),tab.getInt("idbrut"));
+                Produit at = new Produit(connect, tab.getInt("id"),tab.getString("ref"),tab.getString("des"),tab.getInt("idbrut"),listoperation);
                 listproduit.add(at);
             }
 
@@ -1880,11 +1881,12 @@ public static ArrayList<Integer> listgammeoperation(Connection connect,int idope
   return listidproduit;
 }
 
-//renvoit la liste des id des opérations dans l'ordre (gamme) d'un produit particulier en ArrayList<Integer>
-public static ArrayList<Integer> listgammeproduit(Connection connect,int idproduit) throws SQLException{
+//renvoit la liste  des opérations dans l'ordre (gamme) d'un produit particulier en ArrayList<Integer>
+public static ArrayList<Operation> listgammeproduit(Connection connect,int idproduit) throws SQLException{
       ArrayList<Integer> listidavant = new ArrayList();
       ArrayList<Integer> listidapres = new ArrayList();
       ArrayList<Integer> ordre = new ArrayList();
+      ArrayList<Operation> listoperation =new ArrayList();
       int idfirst=0;
       int k=0;
       boolean find=false;
@@ -1927,8 +1929,13 @@ public static ArrayList<Integer> listgammeproduit(Connection connect,int idprodu
             else {
                 ordre = new ArrayList();
             }
-            } 
-  return ordre;
+            }
+  
+  for (int i=0;i<ordre.size();i++){
+      Operation op =new Operation(connect,ordre.get(i));
+      listoperation.add(op);
+  }
+  return listoperation;
 }
 
 //renvoit la liste de toutes les gammes de la base de donnée en ArrayList<Gamme> 
@@ -1937,7 +1944,7 @@ public static ArrayList<Gamme> listgamme(Connection connect) throws SQLException
       ArrayList<Gamme> listgamme = new ArrayList();
       ArrayList<Integer> listidproduit = new ArrayList();
 
-      ArrayList<Integer> ordre = new ArrayList();
+      ArrayList<Operation> listoperation = new ArrayList();
 
     connect.setAutoCommit(false); //stope la mise à jour, elle sera fait à la fin si tout se passe bien
         try ( PreparedStatement affichetabid = connect.prepareStatement(
@@ -1953,8 +1960,8 @@ public static ArrayList<Gamme> listgamme(Connection connect) throws SQLException
             listidproduit = new ArrayList<>(idProdSansDouble);
             
             for(int i=0;i<listidproduit.size();i++){
-            ordre = listgammeproduit(connect,listidproduit.get(i));
-            listgamme.add(new Gamme(ordre,listidproduit.get(i)));
+            listoperation = listgammeproduit(connect,listidproduit.get(i));
+            listgamme.add(new Gamme(listoperation,listidproduit.get(i)));
             }
         }   
         try { // creation d'un requete 

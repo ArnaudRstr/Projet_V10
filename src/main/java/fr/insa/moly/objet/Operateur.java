@@ -71,21 +71,10 @@ public class Operateur {
             System.out.println("Rollback. Erreur : " + ex.getMessage());
             throw ex;
         }
-        ArrayList<Integer> listidtypeoperation = GestionBDD.listgammeproduit(connect,id);
         
-         for (int i=0; i<listidtypeoperation.size() ;i++){
-             Typeoperation op = new Typeoperation(connect,listidtypeoperation.get(i));
-            this.listtypeoperation.add(op) ;
-         }
+        this.listtypeoperation = GestionBDD.listRealiseooOperateur(connect,id);
         
          
-         
-         //this.listtypeoperation = GestionBDD.listgammeproduit(connect,id);
-        
-        
-        
-        
-        
     } finally {
         try {
             if (connect != null) {
