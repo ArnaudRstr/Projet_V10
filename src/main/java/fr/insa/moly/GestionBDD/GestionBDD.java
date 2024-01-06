@@ -60,7 +60,7 @@ public class GestionBDD {
         con.setTransactionIsolation(Connection.TRANSACTION_SERIALIZABLE);
         return con;
     }
-    //3306
+    
     public static Connection connectSurServeurM3() throws SQLException {
         return connectGeneralMySQL("92.222.25.165", 3306,
                 "m3_smoly01", "m3_smoly01",
@@ -149,8 +149,7 @@ catch (SQLException ex) {
             throw new Error("Connection impossible", ex);
         }
     }
-
-   
+  
 public void deleteBDDTest()throws SQLException {
         this.conn.setAutoCommit(false); //stope la mise à jour, elle sera fait à la fin si tout se passe bien
  //On supprime tout les clés étrangères
@@ -1041,7 +1040,7 @@ public static void addoperateur(Connection connect,String identifiant, String mo
         }
 }
 
-public static void updateOperateur(Connection connect,int id,String identifiant, String motdepasse,String nom,String prenom,int idatelier,int statut, int tel, String mail,ArrayList<Integer> listtypeoperation)throws SQLException {
+public static void updateOperateur(Connection connect,int id,String identifiant, String motdepasse,String nom,String prenom,int idatelier,int statut, int tel, String mail,ArrayList<Typeoperation> listtypeoperation)throws SQLException {
   
      try {
         connect.setAutoCommit(false);
@@ -1065,7 +1064,7 @@ public static void updateOperateur(Connection connect,int id,String identifiant,
             if (!listtypeoperation.isEmpty()){
             for(int i=0;i<listtypeoperation.size();i++){
                 System.out.println("addrealise execute");
-                            addrealiseoo(connect,id,listtypeoperation.get(i));
+                            addrealiseoo(connect,id,listtypeoperation.get(i).getId());
                         }
             }
             else {
