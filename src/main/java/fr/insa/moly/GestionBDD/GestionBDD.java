@@ -1041,9 +1041,9 @@ public static void addoperateur(Connection connect,String identifiant, String mo
 }
 
 public static void updateOperateur(Connection connect,int id,String identifiant, String motdepasse,String nom,String prenom,int idatelier,int statut, int tel, String mail,ArrayList<Typeoperation> listtypeoperation)throws SQLException {
-  
+     connect.setAutoCommit(false);
      try {
-        connect.setAutoCommit(false);
+        
 
         String sql = "UPDATE operateur SET identifiant=?, motdepasse=?, nom=?, prenom=?, idatelier=?, statut=?, tel=?, mail=? WHERE id=?";
         try (PreparedStatement pst = connect.prepareStatement(sql)) {
