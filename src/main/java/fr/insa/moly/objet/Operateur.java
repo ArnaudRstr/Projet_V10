@@ -73,6 +73,15 @@ public class Operateur {
              Typeoperation op = new Typeoperation(connect,listidtypeoperation.get(i));
             this.listtypeoperation.add(op) ;
          }
+        
+         
+         
+         //this.listtypeoperation = GestionBDD.listgammeproduit(connect,id);
+        
+        
+        
+        
+        
     } finally {
         try {
             if (connect != null) {

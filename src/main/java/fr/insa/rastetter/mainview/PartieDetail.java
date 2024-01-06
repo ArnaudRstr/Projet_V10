@@ -35,6 +35,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import static fr.insa.moly.GestionBDD.GestionBDD.listAtelier;
+import java.util.Set;
 
 
 /**
@@ -966,8 +967,9 @@ private Button boutonSupprimer;
             
             
                 
-               Div divtypeop = new Div();
+            Div divtypeop = new Div();
             divtypeop.setHeight("350px");
+            
             CheckboxGroup<Typeoperation> cbgtypeop = new CheckboxGroup<>();
             divtypeop.getStyle().set("overflow-y", "auto");
             cbgtypeop.setLabel("Type(s) d'opération(s)");
@@ -979,36 +981,28 @@ private Button boutonSupprimer;
             cbgtypeop.setItems(listtemptypop);
             cbgtypeop.addThemeVariants(CheckboxGroupVariant.LUMO_VERTICAL);
             cbgtypeop.setReadOnly(true);
-            divtypeop.add(cbgtypeop); 
             
-            
+ 
+            ArrayList<Typeoperation> listtypeoperationoperateur = operateurtemp.getListtypeoperation();
 
-//            List <Integer> listidselect=operateurtemp.getListtypeoperation();
-//            
-//            List<Typeoperation> selectedTypeoperations = (List<Typeoperation>) listtemptypop.stream()
-//                    
-//                    
-//                .filter(typeoperation -> listidselect.contains(((Typeoperation)typeoperation).getId()))
-//                .collect(Collectors.toList());
             
-               ArrayList<Integer> listtypeoperation = operateurtemp.getListtypeoperation();
-               
-               List<Integer> listidselect =  operateurtemp.getListtypeoperation();
-               
-            System.out.println("Liste des types operations de l'operateur"+listtypeoperation);
-            System.out.println("Le type de la liste est : " + listtypeoperation.getClass().getSimpleName());
-            System.out.println("Le type d'un élément de liste est : " + listtypeoperation.get(0).getClass().getSimpleName());
-            
-        List<Typeoperation> selectedTypeoperations = listtemptypop.stream()
-            .filter(typeoperation -> listidselect.contains((typeoperation).getId()))
-            .collect(Collectors.toList()); 
-            
-        
-        
-            //cbgtypeop.select(selectedTypeoperations.toArray(new Typeoperation[0]));
-            cbgtypeop.select(selectedTypeoperations);    
+            cbgtypeop.setItems(listtemptypop);    
+
+            for (int i=0;i<listtemptypop.size();i++){
                 
-              contenu.add(cbgtypeop ); 
+                for(int j =0;j<listtypeoperationoperateur.size();j++){
+                    
+                    if(listtemptypop.get(i).getId()==listtypeoperationoperateur.get(j).getId()){
+                        
+                        cbgtypeop.select(listtemptypop.get(i));
+                    }
+                }
+            }
+    
+
+            
+            divtypeop.add(cbgtypeop); 
+            contenu.add(divtypeop); 
                 
                 
                 
@@ -1084,11 +1078,24 @@ private Button boutonSupprimer;
             
            final int idatelier =idateliertemp; 
             
+           
+           
+           
+           
+           
+           
+           
+           Set<Typeoperation> selectedItems = cbgtypeop.getSelectedItems();
+            ArrayList<Typeoperation> listtypeop = new ArrayList<>(selectedItems);
+           
+           
+           
+           
+           
+           
+           
             
-            ArrayList <Integer> listidtest = new ArrayList();
             
-            listidtest.add(1);
-            listidtest.add(13);
             
             
             Notification.show("La méthode d'enregistrement n'est pas encore faite");
@@ -1097,7 +1104,7 @@ private Button boutonSupprimer;
                     //this.controleur.getVuePrincipale().getGestionBDD().updateOperateur(this.controleur.getVuePrincipale().getGestionBDD().conn,operateurtemp.getId(),operateurtemp.getIdentifiant(),operateurtemp.getMotdepasse(),operateurtemp.getNom(),operateurtemp.getPrenom(),idateliertemp,idstatut,operateurtemp.getTel(),operateurtemp.getMail(),operateurtemp.getListtypeoperation());
               
             
-                    this.controleur.getVuePrincipale().getGestionBDD().updateOperateur(this.controleur.getVuePrincipale().getGestionBDD().conn,id,identifiant,mdp,nom,prenom,idateliertemp,idstatutchoix,tel,mail,listidtest);
+                    this.controleur.getVuePrincipale().getGestionBDD().updateOperateur(this.controleur.getVuePrincipale().getGestionBDD().conn,id,identifiant,mdp,nom,prenom,idateliertemp,idstatutchoix,tel,mail,listtypeop);
 
             
             } catch (SQLException ex) {

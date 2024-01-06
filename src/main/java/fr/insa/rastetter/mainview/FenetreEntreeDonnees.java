@@ -564,27 +564,33 @@ public class FenetreEntreeDonnees extends Dialog{
             
            
            Set<Typeoperation> selectedItems = cbgtypeop.getSelectedItems();
-           
+            ArrayList<Typeoperation> listtypeop = new ArrayList<>(selectedItems);
+
            
            List<Integer> selected = selectedItems.stream()
             .map(Typeoperation::getId) 
             .collect(Collectors.toList());
            
-           ArrayList<Integer> listId = new ArrayList<>(selected);
            
-           System.out.println(listId);
+           System.out.println(listtypeop);
            
-           ArrayList <Integer>listidtest = new ArrayList();
            
-           listidtest.add((int)1);
-           listidtest.add((int)13);
+           String typesOperations = listtypeop.stream()
+            .map(Typeoperation::getNom) // Supposons que Typeoperation a une méthode getNom()
+            .collect(Collectors.joining(", "));
+
+            System.out.println("Types d'opérations : " + typesOperations);
+           
+           
+           
+           
             
             
             this.close();
                try {
                    
                    //(Connection connect,String identifiant, String motdepasse,String nom,String prenom,int idatelier,int statut, int tel, String mail,ArrayList<Integer> listtypeoperation)
-                   this.controleur.getVuePrincipale().getGestionBDD().addoperateur(this.controleur.getVuePrincipale().getGestionBDD().conn,tfidentifiant.getValue(),tfmdp.getValue(),nom.getValue(),tfprenom.getValue(),idateliertemp,idstatut,(int) Math.round(nbtel.getValue()),tfmail.getValue(),listidtest);
+                   this.controleur.getVuePrincipale().getGestionBDD().addoperateur(this.controleur.getVuePrincipale().getGestionBDD().conn,tfidentifiant.getValue(),tfmdp.getValue(),nom.getValue(),tfprenom.getValue(),idateliertemp,idstatut,(int) Math.round(nbtel.getValue()),tfmail.getValue(),listtypeop);
                    
                    //this.controleur.getVuePrincipale().getGestionBDD().addoperateur(this.controleur.getVuePrincipale().getGestionBDD().conn,"identifiant","mdp","martin","martine",2,0,1,"mail",listidtypeop);
 

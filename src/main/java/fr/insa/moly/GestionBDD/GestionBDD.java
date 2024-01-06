@@ -21,6 +21,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 
         
@@ -967,7 +968,7 @@ public static void updateBrut(Connection connect,int id, String nom, String ref,
     }
 }
 
-public static void addoperateur(Connection connect,String identifiant, String motdepasse,String nom,String prenom,int idatelier,int statut, int tel, String mail,ArrayList<Integer> listtypeoperation)throws SQLException {
+public static void addoperateur(Connection connect,String identifiant, String motdepasse,String nom,String prenom,int idatelier,int statut, int tel, String mail,ArrayList<Typeoperation> listtypeoperation)throws SQLException {
     System.out.print("1: " +listtypeoperation);
     connect.setAutoCommit(false); //stope la mise à jour, elle sera fait à la fin si tout se passe bien
         try ( PreparedStatement cherchedouble = connect.prepareStatement(
@@ -1008,7 +1009,7 @@ public static void addoperateur(Connection connect,String identifiant, String mo
 
                         for(int i=0;i<listtypeoperation.size();i++){
                             System.out.println("realiseoo va etre appelé");
-                            addrealiseoo(connect,id,(int)listtypeoperation.get(i));
+                            addrealiseoo(connect,id,(int)listtypeoperation.get(i).getId());
                         }
                         System.out.println("realiseoo add");
                         }
@@ -1708,7 +1709,7 @@ public static ArrayList<Operateur> listoperateur (Connection connect)throws SQLE
     ArrayList<Operateur> listoperateur = new ArrayList();
     ArrayList<Typeoperation> listoperationvide = new ArrayList();
    
-    System.out.println("arrivé dans listoperateur");
+    //System.out.println("arrivé dans listoperateur");
         try ( PreparedStatement affichetab = connect.prepareStatement(
                 "select * from operateur")) {
             
@@ -1720,15 +1721,16 @@ public static ArrayList<Operateur> listoperateur (Connection connect)throws SQLE
             }
         }
         
-        System.out.println("arrivé etape 2");
+        //System.out.println("arrivé etape 2");
         
     for (int i=0;i<listoperateur.size();i++){
-        ArrayList<Typeoperation> listtypeoperation = new ArrayList();
+
+                ArrayList<Typeoperation> listtypeoperation = new ArrayList();
         listtypeoperation=listRealiseooOperateur(connect,listoperateur.get(i).getId());
             listoperateur.get(i).setListtypeoperation(listtypeoperation);
     
             }
-    System.out.println("etape 2 finit");
+    //System.out.println("etape 2 finit");
         
         
      
@@ -1838,11 +1840,23 @@ public static ArrayList<Typeoperation> listRealiseooOperateur (Connection connec
                 System.out.println("typeoperation non vide");
                 Typeoperation at = new Typeoperation(connect,tab.getInt("idtypeoperation"));
                 listtypeoperation.add(at);
+                
+                //System.out.println("listrealiseoooperateur : Creation du typop: nom :  "+ at.getNom());
             }
 
             }
         System.out.println("try select done");
         
+        
+        
+        
+        
+        //Permet juste d'afficher la listes des noms des types operations
+        String typesOperations = listtypeoperation.stream()
+            .map(Typeoperation::getNom) // Supposons que Typeoperation a une méthode getNom()
+            .collect(Collectors.joining(", "));
+
+    //System.out.println("Types d'opérations via listrealiseoooperateur: " + typesOperations);
         
      
     return listtypeoperation;
