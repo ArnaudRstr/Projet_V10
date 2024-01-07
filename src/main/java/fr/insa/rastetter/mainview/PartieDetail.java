@@ -12,6 +12,7 @@ import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.component.html.H3;
 import com.vaadin.flow.component.html.H4;
+import com.vaadin.flow.component.html.H5;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.notification.Notification;
@@ -33,6 +34,7 @@ import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import static fr.insa.moly.GestionBDD.GestionBDD.listAtelier;
+import static fr.insa.moly.GestionBDD.GestionBDD.listoperation;
 import java.util.Set;
 
 
@@ -360,6 +362,7 @@ private Button boutonSupprimer;
             
             
             Produit produittemp = (Produit) object;
+            System.out.println("Recupération du produit réussie");
             
             TextField tfref=  new TextField();
             tfref.setLabel("Référence");
@@ -393,7 +396,12 @@ private Button boutonSupprimer;
             contenu.add(nfidbrut);
             
             
-            //On pourra encore ajouter le nom du brut
+            
+            
+            
+            
+            
+            //On pourra encore ajouter le nom du brut ??
 //            TextField tfnombrut=  new TextField();
 //            tfref.setLabel("Nom du brut");
 //            tfref.getStyle().set("font-size","40px");
@@ -404,21 +412,134 @@ private Button boutonSupprimer;
 //            tfref.setWidthFull();
 //            contenu.add(tfref);
 
+
+
+            
+
+
+            //Ajout de la gamme => opérations
+            final ArrayList<Operation> listop = listoperation(this.controleur.getVuePrincipale().getGestionBDD().conn);
+            
+            
+            //On récupère la liste d'operation du produit
+            ArrayList <Operation> listopactuelle = new ArrayList();
+            listopactuelle = produittemp.getGamme().getList();
+            System.out.println("Recupération de la gamme du produit réussie");
+            System.out.println("Taille de la liste de gamme (différente de 0) : "+listopactuelle.size());
+
+            ArrayList <Operation> listopselect = new ArrayList();
+            
+            ArrayList <ComboBox> listcbb = new ArrayList();
             
             
             
             
+            MyHorizontalLayout hl1 = new MyHorizontalLayout();
+            ComboBox <Operation>cbbop1 = new ComboBox<>();
+            cbbop1.setItems(listop);
+            cbbop1.setItemLabelGenerator(Operation::getNom);
+            cbbop1.setLabel("Operation 1");
+            cbbop1.setWidth("80%");
+            cbbop1.getStyle().set("margin-left", "auto");
+            cbbop1.getStyle().set("margin-right", "auto");
+            
+            MyHorizontalLayout hlbouton = new MyHorizontalLayout();
+            hlbouton.add(VaadinIcon.PLUS_CIRCLE.create(),new H5("Ajouter une operation"));
+            Button baddop = new Button(hlbouton);
+             
+            Div div = new Div();
+            div.setHeight("300px");
+            div.setWidthFull();
+            div.add(baddop);
+            listcbb.add(cbbop1);
+            
+            div.add(cbbop1);
+            contenu.add(div);
+            
+            int nbop = 1;
+            
+            
+            
+            //On créé à nouveau la liste de combobox pour afficher les infos actuelles (avant modif)
+              int index1=1;
+            
+              
+            System.out.println("On essaie de donner la valeur aux combobox : erreur si taille =0");
+            cbbop1.setValue(listopactuelle.get(0));
+            
+            while(index1<listopactuelle.size()){
+                ComboBox <Operation>cbbopn = new ComboBox<>();
+                cbbopn.setItems(listop);
+                cbbopn.setItemLabelGenerator(Operation::getNom);
+                cbbopn.setLabel("Operation "+String.valueOf(index1+1));
+                cbbopn.setWidth("80%");
+                cbbopn.getStyle().set("margin-left", "auto");
+                cbbopn.getStyle().set("margin-right", "auto");
+                listcbb.add(cbbopn);
+                
+                div.add(cbbopn);
+                
+                
+                cbbopn.setValue(listopactuelle.get(index1));
+                
+                    
+                index1++;
+
+            }           
+               
+            
+            
+            //Les cases vides ne peuvent pas être supprimées pendant la saisie, mais elles sont éliminées lors de l'enregistrement
+            int index0=0;
+            while(index0<listcbb.size()){
+                
+                if((listcbb.get(index0).getValue())== null){
+                    listcbb.remove(index0);
+                    index0--;
+                    
+                }
+                
+                else{
+                System.out.println(index0);
+
+                
+                System.out.println(((Operation)(listcbb.get(index0).getValue())).getNom());
+                
+                //ON ajoute l'operation à la liste finale 
+                listopselect.add((Operation)(listcbb.get(index0).getValue()));
+                }      
+                index0++;
+
+            }           
+               
+            
+            
+            
+            baddop.addClickListener(event -> {
+                
+                ComboBox <Operation>cbbopn = new ComboBox<>();
+                cbbopn.setItems(listop);
+                cbbopn.setItemLabelGenerator(Operation::getNom);
+                cbbopn.setLabel("Operation "+String.valueOf(listcbb.size()+1));
+                cbbopn.setWidth("80%");
+                cbbopn.getStyle().set("margin-left", "auto");
+                cbbopn.getStyle().set("margin-right", "auto");
+                listcbb.add(cbbopn);
+                
+                div.add(cbbopn);
+                
+                
+            });
+            
+                    
+   
             boutonModifier.addClickListener(event -> {
                     
             tfref.setReadOnly(false);
             nfidbrut.setReadOnly(false);
             tades.setReadOnly(false);
             
-            
-                        
-            
-            
-            
+
             
             });
             
@@ -427,16 +548,39 @@ private Button boutonSupprimer;
             tfref.setReadOnly(true);
             nfidbrut.setReadOnly(true);
             tades.setReadOnly(true);
-            
-            
-            
-            
+            //rajouter les cbb en lecture
+
             
             System.out.println();
             System.out.println(produittemp.getId()+tfref.getValue()+tades.getValue()+(int)Math.round(nfidbrut.getValue()));
             
+            int index =0;
+            while(index<listcbb.size()){
+                
+                if((listcbb.get(index).getValue())== null){
+                    listcbb.remove(index);
+                    index--;
+                    
+                }
+                
+                else{
+                System.out.println(index);
+                
+                System.out.println(((Operation)(listcbb.get(index).getValue())).getNom());
+                listopselect.add((Operation)(listcbb.get(index).getValue()));
+                }
+                
+                
+                index++;
+                
+                
+                
+            }
+                
+                
+                
                 try {
-                    this.controleur.getVuePrincipale().getGestionBDD().updateProduit(this.controleur.getVuePrincipale().getGestionBDD().conn,produittemp.getId(),tfref.getValue(),tades.getValue(),(int)Math.round(nfidbrut.getValue()));
+                    this.controleur.getVuePrincipale().getGestionBDD().updateProduit(this.controleur.getVuePrincipale().getGestionBDD().conn,produittemp.getId(),tfref.getValue(),tades.getValue(),(int)Math.round(nfidbrut.getValue()),listopselect);
                 } catch (SQLException ex) {
                     Logger.getLogger(PartieDetail.class.getName()).log(Level.SEVERE, null, ex);
                 }

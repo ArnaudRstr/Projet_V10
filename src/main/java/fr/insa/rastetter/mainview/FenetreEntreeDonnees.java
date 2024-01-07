@@ -19,6 +19,7 @@ import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.component.checkbox.CheckboxGroup;
 import com.vaadin.flow.component.checkbox.CheckboxGroupVariant;
 import com.vaadin.flow.component.html.Div;
+import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.FlexComponent.Alignment;
 import static fr.insa.moly.GestionBDD.GestionBDD.listmachine;
 import static fr.insa.moly.GestionBDD.GestionBDD.listtypeoperation;
@@ -34,6 +35,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import static fr.insa.moly.GestionBDD.GestionBDD.listAtelier;
+import static fr.insa.moly.GestionBDD.GestionBDD.listoperation;
+import fr.insa.moly.objet.Operation;
 
 /**
  *
@@ -316,7 +319,62 @@ public class FenetreEntreeDonnees extends Dialog{
             this.contenuVL.add(nom,tfref, des,nbidbrut);
             this.add(contenuVL);
             
+            
+            //On récupère la liste de toutes les operations possibles pour remplir le choix des combobox
+            final ArrayList<Operation> listop = listoperation(this.controleur.getVuePrincipale().getGestionBDD().conn);
+
+            ArrayList <Operation> listopselect = new ArrayList();
+            
+            ArrayList <ComboBox> listcbb = new ArrayList();
+            
+            
+            
+            
+            MyHorizontalLayout hl1 = new MyHorizontalLayout();
+            ComboBox <Operation>cbbop1 = new ComboBox<>();
+            cbbop1.setItems(listop);
+            cbbop1.setItemLabelGenerator(Operation::getNom);
+            cbbop1.setLabel("Operation 1");
+            cbbop1.setWidth("80%");
+            cbbop1.getStyle().set("margin-left", "auto");
+            cbbop1.getStyle().set("margin-right", "auto");
+            
+            MyHorizontalLayout hlbouton = new MyHorizontalLayout();
+            hlbouton.add(VaadinIcon.PLUS_CIRCLE.create(),new H5("Ajouter une operation"));
+
+            Button baddop = new Button(hlbouton);
+            
+            this.contenuVL.add(baddop);
+            Div div = new Div();
+            div.setHeight("300px");
+            div.setWidthFull();
+            listcbb.add(cbbop1);
+            
+            div.add(cbbop1);
+            this.contenuVL.add(div);
+            
             this.open();
+            
+            baddop.addClickListener(event -> {
+                
+                ComboBox <Operation>cbbopn = new ComboBox<>();
+                cbbopn.setItems(listop);
+                cbbopn.setItemLabelGenerator(Operation::getNom);
+                cbbopn.setLabel("Operation "+String.valueOf(listcbb.size()+1));
+                cbbopn.setWidth("80%");
+                cbbopn.getStyle().set("margin-left", "auto");
+                cbbopn.getStyle().set("margin-right", "auto");
+                listcbb.add(cbbopn);
+                
+                div.add(cbbopn);
+                
+                
+            });
+            
+            
+            
+            
+            
            
            
            
@@ -330,11 +388,39 @@ public class FenetreEntreeDonnees extends Dialog{
         });
         
         boutonEnregistrer.addClickListener(event -> {
-            
+            System.out.println("1");
+            int index =0;
+            while(index<listcbb.size()){
+                
+                if((listcbb.get(index).getValue())== null){
+                    listcbb.remove(index);
+                    index--;
+                    
+                }
+                
+                else{
+                System.out.println(index+1);
+                //On ajoutera ici l'operation à la listopselect
+                
+                System.out.println(((Operation)(listcbb.get(index).getValue())).getNom());
+                listopselect.add((Operation)(listcbb.get(index).getValue()));
+                }
+                
+                
+                index++;
+                
+                
+                
+            }
             
             this.close();
+            
+            
+            System.out.println(listopselect);
                try {
-                   this.controleur.getVuePrincipale().getGestionBDD().addproduit(this.controleur.getVuePrincipale().getGestionBDD().conn,tfref.getValue(),des.getValue(),(int) Math.round(nbidbrut.getValue()));
+                   this.controleur.getVuePrincipale().getGestionBDD().addproduit(this.controleur.getVuePrincipale().getGestionBDD().conn,tfref.getValue(),des.getValue(),(int) Math.round(nbidbrut.getValue()),listopselect);
+                   
+                   
                    this.controleur.MenuItemProduit();
                } catch (SQLException ex) {
                    System.out.print("Fenêtre entrée de donnée : erreur lors de l'ajout du produit");
