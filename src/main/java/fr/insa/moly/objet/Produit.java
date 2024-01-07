@@ -95,6 +95,9 @@ public class Produit {
         this.idbrut = idbrut;
     }
     
+    public void setGamme(Gamme gamme){
+        this.gamme=gamme;
+    }
     
     public String getString(){
         String tab = "identifiant: "+this.id + " Reférence: "+ this.ref+ " Description: "+ this.des+" Identifiant Brut: "+this.idbrut;

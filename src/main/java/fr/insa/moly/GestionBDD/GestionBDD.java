@@ -1819,6 +1819,10 @@ public static ArrayList<Produit> listproduit (Connection connect)throws SQLExcep
             connect.setAutoCommit(true);// on remet le refresh automatique
         }
         
+        for (int i=0;i<listproduit.size();i++){
+            Gamme gam = new Gamme(connect,listproduit.get(i).getId());
+            listproduit.get(i).setGamme(gam);
+        }
      
     return listproduit;
 }  
@@ -1925,19 +1929,23 @@ public static ArrayList<Operation> listgammeproduit(Connection connect,int idpro
             listidapres.add(tab.getInt("idopapres"));
             }
             if (!listidavant.isEmpty()){
-                while (find == false){
-                    idfirst=listidavant.get(k);
-
-                for(int j=0;j<listidapres.size();j++){
-                    if (idfirst==listidapres.get(j)){
-                        find=false;
+  
+                for(int i=0;i<listidavant.size();i++){
+                    idfirst=listidavant.get(i);
+                    
+                    for(int j=0;j<listidapres.size();j++){
+                        if (idfirst==listidapres.get(j)){
+                            find=false;
+                        }
+                        else{
+                            find=true;
+                        }
                     }
-                    else{
-                        find=true;
+                    if(find==true){
+                        break;
                     }
                 }
-                k=k+1;
-                }
+                
                 ordre.add(idfirst);
 
                 for (int j=0;j<listidapres.size();j++){
