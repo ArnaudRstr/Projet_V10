@@ -1441,7 +1441,7 @@ public static void addgamme(Connection connect,Gamme gamme) throws SQLException{
     
      connect.setAutoCommit(false); //stope la mise à jour, elle sera fait à la fin si tout se passe bien
         try ( PreparedStatement cherchedouble = connect.prepareStatement(
-                "select id from ordre where idproduit=?")) {
+                "select * from ordre where idproduit=?")) {
             cherchedouble.setInt(1, gamme.getIdproduit());
             ResultSet test = cherchedouble.executeQuery();
             if (test.next()!= false){
