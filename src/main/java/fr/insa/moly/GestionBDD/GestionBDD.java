@@ -1325,10 +1325,9 @@ public static void updateProduit(Connection connect,int id,String ref,String des
             System.err.println("Erreur lors de la gestion des ressources : " + ex.getMessage());
         }
     }
-    
-     deleteOrdre(connect,id);
-     Gamme gam =new Gamme(listoperation,id);
-     addgamme(connect,gam);
+    System.out.println("updateProduit taille listoperation "+listoperation.size());
+     Gamme gam = new Gamme(listoperation,id);
+     updateGamme(connect,gam);
 }
 
 public static void addrealiseoo(Connection connect, int idoperateur, int idtypeoperation) throws SQLException {
@@ -1449,8 +1448,9 @@ public static void addgamme(Connection connect,Gamme gamme) throws SQLException{
                 System.out.println("On ne peut pas l'ajouter");
             }
             else{
-
+System.out.print("list op taille"+ gamme.getList().size());
             for(int i=0;i<gamme.getList().size()-1;i++){
+                System.out.println("add gamme 1 realisoo");
             try ( PreparedStatement pst = connect.prepareStatement(
                         "INSERT INTO `ordre` (idopavant,idopapres,idproduit) VALUES (?,?,?);"
 
@@ -1952,11 +1952,18 @@ public static ArrayList<Operation> listgammeproduit(Connection connect,int idpro
                 for (int j=0;j<listidapres.size();j++){
                      try ( PreparedStatement idapres = connect.prepareStatement(
                     "select idopapres from ordre where idopavant=?")) {
+                         
                          idapres.setInt(1, ordre.get(j));
+                         System.out.println("statement prète");
                          ResultSet tabidopapres = idapres.executeQuery();
-                          while (tab.next()!= false){
+                         System.out.println("resultat recup");
+                          while (tabidopapres.next()!= false){
+                              System.out.println("dans le while");
                              ordre.add(tabidopapres.getInt("idopapres"));
+                             System.out.println("ordre add =" + ordre.get(j+1));
                           }
+                     } catch(SQLException ex) {
+                          System.out.println("Rollback. Erreur : " + ex.getMessage());
                      }
                 }
             }
