@@ -2030,10 +2030,9 @@ public static ArrayList<Integer> listchild(Connection connect,String tabparentna
     
     connect.setAutoCommit(false); //stope la mise à jour, elle sera fait à la fin si tout se passe bien
         try ( PreparedStatement idtab = connect.prepareStatement(
-                "select id from ? where ?=?")) {
-            idtab.setString(1, tabchild);
-            idtab.setString(2,"id"+tabparentname);
-            idtab.setInt(3, idparent);
+                String.format("SELECT id FROM %s WHERE id%s=?", tabchild, tabparentname))) {
+            
+            idtab.setInt(1, idparent);
             ResultSet tab = idtab.executeQuery();
             while (tab.next()!= false){
                 listchild.add(tab.getInt("id"));

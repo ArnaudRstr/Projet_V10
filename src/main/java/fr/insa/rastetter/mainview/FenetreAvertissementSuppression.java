@@ -64,19 +64,24 @@ public FenetreAvertissementSuppression(Controleur controleur,String type,Object 
         Dialog rapportsupp = new Dialog();
         MyVerticalLayout contenurapport = new MyVerticalLayout();
 
-        try {
+        //try {
             contenurapport.add();
             
             ArrayList<String> stringList = new ArrayList();
-            stringList =((Atelier)objet).getGrandChildList(this.controleur.getVuePrincipale().getGestionBDD().conn);
+            try {
+                stringList =((Atelier)objet).getGrandChildList(this.controleur.getVuePrincipale().getGestionBDD().conn);
+            } catch (SQLException ex) {
+                Logger.getLogger(FenetreAvertissementSuppression.class.getName()).log(Level.SEVERE, null, ex);
+            }
             System.out.println("La liste du texte à afficher a été récupérée");
             stringList.forEach(element -> contenurapport.add(new Text(element)));
             
             rapportsupp.open();
             
-        } catch (SQLException ex) {
-            System.out.println("L'ouverture du rapport a échoué");
-        }
+//        } catch (SQLException ex) {
+//            System.out.println("L'ouverture du rapport a échoué");
+//            System.out.println(ex.getMessage());
+//        }
 
        });
         
