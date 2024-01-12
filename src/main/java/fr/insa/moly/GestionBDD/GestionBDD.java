@@ -1499,18 +1499,19 @@ public static void delete(Connection connect, String table, int id) throws SQLEx
             connect.rollback();
             System.out.println("Rollback. Erreur : " + ex.getMessage());
             throw ex;
+        
+    } finally {
+        try {
+            if (connect != null) {
+                connect.setAutoCommit(true);
+                
+            }
+        } catch (SQLException ex) {
+            System.err.println("Erreur lors de la gestion des ressources : " + ex.getMessage());
         }
-//    } finally {
-//        try {
-//            if (connect != null) {
-//                connect.setAutoCommit(true);
-//                connect.close();
-//            }
-//        } catch (SQLException ex) {
-//            System.err.println("Erreur lors de la gestion des ressources : " + ex.getMessage());
-//        }
-//    }
+    }
 }
+
 
 public static void deleteRealiseoo(Connection connect, String colonne, int idcolonne) throws SQLException {
     //try {
@@ -1526,17 +1527,17 @@ public static void deleteRealiseoo(Connection connect, String colonne, int idcol
             connect.rollback();
             System.out.println("Rollback. Erreur : " + ex.getMessage());
             throw ex;
+        
+    } finally {
+        try {
+            if (connect != null) {
+                connect.setAutoCommit(true);
+               
+            }
+        } catch (SQLException ex) {
+            System.err.println("Erreur lors de la gestion des ressources : " + ex.getMessage());
         }
-//    } finally {
-//        try {
-//            if (connect != null) {
-//                connect.setAutoCommit(true);
-//                connect.close();
-//            }
-//        } catch (SQLException ex) {
-//            System.err.println("Erreur lors de la gestion des ressources : " + ex.getMessage());
-//        }
-//    }
+    }
 }
 
 public static void deleteOrdre(Connection connect, int idproduit) throws SQLException {
@@ -1558,7 +1559,7 @@ public static void deleteOrdre(Connection connect, int idproduit) throws SQLExce
         try {
             if (connect != null) {
                 connect.setAutoCommit(true);
-                connect.close();
+                
             }
         } catch (SQLException ex) {
             System.err.println("Erreur lors de la gestion des ressources : " + ex.getMessage());
