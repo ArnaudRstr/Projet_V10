@@ -1918,8 +1918,8 @@ public static ArrayList<Operation> listgammeproduit(Connection connect,int idpro
       ArrayList<Integer> ordre = new ArrayList();
       ArrayList<Operation> listoperation =new ArrayList();
       int idfirst=0;
-      int k=0;
       boolean find=false;
+      
   try ( PreparedStatement affichetab = connect.prepareStatement(
                 "select * from ordre where idproduit=?")) {
                 affichetab.setInt(1, idproduit);
@@ -1931,40 +1931,42 @@ public static ArrayList<Operation> listgammeproduit(Connection connect,int idpro
             }
             if (!listidavant.isEmpty()){
   
-                for(int i=0;i<listidavant.size();i++){
-                    idfirst=listidavant.get(i);
-                    
-                    for(int j=0;j<listidapres.size();j++){
-                        if (idfirst==listidapres.get(j)){
-                            find=false;
-                        }
-                        else{
-                            find=true;
-                        }
-                    }
-                    if(find==true){
-                        break;
-                    }
-                }
+//                for(int i=0;i<listidavant.size();i++){
+//                    idfirst=listidavant.get(i);
+//                    
+//                    for(int j=0;j<listidapres.size();j++){
+//                        if (idfirst==listidapres.get(j)){
+//                            find=false;
+//                        }
+//                        else{
+//                            find=true;
+//                        }
+//                    }
+//                    if(find==true){
+//                        break;
+//                    }
+//                }
                 
-                ordre.add(idfirst);
+//                ordre.add(idfirst);
+                ordre.add(listidavant.get(0));
 
                 for (int j=0;j<listidapres.size();j++){
-                     try ( PreparedStatement idapres = connect.prepareStatement(
-                    "select idopapres from ordre where idopavant=?")) {
-                         
-                         idapres.setInt(1, ordre.get(j));
-                         System.out.println("statement prète");
-                         ResultSet tabidopapres = idapres.executeQuery();
-                         System.out.println("resultat recup");
-                          while (tabidopapres.next()!= false){
-                              System.out.println("dans le while");
-                             ordre.add(tabidopapres.getInt("idopapres"));
-                             System.out.println("ordre add =" + ordre.get(j+1));
-                          }
-                     } catch(SQLException ex) {
-                          System.out.println("Rollback. Erreur : " + ex.getMessage());
-                     }
+//                     try ( PreparedStatement idapres = connect.prepareStatement(
+//                    "select idopapres from ordre where idopavant=?")) {
+//                         
+//                         idapres.setInt(1, ordre.get(j));
+//                         System.out.println("statement ready");
+//                         ResultSet tabidopapres = idapres.executeQuery();
+//                         System.out.println("resultat recup");
+//                          while (tabidopapres.next()!= false){
+//                              System.out.println("dans le while");
+//                             ordre.add(tabidopapres.getInt("idopapres"));
+//                             System.out.println("ordre add à sa list =" + ordre.get(j+1));
+//                          }
+//                     } catch(SQLException ex) {
+//                          System.out.println("Rollback. Erreur : " + ex.getMessage());
+//                     }
+                        ordre.add(j);
                 }
             }
             else {
