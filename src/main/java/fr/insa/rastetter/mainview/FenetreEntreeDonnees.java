@@ -283,12 +283,17 @@ public class FenetreEntreeDonnees extends Dialog{
 
             try {
                 this.controleur.getVuePrincipale().getGestionBDD().addmachine(this.controleur.getVuePrincipale().getGestionBDD().conn,nom.getValue(),this.controleur.getEtatAtelier(),idtypeoperationtemp,des.getValue(),marque.getValue(),puissance.getValue(),statutTemp,coutHoraire.getValue(),localisation.getValue(),dimLargeur.getValue(),dimLongueur.getValue());
-                this.controleur.MenuItemMachine();
 
             } catch (SQLException ex) {
                 Logger.getLogger(FenetreEntreeDonnees.class.getName()).log(Level.SEVERE, null, ex);
             }
             
+            
+            try {
+                this.controleur.MenuItemMachine();
+            } catch (SQLException ex) {
+                Logger.getLogger(FenetreEntreeDonnees.class.getName()).log(Level.SEVERE, null, ex);
+            }
 
 
         });
@@ -421,12 +426,16 @@ public class FenetreEntreeDonnees extends Dialog{
                    this.controleur.getVuePrincipale().getGestionBDD().addproduit(this.controleur.getVuePrincipale().getGestionBDD().conn,tfref.getValue(),des.getValue(),(int) Math.round(nbidbrut.getValue()),listopselect);
                    
                    
-                   this.controleur.MenuItemProduit();
                } catch (SQLException ex) {
                    System.out.print("Fenêtre entrée de donnée : erreur lors de l'ajout du produit");
                }
             
-            
+               try {
+                   this.controleur.MenuItemProduit();
+               } catch (SQLException ex) {
+                   Logger.getLogger(FenetreEntreeDonnees.class.getName()).log(Level.SEVERE, null, ex);
+               }
+
             
         });
         
@@ -817,13 +826,19 @@ public class FenetreEntreeDonnees extends Dialog{
                try {
                    this.controleur.getVuePrincipale().getGestionBDD().addoperation(this.controleur.getVuePrincipale().getGestionBDD().conn,idtypeoperationtemp,nom.getValue(),nbduree.getValue(),tfoutil.getValue(),idmachineselect);
                     System.out.println("addop fait");
-                   this.controleur.MenuItemOperations();
                    
                    System.out.println("L'operation devrait être créé");
                } catch (SQLException ex) {
                    System.out.print("Fenêtre entrée de donnée : erreur lors de l'ajout de l'opération");
                }
-  
+                     
+               
+                try {
+                    this.controleur.MenuItemOperations();
+                } catch (SQLException ex) {
+                    Logger.getLogger(FenetreEntreeDonnees.class.getName()).log(Level.SEVERE, null, ex);
+                }
+
         });
            
            
