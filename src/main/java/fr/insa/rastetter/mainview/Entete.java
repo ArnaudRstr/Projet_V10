@@ -286,7 +286,7 @@ public class Entete extends MyHorizontalLayout {
         
         menuItemInfos.addClickListener(event -> {
             Notification.show("Ouverture de la section à propos");
-            String cheminRelatif = "src/main/resources/FichierTest.pdf";
+            String cheminRelatif = "src/main/resources/LEON.pdf";
         
         try {
             // Utilisation de cmd pour ouvrir le fichier avec l'application par défaut

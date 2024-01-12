@@ -402,12 +402,7 @@ private Button boutonSupprimer;
             nfidbrut.setWidthFull();
             nfidbrut.setValue((double)Math.round(produittemp.getIdbrut()));
             contenu.add(nfidbrut);
-            
-            
-            
-            
-            
-            
+
             
             //On pourra encore ajouter le nom du brut ??
 //            TextField tfnombrut=  new TextField();
@@ -420,21 +415,38 @@ private Button boutonSupprimer;
 //            tfref.setWidthFull();
 //            contenu.add(tfref);
 
-
+            //On créé une opération vide
+            Operation opnulle = new Operation(-1,-1,"vide",-1,"nul",-1);
 
             
-
-
             //Ajout de la gamme => opérations
-            final ArrayList<Operation> listop = listoperation(this.controleur.getVuePrincipale().getGestionBDD().conn);
+            
+            ArrayList<Operation> listoptemp = new ArrayList();
+            listoptemp.add(opnulle);
+            
+            ArrayList<Operation> listoptempbdd = listoperation(this.controleur.getVuePrincipale().getGestionBDD().conn);
+            int i =0;
+            while(i<listoptempbdd.size()){
+                listoptemp.add(listoptempbdd.get(i));
+                i++;
+                
+            }
+            
+            
+            
+            //final ArrayList<Operation> listop = listoperation(this.controleur.getVuePrincipale().getGestionBDD().conn);
+            final ArrayList<Operation> listop = listoptemp;
+            
             System.out.println("Taille de la liste des operations disponibles "+listop.size());
             
+            
+             
             //On récupère la liste d'operation du produit
             ArrayList <Operation> listopactuelle = new ArrayList();
             listopactuelle = produittemp.getGamme().getList();
             System.out.println("Recupération de la gamme du produit réussie");
             System.out.println("Taille de la liste de gamme (différente de 0) : "+listopactuelle.size());
-
+            
             ArrayList <Operation> listopselect = new ArrayList();
             
             ArrayList <ComboBox> listcbb = new ArrayList();
@@ -443,6 +455,8 @@ private Button boutonSupprimer;
             
             
             MyHorizontalLayout hl1 = new MyHorizontalLayout();
+            
+            
             //ComboBox <Operation>cbbop1 = new ComboBox<>();
 //            cbbop1.setItems(listop);
 //            cbbop1.setItemLabelGenerator(Operation::getNom);
@@ -485,9 +499,13 @@ private Button boutonSupprimer;
 //                System.out.println("Liste de taille nulle");
 //            }
             //cbbop1.setReadOnly(true);
+            
+            
             System.out.println();
             listopactuelle.forEach(Produit -> System.out.println(Produit.getNom()));
             System.out.println();
+            
+            
             while(index1<listopactuelle.size()){
                 
                 ComboBox <Operation>cbbopn = new ComboBox<>();
@@ -497,11 +515,8 @@ private Button boutonSupprimer;
                 cbbopn.setWidth("80%");
                 cbbopn.getStyle().set("margin-left", "auto");
                 cbbopn.getStyle().set("margin-right", "auto");
-                listcbb.add(cbbopn);
-                
+                listcbb.add(cbbopn);       
                 div.add(cbbopn);
-                
-                
                 cbbopn.setValue(listopactuelle.get(index1));
                 
                     
@@ -528,7 +543,7 @@ private Button boutonSupprimer;
                 System.out.println(((Operation)(listcbb.get(index0).getValue())).getNom());
                 listcbb.get(index0).setReadOnly(true);
                 //ON ajoute l'operation à la liste finale 
-                listopselect.add((Operation)(listcbb.get(index0).getValue()));
+                //listopselect.add((Operation)(listcbb.get(index0).getValue()));
                 }      
                 index0++;
 
@@ -560,28 +575,13 @@ private Button boutonSupprimer;
             tfref.setReadOnly(false);
             nfidbrut.setReadOnly(false);
             tades.setReadOnly(false);
-            //cbbop1.setReadOnly(false);
             baddop.setEnabled(true);
-
             
             int index2=0;
             while(index2<listcbb.size()){
-                
-//                if((listcbb.get(index2).getValue())== null){
-//                    listcbb.remove(index2);
-//                    index2--;
-//                    
-//                }
-                
-//                else{
-                System.out.println(index2);
+                listcbb.get(index2).setReadOnly(false);
 
-                
-                //System.out.println(((Operation)(listcbb.get(index2).getValue())).getNom());
-                listcbb.get(index2).setReadOnly(true);
-                //ON ajoute l'operation à la liste finale 
-                listopselect.add((Operation)(listcbb.get(index2).getValue()));
-//                }      
+                //listopselect.add((Operation)(listcbb.get(index2).getValue()));     
                 index2++;
 
             }           
@@ -593,12 +593,10 @@ private Button boutonSupprimer;
                 
                 int index2 =0;
             while(index2<listcbb.size()){
-                listcbb.get(index2).setReadOnly(false);
+                listcbb.get(index2).setReadOnly(true);
                 index2++;
-
             }     
-//            cbbop1.setReadOnly(true);
-//            listcbb.add(cbbop1);
+            
                             
 
             
@@ -623,7 +621,10 @@ private Button boutonSupprimer;
                     index--;
                     
                 }
-                
+                if(((Operation)(listcbb.get(index).getValue())).getNom()=="vide"){
+                    listcbb.remove(index);
+                    index--;
+                }
                 else{
                 System.out.println(index);
                 

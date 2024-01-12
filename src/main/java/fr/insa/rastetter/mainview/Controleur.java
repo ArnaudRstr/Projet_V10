@@ -603,13 +603,15 @@ public class Controleur {
         listTemp=listAtelier(this.getVuePrincipale().getGestionBDD().conn);
         String nom = new String();
         int index =0;
-        while (index<listTemp.size()){
+        boolean valide = false;
+        Atelier atelierselect = new Atelier(-1, "vide", "vide");
+        while (index<listTemp.size()&& valide == false){
             Atelier atelierTemp = (Atelier) listTemp.get(index);
 
             if(atelierTemp.getId()==this.etatAtelier){
                 
                 nom = atelierTemp.getNom();
-                 
+                atelierselect = atelierTemp;
                 
             }
             
@@ -617,7 +619,7 @@ public class Controleur {
             index++;        
 
         }
-        Atelier atelierselect = (Atelier) listTemp.get(this.etatAtelier);
+        
         //On affiche une fenêtre d'avertissement
         
                     FenetreAvertissementSuppression fenetreAvertissementSuppression = new FenetreAvertissementSuppression(this,"atelier",atelierselect);

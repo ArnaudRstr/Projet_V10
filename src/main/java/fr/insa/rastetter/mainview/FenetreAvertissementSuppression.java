@@ -69,6 +69,7 @@ public FenetreAvertissementSuppression(Controleur controleur,String type,Object 
             
             ArrayList<String> stringList = new ArrayList();
             stringList =((Atelier)objet).getGrandChildList(this.controleur.getVuePrincipale().getGestionBDD().conn);
+            System.out.println("La liste du texte à afficher a été récupérée");
             stringList.forEach(element -> contenurapport.add(new Text(element)));
             
             rapportsupp.open();
