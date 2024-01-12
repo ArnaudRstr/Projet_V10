@@ -1966,7 +1966,7 @@ public static ArrayList<Operation> listgammeproduit(Connection connect,int idpro
 //                     } catch(SQLException ex) {
 //                          System.out.println("Rollback. Erreur : " + ex.getMessage());
 //                     }
-                        ordre.add(j);
+                        ordre.add(listidapres.get(j));
                 }
             }
             else {
