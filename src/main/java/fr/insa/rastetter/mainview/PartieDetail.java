@@ -446,7 +446,7 @@ private Button boutonSupprimer;
             MyHorizontalLayout hlbouton = new MyHorizontalLayout();
             hlbouton.add(VaadinIcon.PLUS_CIRCLE.create(),new H5("Ajouter une operation"));
             Button baddop = new Button(hlbouton);
-             
+            baddop.setEnabled(false);
             Div div = new Div();
             div.setHeight("300px");
             div.setWidthFull();
@@ -465,8 +465,18 @@ private Button boutonSupprimer;
             
               
             System.out.println("On essaie de donner la valeur aux combobox : erreur si taille =0");
-            cbbop1.setValue(listopactuelle.get(0));
             
+            
+            
+            try{
+                cbbop1.setValue(listopactuelle.get(0));
+                cbbop1.setReadOnly(true);
+
+            }
+            catch(IndexOutOfBoundsException e){
+                System.out.println("Liste de taille nulle");
+            }
+            cbbop1.setReadOnly(true);
             while(index1<listopactuelle.size()){
                 ComboBox <Operation>cbbopn = new ComboBox<>();
                 cbbopn.setItems(listop);
@@ -504,7 +514,7 @@ private Button boutonSupprimer;
 
                 
                 System.out.println(((Operation)(listcbb.get(index0).getValue())).getNom());
-                
+                listcbb.get(index0).setReadOnly(true);
                 //ON ajoute l'operation à la liste finale 
                 listopselect.add((Operation)(listcbb.get(index0).getValue()));
                 }      
@@ -538,13 +548,50 @@ private Button boutonSupprimer;
             tfref.setReadOnly(false);
             nfidbrut.setReadOnly(false);
             tades.setReadOnly(false);
+            cbbop1.setReadOnly(false);
+            baddop.setEnabled(true);
+
             
+            int index2=0;
+            while(index2<listcbb.size()){
+                
+//                if((listcbb.get(index2).getValue())== null){
+//                    listcbb.remove(index2);
+//                    index2--;
+//                    
+//                }
+                
+//                else{
+                System.out.println(index2);
+
+                
+                //System.out.println(((Operation)(listcbb.get(index2).getValue())).getNom());
+                listcbb.get(index2).setReadOnly(true);
+                //ON ajoute l'operation à la liste finale 
+                listopselect.add((Operation)(listcbb.get(index2).getValue()));
+//                }      
+                index2++;
+
+            }           
 
             
             });
             
             boutonEnregistrer.addClickListener(event -> {
-                    
+                
+                int index2 =0;
+            while(index2<listcbb.size()){
+                listcbb.get(index2).setReadOnly(false);
+                index2++;
+
+            }     
+            cbbop1.setReadOnly(true);
+            listcbb.add(cbbop1);
+                            
+
+            
+            
+            baddop.setEnabled(false);
             tfref.setReadOnly(true);
             nfidbrut.setReadOnly(true);
             tades.setReadOnly(true);
