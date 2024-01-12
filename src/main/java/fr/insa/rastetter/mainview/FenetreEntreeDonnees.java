@@ -36,6 +36,7 @@ import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import static fr.insa.moly.GestionBDD.GestionBDD.listAtelier;
 import static fr.insa.moly.GestionBDD.GestionBDD.listoperation;
+import fr.insa.moly.objet.Brut;
 import fr.insa.moly.objet.Operation;
 
 /**
@@ -316,12 +317,19 @@ public class FenetreEntreeDonnees extends Dialog{
             this.nom = new TextField("Nom");
             this.des = new TextArea("Description");
             TextField tfref = new TextField("Référence");
-            NumberField nbidbrut = new NumberField("Identifiant du brut");
+            
+            ComboBox<Brut> cbbbrut = new ComboBox();
+            ArrayList <Brut> brutsbdd = this.controleur.getVuePrincipale().getGestionBDD().listBrut(this.controleur.getVuePrincipale().getGestionBDD().conn); 
+            cbbbrut.setItems(brutsbdd);
+            cbbbrut.setItemLabelGenerator(Brut::getNom);
+            
+            
+            
             this.setWidth("40vw");
 
 
 
-            this.contenuVL.add(nom,tfref, des,nbidbrut);
+            this.contenuVL.add(nom,tfref, des,cbbbrut);
             this.add(contenuVL);
             
             
@@ -421,9 +429,12 @@ public class FenetreEntreeDonnees extends Dialog{
             this.close();
             
             
+            
             System.out.println(listopselect);
+            System.out.println("Brut sélectionné : "+((Brut)cbbbrut.getValue()).getNom()+" Id : "+((Brut)cbbbrut.getValue()).getId());
+            
                try {
-                   this.controleur.getVuePrincipale().getGestionBDD().addproduit(this.controleur.getVuePrincipale().getGestionBDD().conn,tfref.getValue(),des.getValue(),(int) Math.round(nbidbrut.getValue()),listopselect);
+                   this.controleur.getVuePrincipale().getGestionBDD().addproduit(this.controleur.getVuePrincipale().getGestionBDD().conn,tfref.getValue(),des.getValue(),(int) Math.round(((Brut)cbbbrut.getValue()).getId()),listopselect);
                    
                    
                } catch (SQLException ex) {

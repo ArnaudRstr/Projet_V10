@@ -395,14 +395,30 @@ private Button boutonSupprimer;
             tades.setWidthFull();
             contenu.add(tades);
             
+  
+            ComboBox<Brut> cbbbrut = new ComboBox();
+            ArrayList <Brut> brutsbdd = this.controleur.getVuePrincipale().getGestionBDD().listBrut(this.controleur.getVuePrincipale().getGestionBDD().conn); 
+            cbbbrut.setItems(brutsbdd);
+            cbbbrut.setWidthFull();
+            cbbbrut.setItemLabelGenerator(Brut::getNom);
+            cbbbrut.setReadOnly(true);
             
-            NumberField nfidbrut = new NumberField();
-            nfidbrut.setLabel("Identifiant du brut");
-            nfidbrut.setReadOnly(true);
-            nfidbrut.setWidthFull();
-            nfidbrut.setValue((double)Math.round(produittemp.getIdbrut()));
-            contenu.add(nfidbrut);
-
+            
+            int j =0;
+            while(j<brutsbdd.size()){
+                
+                if(((Brut)brutsbdd.get(j)).getId()==produittemp.getIdbrut())
+                    cbbbrut.setValue(brutsbdd.get(j));
+                
+                System.out.println();
+                System.out.println("cbbbrut mis à jour");
+                System.out.println();
+                                   
+                j++;
+            }
+            //cbbbrut.setValue();
+            contenu.add(cbbbrut);
+            
             
             //On pourra encore ajouter le nom du brut ??
 //            TextField tfnombrut=  new TextField();
@@ -573,10 +589,10 @@ private Button boutonSupprimer;
             boutonModifier.addClickListener(event -> {
                     
             tfref.setReadOnly(false);
-            nfidbrut.setReadOnly(false);
             tades.setReadOnly(false);
             baddop.setEnabled(true);
-            
+            cbbbrut.setReadOnly(false);
+
             int index2=0;
             while(index2<listcbb.size()){
                 listcbb.get(index2).setReadOnly(false);
@@ -603,13 +619,12 @@ private Button boutonSupprimer;
             
             baddop.setEnabled(false);
             tfref.setReadOnly(true);
-            nfidbrut.setReadOnly(true);
             tades.setReadOnly(true);
             //rajouter les cbb en lecture
 
             
             System.out.println();
-            System.out.println(produittemp.getId()+tfref.getValue()+tades.getValue()+(int)Math.round(nfidbrut.getValue()));
+            //System.out.println(produittemp.getId()+tfref.getValue()+tades.getValue()+(int)Math.round(nfidbrut.getValue()));
             
             int index =0;
             System.out.println("Taille listecbb : "+listcbb.size());
@@ -646,7 +661,7 @@ private Button boutonSupprimer;
             System.out.println();
             
                 try {
-                    this.controleur.getVuePrincipale().getGestionBDD().updateProduit(this.controleur.getVuePrincipale().getGestionBDD().conn,produittemp.getId(),tfref.getValue(),tades.getValue(),(int)Math.round(nfidbrut.getValue()),listopselect);
+                    this.controleur.getVuePrincipale().getGestionBDD().updateProduit(this.controleur.getVuePrincipale().getGestionBDD().conn,produittemp.getId(),tfref.getValue(),tades.getValue(),(int)Math.round(((Brut)cbbbrut.getValue()).getId()),listopselect);
                 } catch (SQLException ex) {
                     Logger.getLogger(PartieDetail.class.getName()).log(Level.SEVERE, null, ex);
                 }
