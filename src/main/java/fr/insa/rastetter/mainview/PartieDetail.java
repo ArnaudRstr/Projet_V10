@@ -628,9 +628,11 @@ private Button boutonSupprimer;
                 
             }
                 
-            System.out.println(listopselect);
+            System.out.println("taille de la list d'operations à ajouter au produit : "+listopselect.size());
             
-            System.out.println(listopselect.getClass());    
+            System.out.println(listopselect.get(0).getClass());    
+            System.out.println();
+            System.out.println();
             
                 try {
                     this.controleur.getVuePrincipale().getGestionBDD().updateProduit(this.controleur.getVuePrincipale().getGestionBDD().conn,produittemp.getId(),tfref.getValue(),tades.getValue(),(int)Math.round(nfidbrut.getValue()),listopselect);
@@ -639,6 +641,9 @@ private Button boutonSupprimer;
                 }
                 
                 try {
+                    System.out.println();
+                    System.out.println();
+                    System.out.println("Actualisation menuitemproduit");
                     this.controleur.MenuItemProduit();
                 } catch (SQLException ex) {
                     Logger.getLogger(PartieDetail.class.getName()).log(Level.SEVERE, null, ex);
@@ -653,7 +658,7 @@ private Button boutonSupprimer;
                 
                 
                 try {
-                    FenetreAvertissementSuppression fenetreAvertissementSuppression = new FenetreAvertissementSuppression(this.controleur,"brut",produittemp);
+                    FenetreAvertissementSuppression fenetreAvertissementSuppression = new FenetreAvertissementSuppression(this.controleur,"produit",produittemp);
                 } catch (SQLException ex) {
                     Logger.getLogger(PartieDetail.class.getName()).log(Level.SEVERE, null, ex);
                 }
