@@ -597,7 +597,7 @@ public class Controleur {
         else {
         
 
-            
+          
             ArrayList<Atelier> listTemp =  new ArrayList();
        
         listTemp=listAtelier(this.getVuePrincipale().getGestionBDD().conn);
@@ -609,6 +609,7 @@ public class Controleur {
             if(atelierTemp.getId()==this.etatAtelier){
                 
                 nom = atelierTemp.getNom();
+                 
                 
             }
             
@@ -616,9 +617,10 @@ public class Controleur {
             index++;        
 
         }
+        Atelier atelierselect = (Atelier) listTemp.get(this.etatAtelier);
         //On affiche une fenêtre d'avertissement
         
-                    FenetreAvertissementSuppression fenetreAvertissementSuppression = new FenetreAvertissementSuppression(this,"atelier",nom,this.etatAtelier);
+                    FenetreAvertissementSuppression fenetreAvertissementSuppression = new FenetreAvertissementSuppression(this,"atelier",atelierselect);
 
                         
     }

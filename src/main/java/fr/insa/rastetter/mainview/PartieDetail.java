@@ -96,7 +96,7 @@ private Button boutonSupprimer;
         
         
         
-        this.listboutons.add(new H2(" Détail"),div0,boutonSupprimer,boutonModifier,boutonEnregistrer);
+        this.listboutons.add(new H2(" Détail"),boutonSupprimer,boutonModifier,boutonEnregistrer);
         
         
         
@@ -334,7 +334,9 @@ private Button boutonSupprimer;
             boutonSupprimer.addClickListener(event -> {
                 
                 try {
-                    FenetreAvertissementSuppression fenetreAvertissementSuppression = new FenetreAvertissementSuppression(this.controleur,"machine",machinetemp.getNom(),machinetemp.getId());
+                    FenetreAvertissementSuppression fenetreAvertissementSuppression = new FenetreAvertissementSuppression(this.controleur,"machine",machinetemp);
+
+                    //FenetreAvertissementSuppression fenetreAvertissementSuppression = new FenetreAvertissementSuppression(this.controleur,"machine",machinetemp.getNom(),machinetemp.getId());
                 } catch (SQLException ex) {
                     Logger.getLogger(PartieDetail.class.getName()).log(Level.SEVERE, null, ex);
                 }
@@ -602,6 +604,8 @@ private Button boutonSupprimer;
             System.out.println(produittemp.getId()+tfref.getValue()+tades.getValue()+(int)Math.round(nfidbrut.getValue()));
             
             int index =0;
+            System.out.println("Taille listecbb : "+listcbb.size());
+            
             while(index<listcbb.size()){
                 
                 if((listcbb.get(index).getValue())== null){
@@ -613,7 +617,7 @@ private Button boutonSupprimer;
                 else{
                 System.out.println(index);
                 
-                System.out.println(((Operation)(listcbb.get(index).getValue())).getNom());
+                System.out.println("Nom de l'opération ajoutée : "+((Operation)(listcbb.get(index).getValue())).getNom()+" dans la liste listopselect");
                 listopselect.add((Operation)(listcbb.get(index).getValue()));
                 }
                 
@@ -624,8 +628,10 @@ private Button boutonSupprimer;
                 
             }
                 
-                
-                
+            System.out.println(listopselect);
+            
+            System.out.println(listopselect.getClass());    
+            
                 try {
                     this.controleur.getVuePrincipale().getGestionBDD().updateProduit(this.controleur.getVuePrincipale().getGestionBDD().conn,produittemp.getId(),tfref.getValue(),tades.getValue(),(int)Math.round(nfidbrut.getValue()),listopselect);
                 } catch (SQLException ex) {
@@ -647,7 +653,7 @@ private Button boutonSupprimer;
                 
                 
                 try {
-                    FenetreAvertissementSuppression fenetreAvertissementSuppression = new FenetreAvertissementSuppression(this.controleur,"brut",produittemp.getRef(),produittemp.getId());
+                    FenetreAvertissementSuppression fenetreAvertissementSuppression = new FenetreAvertissementSuppression(this.controleur,"brut",produittemp);
                 } catch (SQLException ex) {
                     Logger.getLogger(PartieDetail.class.getName()).log(Level.SEVERE, null, ex);
                 }
@@ -792,7 +798,7 @@ private Button boutonSupprimer;
                 
                 try {
                     
-                    FenetreAvertissementSuppression fenetreAvertissementSuppression = new FenetreAvertissementSuppression(this.controleur,"brut",bruttemp.getNom(),bruttemp.getId());
+                    FenetreAvertissementSuppression fenetreAvertissementSuppression = new FenetreAvertissementSuppression(this.controleur,"brut",bruttemp);
 
                     //delete(this.controleur.getVuePrincipale().getGestionBDD().conn,bruttemp.getnomtable(),bruttemp.getId());
                     // On fait apparaitre une fenetre supplémentaire
@@ -1022,7 +1028,7 @@ private Button boutonSupprimer;
                 
                 try {
                     
-                    FenetreAvertissementSuppression fenetreAvertissementSuppression = new FenetreAvertissementSuppression(this.controleur,"operation",operationtemp.getNom(),operationtemp.getId());
+                    FenetreAvertissementSuppression fenetreAvertissementSuppression = new FenetreAvertissementSuppression(this.controleur,"operation",operationtemp);
 
                     //delete(this.controleur.getVuePrincipale().getGestionBDD().conn,bruttemp.getnomtable(),bruttemp.getId());
                     // On fait apparaitre une fenetre supplémentaire
@@ -1331,7 +1337,7 @@ private Button boutonSupprimer;
                 
                 try {
                     
-                    FenetreAvertissementSuppression fenetreAvertissementSuppression = new FenetreAvertissementSuppression(this.controleur,"operateur",operateurtemp.getNom(),operateurtemp.getId());
+                    FenetreAvertissementSuppression fenetreAvertissementSuppression = new FenetreAvertissementSuppression(this.controleur,"operateur",operateurtemp);
 
                     //delete(this.controleur.getVuePrincipale().getGestionBDD().conn,bruttemp.getnomtable(),bruttemp.getId());
                     // On fait apparaitre une fenetre supplémentaire
