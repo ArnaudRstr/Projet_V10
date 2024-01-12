@@ -402,6 +402,7 @@ private Button boutonSupprimer;
             cbbbrut.setWidthFull();
             cbbbrut.setItemLabelGenerator(Brut::getNom);
             cbbbrut.setReadOnly(true);
+            cbbbrut.setLabel("Brut");
             
             
             int j =0;
