@@ -435,13 +435,13 @@ private Button boutonSupprimer;
             
             
             MyHorizontalLayout hl1 = new MyHorizontalLayout();
-            ComboBox <Operation>cbbop1 = new ComboBox<>();
-            cbbop1.setItems(listop);
-            cbbop1.setItemLabelGenerator(Operation::getNom);
-            cbbop1.setLabel("Operation 1");
-            cbbop1.setWidth("80%");
-            cbbop1.getStyle().set("margin-left", "auto");
-            cbbop1.getStyle().set("margin-right", "auto");
+            //ComboBox <Operation>cbbop1 = new ComboBox<>();
+//            cbbop1.setItems(listop);
+//            cbbop1.setItemLabelGenerator(Operation::getNom);
+//            cbbop1.setLabel("Operation 1");
+//            cbbop1.setWidth("80%");
+//            cbbop1.getStyle().set("margin-left", "auto");
+//            cbbop1.getStyle().set("margin-right", "auto");
             
             MyHorizontalLayout hlbouton = new MyHorizontalLayout();
             hlbouton.add(VaadinIcon.PLUS_CIRCLE.create(),new H5("Ajouter une operation"));
@@ -451,9 +451,9 @@ private Button boutonSupprimer;
             div.setHeight("300px");
             div.setWidthFull();
             div.add(baddop);
-            listcbb.add(cbbop1);
+            //listcbb.add(cbbop1);
             
-            div.add(cbbop1);
+            //div.add(cbbop1);
             contenu.add(div);
             
             int nbop = 1;
@@ -461,22 +461,22 @@ private Button boutonSupprimer;
             
             
             //On créé à nouveau la liste de combobox pour afficher les infos actuelles (avant modif)
-              int index1=1;
+              int index1=0;
             
               
             System.out.println("On essaie de donner la valeur aux combobox : erreur si taille =0");
             
             
             
-            try{
-                cbbop1.setValue(listopactuelle.get(0));
-                cbbop1.setReadOnly(true);
-
-            }
-            catch(IndexOutOfBoundsException e){
-                System.out.println("Liste de taille nulle");
-            }
-            cbbop1.setReadOnly(true);
+//            try{
+//                cbbop1.setValue(listopactuelle.get(0));
+//                cbbop1.setReadOnly(true);
+//
+//            }
+//            catch(IndexOutOfBoundsException e){
+//                System.out.println("Liste de taille nulle");
+//            }
+            //cbbop1.setReadOnly(true);
             while(index1<listopactuelle.size()){
                 ComboBox <Operation>cbbopn = new ComboBox<>();
                 cbbopn.setItems(listop);
@@ -548,7 +548,7 @@ private Button boutonSupprimer;
             tfref.setReadOnly(false);
             nfidbrut.setReadOnly(false);
             tades.setReadOnly(false);
-            cbbop1.setReadOnly(false);
+            //cbbop1.setReadOnly(false);
             baddop.setEnabled(true);
 
             
@@ -585,8 +585,8 @@ private Button boutonSupprimer;
                 index2++;
 
             }     
-            cbbop1.setReadOnly(true);
-            listcbb.add(cbbop1);
+//            cbbop1.setReadOnly(true);
+//            listcbb.add(cbbop1);
                             
 
             
