@@ -358,6 +358,12 @@ private Button boutonSupprimer;
         
         
         
+        
+        
+        
+        
+        
+        
         if (typeobjet == "produit"){
             contenu.add(listboutons);
             this.add(contenu);
@@ -421,7 +427,7 @@ private Button boutonSupprimer;
 
             //Ajout de la gamme => opérations
             final ArrayList<Operation> listop = listoperation(this.controleur.getVuePrincipale().getGestionBDD().conn);
-            
+            System.out.println("Taille de la liste des operations disponibles "+listop.size());
             
             //On récupère la liste d'operation du produit
             ArrayList <Operation> listopactuelle = new ArrayList();
@@ -479,7 +485,11 @@ private Button boutonSupprimer;
 //                System.out.println("Liste de taille nulle");
 //            }
             //cbbop1.setReadOnly(true);
+            System.out.println();
+            listopactuelle.forEach(Produit -> System.out.println(Produit.getNom()));
+            System.out.println();
             while(index1<listopactuelle.size()){
+                
                 ComboBox <Operation>cbbopn = new ComboBox<>();
                 cbbopn.setItems(listop);
                 cbbopn.setItemLabelGenerator(Operation::getNom);
