@@ -12,7 +12,6 @@ import com.vaadin.flow.component.html.H5;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.notification.Notification;
-import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.textfield.NumberField;
 import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.component.textfield.TextField;
@@ -27,7 +26,6 @@ import java.util.logging.Logger;
 import static fr.insa.moly.GestionBDD.GestionBDD.listAtelier;
 import static fr.insa.moly.GestionBDD.GestionBDD.listoperateur;
 import fr.insa.moly.objet.Operateur;
-import java.sql.Connection;
 
 /**
  *
@@ -35,6 +33,7 @@ import java.sql.Connection;
  */
 
 
+//Le controleur fait le lien entre les différentes classes
 public class Controleur {
     
     private VuePrincipale main;
@@ -44,8 +43,7 @@ public class Controleur {
     private FenetrePartagee fenetrePartagee;
     private FenetreEntreeDonnees fenetreEntreeDonnees;
     
-    
-    
+
     
     public Controleur(VuePrincipale main,int etat,String etatFenetre) throws SQLException{
         this.main = main;
@@ -53,16 +51,12 @@ public class Controleur {
         this.etatFenetre = etatFenetre;
         this.fenetrePartagee=new FenetrePartagee(this);
         this.identifiantutilisateur="";
-        
                
     }
-    
-        
-    
+
     //On gère les événements pour les boutons et différents composants
 
     public void boutonConnect(VuePrincipale main) throws SQLException{
-        //this.main.setMainContent(new VuePlan());
         MenuItemMachine();
         this.main=main;
         this.main.setEntete(new Entete(main));
@@ -71,12 +65,8 @@ public class Controleur {
         
     }
 
-    
-   
     //Retour sur la vue initiale
     public void MenuItemDeconnexion() {
-        Notification.show("Deconnexion via controleur");
-
         this.main.setMainContent(new VueInitialeConnection(this.main,this));
         this.main.entete.removeAll();
         this.main.setEntete(new Entete());
@@ -85,7 +75,6 @@ public class Controleur {
     
     
     public void MenuItemInfosCompte() throws SQLException {
-        Notification.show("Deconnexion via controleur");
         Dialog dcompte = new Dialog();
         MyVerticalLayout vlcontenu = new MyVerticalLayout();
         vlcontenu.setWidthFull();
@@ -96,7 +85,6 @@ public class Controleur {
         //On récupèrera les infos de la personne connectée ici
         ArrayList <Operateur> listoperateurs = new ArrayList();
         listoperateurs = listoperateur (this.main.getGestionBDD().getConn());
-        
         //On recherche la personne grâce à l'identifiant (attribut du controleur)
         int i =0;
         boolean valide = false;
@@ -109,12 +97,8 @@ public class Controleur {
             }
             i++;   
         }
-        
-        
-        
-        
-        this.identifiantutilisateur=operateurconnecte.getIdentifiant();
-        
+    
+        this.identifiantutilisateur=operateurconnecte.getIdentifiant();    
         TextField tfnom = new TextField("Nom");
         tfnom.setReadOnly(true);
         tfnom.setWidthFull();
@@ -139,15 +123,11 @@ public class Controleur {
         nftel.setReadOnly(true);
         nftel.setWidthFull();
         nftel.setValue((double)operateurconnecte.getTel());
-        
-        
-        
-        
+ 
         String couleur1 = new String("#38998C");
         String couleur2 = new String("#BDE767");
         String couleur3 = new String("#1F4C83");
-        
-        
+   
         Icon iconenreg = new Icon("lumo","checkmark");
         Icon iconmodif = new Icon("lumo","edit");
         Icon iconsupp = new Icon(VaadinIcon.TRASH);
@@ -155,12 +135,9 @@ public class Controleur {
         iconenreg.setColor(couleur1);
         iconmodif.setColor(couleur1);
         iconsupp.setColor(couleur1);
-        
-         
-        
+  
         Button boutonModifier =new Button(new H5("Modifier"));
-        
-        
+  
         dcompte.setHeaderTitle("Informations du compte");
         dcompte.getHeader().add(boutonFermer);
         vlcontenu.add(boutonModifier,tfnom,tfprenom,nftel,tfmail,tfidentifiant,tfmdp);
@@ -194,8 +171,7 @@ public class Controleur {
             nftel.setReadOnly(true);
                 
             });
-        
-        
+ 
         boutonEnregistrer.addClickListener(event -> {
             tfnom.setReadOnly(true);
             tfprenom.setReadOnly(true);
@@ -203,17 +179,13 @@ public class Controleur {
             tfmail.setReadOnly(true);
             tfidentifiant.setReadOnly(true);  
             nftel.setReadOnly(true);
-            
-            
-                
+
             try {
                 this.getVuePrincipale().getGestionBDD().updateOperateur(this.getVuePrincipale().getGestionBDD().conn,id,tfidentifiant.getValue(),tfmdp.getValue(),tfnom.getValue(),tfprenom.getValue(),idateliertemp,idstatutchoix,(int) Math.round(nftel.getValue()),tfmail.getValue(),listtypeop);
             } catch (SQLException ex) {
                 System.out.println("Pas reussi à modifier l'operateur");
             }
-            
-                        
-            
+     
             dcompte.close();
             });
         
@@ -222,53 +194,28 @@ public class Controleur {
     
     public void MenuItemPlan() {
         this.main.setMainContent(new VuePlan());
-        Notification.show("plan via controleur");
     }
 
     public void MenuItemMachine() throws SQLException {
-        this.fenetrePartagee =new FenetrePartagee(this, "machine");
-        //this.main.setMainContent(new FenetrePartagee(this, "machine"));
-        
+        this.fenetrePartagee =new FenetrePartagee(this, "machine");        
         this.main.setMainContent(this.fenetrePartagee);
         this.etatFenetre= "machine";
-        
-        
-        
-        
-        Notification.show("machines via controleur");
-        
-        
+
     }
     
     public void MenuItemProduit() throws SQLException {
-        Notification.show("Produits via controleur");
-        
-        this.fenetrePartagee =new FenetrePartagee(this,"produit");
-        //this.main.setMainContent(new FenetrePartagee(this, "machine"));
-        
+        this.fenetrePartagee =new FenetrePartagee(this,"produit");   
         this.main.setMainContent(this.fenetrePartagee);
         this.etatFenetre= "produit";
-        
-        
-        
     }
     
     
-    public void MenuItemOperations() throws SQLException {
-        Notification.show("Operations via controleur");
-        
+    public void MenuItemOperations() throws SQLException {       
         this.fenetrePartagee =new FenetrePartagee(this,"operation");
-        //this.main.setMainContent(new FenetrePartagee(this, "machine"));
-        
         this.main.setMainContent(this.fenetrePartagee);
-        this.etatFenetre= "operation";
-        
-        
-        
+        this.etatFenetre= "operation";  
     }
-    
-    
-    
+
     
     public void MenuItemTypeOperation() throws SQLException{
         Dialog fenetre = new Dialog();
@@ -289,14 +236,11 @@ public class Controleur {
         
         hlmodif.add(entreetype,boutonajouter,boutonsupprimer);
         contenu.add(hlmodif);
-        
-        
+
         if (listtypeoperation(this.getVuePrincipale().getGestionBDD().conn).size()==0){
             contenu.add(new Text("Il n'y a pas de type d'opération"));
-            System.out.println("Pas de types d'iopération");
         }
-        
-        
+
         else{
           ArrayList<Typeoperation> listtemp = new ArrayList();
           listtemp=listtypeoperation(this.getVuePrincipale().getGestionBDD().conn);
@@ -312,12 +256,9 @@ public class Controleur {
         fenetre.setHeaderTitle("Types d'opération");
         fenetre.setResizable(true);
         fenetre.open(); 
-        
-        
-        boutonajouter.addClickListener(event4 -> {
-            
+
+        boutonajouter.addClickListener(event4 -> {    
             String nomtype = entreetype.getValue();
-            System.out.println("Bouton Ajouté activé");
 
             if (nomtype.isEmpty()){
                 Notification.show("Ajoutez un nom");
@@ -339,13 +280,8 @@ public class Controleur {
             }
       
         });
-        
-        
-       
-        
+ 
         grid.addItemClickListener(event5 -> {
-                    Notification.show("Ligne sélectionnée"+event5.getItem().getId());
-                    System.out.println("Id à supprimer "+event5.getItem().getId());
                     boutonsupprimer.setEnabled(true);
                     
                     final int intselect = event5.getItem().getId();
@@ -363,127 +299,36 @@ public class Controleur {
                         }
                         
                         grid.deselectAll();
-                        
-                        
-//                        System.out.println("Id à supprimer ( 2ème boucle) "+intselect);
-//                        grid.deselectAll();
-//                        Dialog dsuppression = new Dialog();
-//                        dsuppression.setHeaderTitle("Confirmer la suppression");
-//                        MyVerticalLayout vlsuppression = new MyVerticalLayout();
-//                        vlsuppression.add(new Text("Etes-vous sûr de vouloir supprimer ce type d'opération?"));
-//                        vlsuppression.add();
-//                        vlsuppression.add(new Text("Liste des éléments qui seront supprimés"));
-//                        
-//                        //Il faudra ajouter tout ce qui est supprimé
-//                        
-//                        
-//                        
-//                        dsuppression.add(vlsuppression);
-//                        Button boutonFermer2 = new Button(new Icon("lumo","cross"));
-//                        dsuppression.getHeader().add(boutonFermer2);
-//                        Button boutonSupp = new Button("Supprimer");
-//                        Button boutonAnnuler = new Button("Annuler");
-//                        dsuppression.open();
-//
-//                        
-//                        
-//                        
-//                        
-//                        dsuppression.getFooter().add(boutonAnnuler,boutonSupp);                     
-//
-//                        
-//                        boutonSupp.addClickListener(event3 -> {
-//                            dsuppression.close();
-//                            
-//                            try {
-//                                System.out.println("Essai de suppression : id = "+intselect);
-//
-//                                delete(this.getVuePrincipale().getGestionBDD().conn,typopsupp.getnomtable(),intselect);
-//                                grid.setItems(listtypeoperation(this.getVuePrincipale().getGestionBDD().conn));
-//                                boutonSupp.setEnabled(true);
-//                            } catch (SQLException ex) {
-//                                System.out.println("Pas reussi à supprimer le type d'operation");
-//                            }
-//                                dsuppression.close();
-//
-//                            
-//                        });
-//                        
-//                  
-//                        boutonAnnuler.addClickListener(event3 -> {
-//                            dsuppression.close();
-//                        });
-//
-//                        boutonFermer2.addClickListener(event3 -> {
-//                            dsuppression.close();
-//                        });
-                             
-                        
 
-                    //System.out.println("Id à supprimer "+event.getItem().getId()+" fenetre fermée avec bouton supprimer");
-                    
-                    
-                 
                 });
                     
                 event5=null;
                 return;
-                
-                
-                
-
        
-                
                 });
-        
-        
-        
-        
-        
+   
         boutonFermer.addClickListener(event -> {
             fenetre.close();
         });
-        
-        
+     
         
     }
     
     public void MenuItemBrut() throws SQLException{
         this.fenetrePartagee =new FenetrePartagee(this,"brut");
-        //this.main.setMainContent(new FenetrePartagee(this, "machine"));
-        
         this.main.setMainContent(this.fenetrePartagee);
         this.etatFenetre= "brut";
-        
-        
-        
+    
     }
     
     
     
     public void MenuItemOperateur() throws SQLException{
-        System.out.println(" Arrivé dans MenuItemOperateur");
-        this.fenetrePartagee =new FenetrePartagee(this,"operateur");
-        System.out.println(" pas de probleme pour fenetre partagee");
-        
-        //this.main.setMainContent(new FenetrePartagee(this, "machine"));
-        
+        this.fenetrePartagee =new FenetrePartagee(this,"operateur");                
         this.main.setMainContent(this.fenetrePartagee);
         this.etatFenetre= "operateur";
-        
-        
- 
-        
-        //this.main.setMainContent(new PartiePrincipale(this,"operateur")); 
-
-        System.out.println(" Reparti dans MenuItemOperateur");
-
     }
-    
-    
-    
-    
-    
+
     public void MenuItemDetailsAtelier() throws SQLException{
         
         
@@ -493,28 +338,18 @@ public class Controleur {
         TextArea des = new TextArea("Description");
         NumberField nfdimlarg = new NumberField("Largeur (cm)");
         NumberField nfdimlong = new NumberField("Longueur (cm)");
-        
-        
-       
+
         Dialog fenetre = new Dialog();
         
         Button boutonModifNom = new Button(new Icon("lumo","edit"));
 
-        
-        
-//        nom.setLabel("Nom de l'atelier");
-//        des.setLabel("Description");
-//        id.setLabel("Identifiant");
-        
         
         nom.setReadOnly(true);
         des.setReadOnly(true);
         id.setReadOnly(true);
         nfdimlarg.setReadOnly(true);
         nfdimlong.setReadOnly(true);    
-        
-        //Il faut encore ajouter les placeHolder et les boutons pour activer les zones.
-
+ 
         ArrayList<Atelier> listTemp =  new ArrayList();
        
         listTemp=listAtelier(this.getVuePrincipale().getGestionBDD().conn);
@@ -563,18 +398,13 @@ public class Controleur {
                 nfdimlarg.setReadOnly(true);
                 nfdimlong.setReadOnly(true);
                 fenetre.close();
-                
-                
+   
                     try {
                         this.getVuePrincipale().getGestionBDD().updateAtelier(this.getVuePrincipale().getGestionBDD().conn,atelierTemp.getId(), nom.getValue(),  des.getValue(), 100/*(int) Math.round(nfdimlarg.getValue())*/, 100/*(int) Math.round(nfdimlong.getValue())*/);
                     } catch (SQLException ex) {
                         Logger.getLogger(Controleur.class.getName()).log(Level.SEVERE, null, ex);
                     }
-                
-                
-               
-                
-                
+        
         });
     
                 
@@ -583,31 +413,18 @@ public class Controleur {
             
             index++;
         }
-        
-        
-        
-        
-        
-        
-        
-        
-        
+    
     }
     
     
     public void MenuItemSupprimerAtelier() throws SQLException{
-        
-        
-        
-        
+
         if(this.etatAtelier==-1){
             Notification.show("Séléctionnez un atelier");
         }
         else {
-        
-
-          
-            ArrayList<Atelier> listTemp =  new ArrayList();
+      
+        ArrayList<Atelier> listTemp =  new ArrayList();
        
         listTemp=listAtelier(this.getVuePrincipale().getGestionBDD().conn);
         String nom = new String();
@@ -620,220 +437,70 @@ public class Controleur {
             if(atelierTemp.getId()==this.etatAtelier){
                 
                 nom = atelierTemp.getNom();
-                atelierselect = atelierTemp;
-                
+                atelierselect = atelierTemp;              
             }
-            
-            
             index++;        
-
         }
-        
-        //On affiche une fenêtre d'avertissement
-        
-                    FenetreAvertissementSuppression fenetreAvertissementSuppression = new FenetreAvertissementSuppression(this,"atelier",atelierselect);
-
-                        
+        FenetreAvertissementSuppression fenetreAvertissementSuppression = new FenetreAvertissementSuppression(this,"atelier",atelierselect);                       
     }
-        
-        
-        
-                    
-                    
-//        System.out.println("les ateliers devraient être affichés");
-//        this.getVuePrincipale().getEntete().setComboBoxAtelier(listaltelier(this.getVuePrincipale().getGestionBDD().conn));
-        
-    }
-    
-    
-    public void MenuItemAjouterMachine(){
-        
-        
     }
 
-    
-    
-    //Plus besoin de cette méthode normalement
-    /*
-    public void MenuItemAjouterAtelier() throws SQLException, InterruptedException{
-        Notification.show("Ajouter Atelier via controleur");
-        //On recueuille les données nécessaires grâce à la fenêtre d'entrée de données
-        //On ajoute l'atelier avec ce que l'on a comme données
-        this.main.getGestionBDD().addatelier(this.main.getGestionBDD().conn,"test 11","Description",14,25);
-        System.out.println("l'atelier devrait être créé");
-        int index =0;
-        ArrayList<Atelier> listTemp= listaltelier(this.main.getGestionBDD().conn);
-
-        while (index<listTemp.size()){
-            Atelier atelierTemp = (Atelier) listTemp.get(index);
-            System.out.println(atelierTemp.getId()+" : "+atelierTemp.getNom());
-            index++;
-        }    
-        System.out.println("les ateliers devraient être affichés");  
-    }
-    */
-    
-    
-    
-    
-    
-    
-
-    
-  
-    
-    
-    public void OuvrirFenetreEntree(String objet){
-        
-        
-        
-        if (objet=="atelier"){
-            
-
-        }
-        
-            
-        
-    }
-    
-    
-    
-    
     public void CreationObjet(String objet) throws SQLException{
+
         
-        
-        
-        
-        if(objet =="atelier"){
-            
-            
-            System.out.println("la fenetre va être créée");
+        if("atelier".equals(objet)){
+  
             this.fenetreEntreeDonnees = new FenetreEntreeDonnees(this,"atelier");
-            
-            System.out.println("La fenetre devrait être crée");
-            
-            
-            
-            
-            
-//            ArrayList donneesText = new ArrayList();
-//            ArrayList<Double> donneesNum = new ArrayList();
-//
-//            donneesText = this.fenetreEntreeDonnees.getDonneesText();
-//            donneesNum = this.fenetreEntreeDonnees.getDonneesNum();
-//            System.out.println("données avant création " + this.fenetreEntreeDonnees.getDonneesText()+this.fenetreEntreeDonnees.getDonneesNum());
-            
-            //this.main.getGestionBDD().addatelier(this.main.getGestionBDD().conn,(String) donneesText.get(0),(String) donneesText.get(1),(int)Math.round(donneesNum.get(0)),(int) Math.round(donneesNum.get(1)));
-        //System.out.println("l'atelier devrait être créé");
-        
-        
-        
-        //Penser à enlever les arrondis si on change le type de la dimension de l'atelier
-        //System.out.println("Controleur : essai de mise à jour du combobox");
-        //this.main.getEntete().setComboBoxAtelier(listaltelier(this.main.getGestionBDD().conn));
-         
-        System.out.println("Combobox mis à jour");
+
         int index =0;
         ArrayList<Atelier> listTemp= listAtelier(this.main.getGestionBDD().conn);
-        
-        
+
         while (index<listTemp.size()){
             Atelier atelierTemp = (Atelier) listTemp.get(index);
             System.out.println(atelierTemp.getId()+" : "+atelierTemp.getNom());
             index++;
+        }  
         }
-        
-        System.out.println("les ateliers devraient être affichés");
-            
-        }
-        
-        
-        if(objet =="machine"){
-        
-            System.out.println("la fenetre va être créée");
-            
-            
-            this.fenetreEntreeDonnees = new FenetreEntreeDonnees(this,"machine");
-            System.out.println("La fenetre devrait être crée");
-            
-            
+  
+        if("machine".equals(objet)){
+
+            this.fenetreEntreeDonnees = new FenetreEntreeDonnees(this,"machine");                       
             this.MenuItemMachine();
         }
         
-        if(objet =="produit"){
-        
-            System.out.println("la fenetre va être créée");
-            
-            
-            this.fenetreEntreeDonnees = new FenetreEntreeDonnees(this,"produit");
-            System.out.println("La fenetre devrait être crée");
-            
-            
+        if("produit".equals(objet)){
+            this.fenetreEntreeDonnees = new FenetreEntreeDonnees(this,"produit");        
             this.MenuItemProduit();
         }
-        
-        
-        if(objet =="brut"){
-        
-            System.out.println("la fenetre va être créée");
-            
-            
-            this.fenetreEntreeDonnees = new FenetreEntreeDonnees(this,"brut");
-            System.out.println("La fenetre devrait être crée");
-            
+     
+        if("brut".equals(objet)){
+            this.fenetreEntreeDonnees = new FenetreEntreeDonnees(this,"brut"); 
             this.MenuItemBrut();
         }
         
-        
-        
-        if(objet =="operation"){
-        
-            System.out.println("la fenetre va être créée");
-            
-            
-            this.fenetreEntreeDonnees = new FenetreEntreeDonnees(this,"operation");
-            System.out.println("La fenetre devrait être crée");
-            
+        if("operation".equals(objet)){
+            this.fenetreEntreeDonnees = new FenetreEntreeDonnees(this,"operation");          
             this.MenuItemOperations();
         }
-        
-        
-        
-        if(objet =="operateur"){
-        
-            System.out.println("la fenetre va être créée");
-            
-            
-            this.fenetreEntreeDonnees = new FenetreEntreeDonnees(this,"operateur");
-            System.out.println("La fenetre devrait être crée");
-            
+
+        if("operateur".equals(objet)){
+            this.fenetreEntreeDonnees = new FenetreEntreeDonnees(this,"operateur");    
             this.MenuItemOperateur();
         }
-        
-        
-        
-        
+
     }
+ 
     
-    
-    
-    
-    //Aucun atelier sélectionné : etat = -1
-    //Atelier 1 selectionné : etat 1 etc...
-    
-    public VuePrincipale getVuePrincipale(){
-        
+    public VuePrincipale getVuePrincipale(){  
         return this.main;
     }
     
     
-    public int getEtatAtelier(){
-        
+    public int getEtatAtelier(){       
         return this.etatAtelier;
     }
     
-        public String getEtatFenetre(){
-        
+        public String getEtatFenetre(){       
         return this.etatFenetre;
     }
        
