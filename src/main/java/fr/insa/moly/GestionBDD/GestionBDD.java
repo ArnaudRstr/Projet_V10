@@ -1617,7 +1617,7 @@ public static ArrayList<Atelier> listAtelier (Connection connect)throws SQLExcep
             
             ResultSet ateliers = affichetab.executeQuery();
             while (ateliers.next()!= false){
-                Atelier at = new Atelier(ateliers.getInt("id"),ateliers.getString("nom"),ateliers.getString("des"));
+                Atelier at = new Atelier(connect, ateliers.getInt("id"));
                 listatelier.add(at);
             }
 

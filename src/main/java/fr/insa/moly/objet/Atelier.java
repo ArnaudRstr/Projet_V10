@@ -19,12 +19,16 @@ public class Atelier {
     
     private final int id; 
     private String nom;
-    private String des; 
+    private String des;
+    private int largeur;
+    private int longueur;
 
-   public Atelier(int id, String nom, String des){
+   public Atelier(int id, String nom, String des, int largeur, int longueur){
        this.id=id;
        this.nom=nom;
-       this.des=des;  
+       this.des=des;
+       this.largeur=largeur;
+       this.longueur=longueur;
    }
  
    public Atelier(Connection connect,int id)throws SQLException {
@@ -39,6 +43,8 @@ public class Atelier {
             while (resultat.next()!= false){
                 this.nom=resultat.getString("nom");
                 this.des=resultat.getString("des");
+                this.largeur=resultat.getInt("dimensionlargeur");
+                this.longueur=resultat.getInt("dimensionlongueur");
             }
         } catch (SQLException ex) {
             connect.rollback();
@@ -75,6 +81,15 @@ public class Atelier {
     public void setDes(String des) {
         this.des = des;
     }
+
+    public void setLargeur(int largeur) {
+        this.largeur = largeur;
+    }
+
+    public void setLongueur(int longueur) {
+        this.longueur = longueur;
+    }
+    
     public String getString(){
         String tab = "Identifiant: "+this.id + " Nom: "+ this.nom+ " Description: "+ this.des;
         return tab;
@@ -82,6 +97,16 @@ public class Atelier {
     public String getnomtable(){
       return   "atelier";
     }
+
+    public int getLargeur() {
+        return largeur;
+    }
+
+    public int getLongueur() {
+        return longueur;
+    }
+    
+    
    
     public ArrayList getMachinechild(Connection connect)throws SQLException{
         ArrayList<Integer> listidchild = GestionBDD.listchild(connect,this.getnomtable(),this.id,"machine");       
