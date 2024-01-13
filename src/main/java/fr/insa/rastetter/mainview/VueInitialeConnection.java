@@ -161,7 +161,7 @@ public class VueInitialeConnection extends MyVerticalLayout{
     });
   
         boutonNotice.addClickListener(e -> {
-        String cheminRelatif = "src/main/resources/FichierTest.pdf";
+        String cheminRelatif = "src/main/resources/Notice d'utilisation.pdf";
         
         try {
             // Utilisation de cmd pour ouvrir le fichier avec l'application par défaut

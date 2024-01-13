@@ -207,7 +207,7 @@ public class Entete extends MyHorizontalLayout {
         //ouverture du .pdf de la notice
         menuItemNotice.addClickListener(event -> {
             Notification.show("Ouverture du mode d'emploi");
-            String cheminRelatif = "src/main/resources/FichierTest.pdf";
+            String cheminRelatif = "src/main/resources/Notice d'utilisation.pdf";
         
         try {
             // Utilisation de cmd pour ouvrir le fichier avec l'application par défaut
