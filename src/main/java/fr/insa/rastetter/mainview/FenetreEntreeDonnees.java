@@ -7,7 +7,6 @@ package fr.insa.rastetter.mainview;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.dialog.Dialog;
-import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.component.html.H5;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.menubar.MenuBar;
@@ -26,7 +25,6 @@ import static fr.insa.moly.GestionBDD.GestionBDD.listtypeoperation;
 import fr.insa.moly.objet.Atelier;
 import fr.insa.moly.objet.Machine;
 import fr.insa.moly.objet.Typeoperation;
-import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -89,27 +87,35 @@ public class FenetreEntreeDonnees extends Dialog{
        
        
        
+      //Cette classe créé une fenêtre de dialogue d'entrée de donnée. 
+      //Ces fenêtres sont toutes différentes en fonction de l'objet que l'on souhaite ajouter.
+      
       
        //Pour un atelier
     if (objet =="atelier"){
         
         this.nom = new TextField("Nom");
+        nom.setWidthFull();
         this.des = new TextArea("Description");
+        des.setWidthFull();
         this.dimLongueur = new NumberField("Longueur (cm)");
+        dimLongueur.setWidthFull();
         this.dimLargeur = new NumberField("Largeur (cm)");
-        
+        dimLargeur.setWidthFull();
         this.setHeaderTitle("Ajouter un atelier");
-
         this.contenuVL.add(nom);
         this.contenuVL.add(des);
         this.contenuVL.add(dimLongueur);
         this.contenuVL.add(dimLargeur);
-        
-
+        this.contenuVL.setWidthFull();
         this.add(contenuVL);
-       
+        this.setWidth("35vw");
         this.contenuVL.setAlignItems(CENTER);
         this.open();
+        
+        
+        
+        //Evénements sur les boutons
         boutonFermer.addClickListener(event -> {
            this.close();   
        });
@@ -118,20 +124,15 @@ public class FenetreEntreeDonnees extends Dialog{
            this.close();   
        });
        
-       
-       
-       
+   
         boutonEnregistrer.addClickListener(event -> {
-            //Il faut encore faire un contrôle de saisie ici
             
-            this.donneesText.add((String) this.nom.getValue());
-            this.donneesText.add((String) this.des.getValue());
-            this.donneesNum.add(this.dimLongueur.getValue());
-            this.donneesNum.add(this.dimLargeur.getValue());   
+//            this.donneesText.add((String) this.nom.getValue());
+//            this.donneesText.add((String) this.des.getValue());
+//            this.donneesNum.add(this.dimLongueur.getValue());
+//            this.donneesNum.add(this.dimLargeur.getValue());   
             this.close();
-            
-            
-            
+   
             Notification.show("Données enregistrées");
             try {
                 this.controleur.getVuePrincipale().getGestionBDD().addatelier(this.controleur.getVuePrincipale().getGestionBDD().conn,this.nom.getValue(),this.des.getValue(),(int)Math.round(this.dimLongueur.getValue()),(int) Math.round(this.dimLargeur.getValue()));
@@ -152,7 +153,16 @@ public class FenetreEntreeDonnees extends Dialog{
                 System.out.println("Impossible de mettre à jour le combobox");
             }
                 System.out.println("Combobox mis à jour (via Fenetre)");
-            
+               
+                
+                
+                
+            //On remet à jour
+            try {
+                this.controleur.boutonConnect(this.controleur.getVuePrincipale());
+            } catch (SQLException ex) {
+                Logger.getLogger(FenetreEntreeDonnees.class.getName()).log(Level.SEVERE, null, ex);
+            }
            
         });
        
@@ -175,10 +185,7 @@ public class FenetreEntreeDonnees extends Dialog{
         NumberField coutHoraire = new NumberField("Coût horaire (€)");
         TextField marque = new TextField("Marque");
         TextField localisation = new TextField("Localisation (String)");
-        NumberField statut = new NumberField("Statut (int)");
 
-        
-        
         ArrayList <String> listStatuts = new ArrayList();
         
         listStatuts.add("Arret");
@@ -188,13 +195,6 @@ public class FenetreEntreeDonnees extends Dialog{
         ComboBox cbbstatut = new ComboBox();
         cbbstatut.setItems(listStatuts);
         cbbstatut.setLabel("Statut");
-        
-        
-        
-        
-        
-        
-
         
         ComboBox comboBoxTypeOperation = new ComboBox();
         comboBoxTypeOperation.setLabel("Type d'opération");
@@ -213,22 +213,17 @@ public class FenetreEntreeDonnees extends Dialog{
         }
         
         comboBoxTypeOperation.setItems(listajouter);
-        
-        
-        
+
         this.setHeaderTitle("Ajouter une machine");
-        
         
         MyVerticalLayout colonne1 = new MyVerticalLayout();
         MyVerticalLayout colonne2 = new MyVerticalLayout();
         colonne1.add(nom);
         colonne1.add(des);
         colonne1.add(marque);
-        //colonne1.add(idTypeOperation);
         colonne1.add(comboBoxTypeOperation);
         colonne1.add(puissance);
         colonne2.add(coutHoraire);
-        colonne2.add(statut);
         colonne2.add(cbbstatut);
         colonne2.add(dimLongueur);
         colonne2.add(dimLargeur);
@@ -236,14 +231,11 @@ public class FenetreEntreeDonnees extends Dialog{
         
         this.contenuHL.add(colonne1,colonne2);
         this.contenuVL.add(this.contenuHL);
-        
 
         this.contenuVL.setAlignItems(CENTER);
         
         this.add(contenuVL);
-        
-        
-        
+
         this.open();
         boutonFermer.addClickListener(event -> {
            this.close();   
@@ -254,10 +246,7 @@ public class FenetreEntreeDonnees extends Dialog{
        });
         
        boutonEnregistrer.addClickListener(event -> {
-            //Il faut encore faire un contrôle de saisie ici
-            
-//            
-            
+      
             String idNom = (String) comboBoxTypeOperation.getValue();
             int indexEspace = idNom.indexOf(' ');
             String avantEspace = idNom.substring(0,indexEspace);
@@ -276,10 +265,7 @@ public class FenetreEntreeDonnees extends Dialog{
             if(stattemp=="Maintenance à prévoir"){
                 statutTemp=2;
             }
-            
-            
-            
-//            
+                   
             this.close();
 
             try {
@@ -314,22 +300,26 @@ public class FenetreEntreeDonnees extends Dialog{
            
             this.setHeaderTitle("Ajouter un produit");
 
-            this.nom = new TextField("Nom");
+            
             this.des = new TextArea("Description");
+            this.des.setWidthFull();
             TextField tfref = new TextField("Référence");
+            tfref.setWidthFull();
             
             ComboBox<Brut> cbbbrut = new ComboBox();
             ArrayList <Brut> brutsbdd = this.controleur.getVuePrincipale().getGestionBDD().listBrut(this.controleur.getVuePrincipale().getGestionBDD().conn); 
             cbbbrut.setItems(brutsbdd);
+            cbbbrut.setWidthFull();
+            cbbbrut.setLabel("Brut");
             cbbbrut.setItemLabelGenerator(Brut::getNom);
             
             
             
-            this.setWidth("40vw");
+            this.setWidth("35vw");
 
 
 
-            this.contenuVL.add(nom,tfref, des,cbbbrut);
+            this.contenuVL.add(tfref, des,cbbbrut);
             this.add(contenuVL);
             
             
@@ -343,14 +333,14 @@ public class FenetreEntreeDonnees extends Dialog{
             
             
             
-            MyHorizontalLayout hl1 = new MyHorizontalLayout();
-            ComboBox <Operation>cbbop1 = new ComboBox<>();
-            cbbop1.setItems(listop);
-            cbbop1.setItemLabelGenerator(Operation::getNom);
-            cbbop1.setLabel("Operation 1");
-            cbbop1.setWidth("80%");
-            cbbop1.getStyle().set("margin-left", "auto");
-            cbbop1.getStyle().set("margin-right", "auto");
+//            MyHorizontalLayout hl1 = new MyHorizontalLayout();
+//            ComboBox <Operation>cbbop1 = new ComboBox<>();
+//            cbbop1.setItems(listop);
+//            cbbop1.setItemLabelGenerator(Operation::getNom);
+//            cbbop1.setLabel("Operation 1");
+//            cbbop1.setWidth("80%");
+//            cbbop1.getStyle().set("margin-left", "auto");
+//            cbbop1.getStyle().set("margin-right", "auto");
             
             MyHorizontalLayout hlbouton = new MyHorizontalLayout();
             hlbouton.add(VaadinIcon.PLUS_CIRCLE.create(),new H5("Ajouter une operation"));
@@ -361,9 +351,9 @@ public class FenetreEntreeDonnees extends Dialog{
             Div div = new Div();
             div.setHeight("300px");
             div.setWidthFull();
-            listcbb.add(cbbop1);
-            
-            div.add(cbbop1);
+//            listcbb.add(cbbop1);
+//            
+//            div.add(cbbop1);
             this.contenuVL.add(div);
             
             this.open();

@@ -87,6 +87,7 @@ public class Entete extends MyHorizontalLayout {
     
     public Entete(){
         this.comboBoxAtelier= new ComboBox<>();
+        
     }
     
     
@@ -125,12 +126,11 @@ public class Entete extends MyHorizontalLayout {
         menuIcon.setColor(couleur3);
         MyHorizontalLayout hlmenu = new MyHorizontalLayout();
         hlmenu.add(menuIcon,new H5("Menu"));
-       
+        
         hlmenu.setAlignItems(CENTER);
         //this.menuItemMenu= this.menuBarG.addItem(menuIcon,"Menu Principal");
         this.menuItemMenu= this.menuBarG.addItem(hlmenu);
-        
-        
+            
         //On crée un sous menu du menu item du menu principal
         this.subMenuMenuPrincipal= menuItemMenu.getSubMenu();
         
@@ -143,9 +143,6 @@ public class Entete extends MyHorizontalLayout {
         this.menuItemTypeOperation=this.subMenuMenuPrincipal.addItem("Types d'opérations");
         
         this.menuItemOperateurs=this.subMenuMenuPrincipal.addItem("Operateurs");
-
-        
-        
         this.menuItemAtelier=this.menuBarM.addItem(new H5("Atelier"));
         this.subMenuAtelier=menuItemAtelier.getSubMenu();
         
@@ -450,6 +447,7 @@ public class Entete extends MyHorizontalLayout {
             } catch (SQLException ex) {
                 Logger.getLogger(Entete.class.getName()).log(Level.SEVERE, null, ex);
             }
+            
                 
  
         });
@@ -502,7 +500,7 @@ public class Entete extends MyHorizontalLayout {
             }
             
         });
-
+        
 }
     
     
@@ -513,32 +511,28 @@ public class Entete extends MyHorizontalLayout {
     
     
     
-    public void setComboBoxAtelier(ArrayList<Atelier> listTemp){
+    public void setComboBoxAtelier(ArrayList<Atelier> listTemp) throws SQLException{
         
         ArrayList <String> listNomAtelier = new ArrayList<>();
+        ArrayList <String> listNulle = new ArrayList<>();
 
         
-        
+
         int index =0;
         
         while (index<listTemp.size()){
             Atelier atelierTemp = (Atelier) listTemp.get(index);
-            
             listNomAtelier.add(atelierTemp.getId()+" : "+atelierTemp.getNom());
-            
             System.out.println(listNomAtelier.get(index));
             index++;
         }
-        
-        //System.out.println("arrivé dans la méthode set comboboxAtelier");
-        //System.out.println("liste ateliers à mettre dans combobox: "+listNomAtelier);
-        
+        System.out.println("liste ateliers à mettre dans combobox: "+listNomAtelier);
+        System.out.println("arrivé dans la méthode set comboboxAtelier");
         
         this.comboBoxAtelier.setItems(listNomAtelier);
         //System.out.println("Le comboBox est mis à jour (méthode setCombobox)");
         
     }
-    
     
     
 

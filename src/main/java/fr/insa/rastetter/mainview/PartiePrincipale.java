@@ -15,20 +15,16 @@ import com.vaadin.flow.component.menubar.MenuBar;
 import com.vaadin.flow.component.notification.Notification;
 import fr.insa.moly.GestionBDD.GestionBDD;
 import static fr.insa.moly.GestionBDD.GestionBDD.listproduit;
-import fr.insa.moly.objet.Atelier;
 import fr.insa.moly.objet.Brut;
 import fr.insa.moly.objet.Machine;
 import fr.insa.moly.objet.Operateur;
 import fr.insa.moly.objet.Operation;
 import fr.insa.moly.objet.Produit;
-import fr.insa.moly.objet.Typeoperation;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.util.stream.Collectors;
 
 /**
  *
@@ -166,7 +162,11 @@ public class PartiePrincipale extends MyVerticalLayout {
                 Text nbelements = new Text(produitsTemp.size()+" produit(s)");
                 this.add(nbelements);
                 this.gridProduits= new Grid<>();
-                gridProduits.addColumn(Produit::getRef).setHeader("Référence");
+                gridProduits.addColumn(Produit::getRef).setHeader("Référence")
+                        .setComparator(Comparator.comparing(Produit::getRef, Comparator.naturalOrder()));
+                gridProduits.addColumn(Produit::getIdbrut).setHeader("Brut")
+                        .setComparator(Comparator.comparingInt(Produit::getIdbrut));
+                gridProduits.addColumn(Produit::getDes).setHeader("Description");
                 gridProduits.setItems(produitsTemp);
                 this.add(gridProduits);
                 gridProduits.addItemClickListener(event -> {
@@ -230,6 +230,8 @@ public class PartiePrincipale extends MyVerticalLayout {
                 gridBruts.addColumn(Brut::getNom).setHeader(new H5("Nom"))
                         .setComparator(Comparator.comparing(Brut::getNom, Comparator.naturalOrder()));
                 gridBruts.addColumn(Brut::getRef).setHeader(new H5("Référence"));
+                gridBruts.addColumn(Brut::getFournisseur).setHeader(new H5("Fournisseur"))
+                        .setComparator(Comparator.comparing(Brut::getFournisseur, Comparator.naturalOrder()));
                 gridBruts.addColumn(Brut::getStock).setHeader(new H5("En stock"))
                         .setComparator(Comparator.comparingInt(Brut::getStock));
 

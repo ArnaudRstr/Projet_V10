@@ -73,10 +73,13 @@ public class Controleur {
     //On gère les événements pour les boutons et différents composants
     
     
-    public void boutonConnect() throws SQLException{
+    public void boutonConnect(VuePrincipale main) throws SQLException{
         //this.main.setMainContent(new VuePlan());
         MenuItemMachine();
-        this.main.setEntete(new Entete(this.main));
+        this.main=main;
+        this.main.setEntete(new Entete(main));
+        this.etatAtelier=-1;
+        MenuItemMachine();
         
     }
     
@@ -372,61 +375,69 @@ public class Controleur {
                     
                     //Ouvre la fenetre supplémentaire : confirmation de suppression
                     boutonsupprimer.addClickListener(event2 -> {
+                    fenetre.close();    
                         
+                        try {
+                            FenetreAvertissementSuppression fenetreAvertissementSuppression = new FenetreAvertissementSuppression(this,"typeoperation",typopsupp);
+                        } catch (SQLException ex) {
+                            Logger.getLogger(Controleur.class.getName()).log(Level.SEVERE, null, ex);
+                        }
                         
                         grid.deselectAll();
-                        System.out.println("Id à supprimer ( 2ème boucle) "+intselect);
-                        grid.deselectAll();
-                        Dialog dsuppression = new Dialog();
-                        dsuppression.setHeaderTitle("Confirmer la suppression");
-                        MyVerticalLayout vlsuppression = new MyVerticalLayout();
-                        vlsuppression.add(new Text("Etes-vous sûr de vouloir supprimer les éléments suivants?"));
-                        vlsuppression.add();
-                        vlsuppression.add(new Text("Liste des éléments qui seront supprimés"));
-                        
-                        //Il faudra ajouter tout ce qui est supprimé
                         
                         
-                        
-                        dsuppression.add(vlsuppression);
-                        Button boutonFermer2 = new Button(new Icon("lumo","cross"));
-                        dsuppression.getHeader().add(boutonFermer2);
-                        Button boutonSupp = new Button("Supprimer");
-                        Button boutonAnnuler = new Button("Annuler");
-                        dsuppression.open();
-
-                        
-                        
-                        
-                        
-                        dsuppression.getFooter().add(boutonAnnuler,boutonSupp);                     
-
-                        
-                        boutonSupp.addClickListener(event3 -> {
-                            dsuppression.close();
-                            
-                            try {
-                                System.out.println("Essai de suppression : id = "+intselect);
-
-                                delete(this.getVuePrincipale().getGestionBDD().conn,typopsupp.getnomtable(),intselect);
-                                grid.setItems(listtypeoperation(this.getVuePrincipale().getGestionBDD().conn));
-                                boutonSupp.setEnabled(true);
-                            } catch (SQLException ex) {
-                                System.out.println("Pas reussi à supprimer le type d'operation");
-                            }
-                                dsuppression.close();
-
-                            
-                        });
-                        
-                  
-                        boutonAnnuler.addClickListener(event3 -> {
-                            dsuppression.close();
-                        });
-
-                        boutonFermer2.addClickListener(event3 -> {
-                            dsuppression.close();
-                        });
+//                        System.out.println("Id à supprimer ( 2ème boucle) "+intselect);
+//                        grid.deselectAll();
+//                        Dialog dsuppression = new Dialog();
+//                        dsuppression.setHeaderTitle("Confirmer la suppression");
+//                        MyVerticalLayout vlsuppression = new MyVerticalLayout();
+//                        vlsuppression.add(new Text("Etes-vous sûr de vouloir supprimer ce type d'opération?"));
+//                        vlsuppression.add();
+//                        vlsuppression.add(new Text("Liste des éléments qui seront supprimés"));
+//                        
+//                        //Il faudra ajouter tout ce qui est supprimé
+//                        
+//                        
+//                        
+//                        dsuppression.add(vlsuppression);
+//                        Button boutonFermer2 = new Button(new Icon("lumo","cross"));
+//                        dsuppression.getHeader().add(boutonFermer2);
+//                        Button boutonSupp = new Button("Supprimer");
+//                        Button boutonAnnuler = new Button("Annuler");
+//                        dsuppression.open();
+//
+//                        
+//                        
+//                        
+//                        
+//                        dsuppression.getFooter().add(boutonAnnuler,boutonSupp);                     
+//
+//                        
+//                        boutonSupp.addClickListener(event3 -> {
+//                            dsuppression.close();
+//                            
+//                            try {
+//                                System.out.println("Essai de suppression : id = "+intselect);
+//
+//                                delete(this.getVuePrincipale().getGestionBDD().conn,typopsupp.getnomtable(),intselect);
+//                                grid.setItems(listtypeoperation(this.getVuePrincipale().getGestionBDD().conn));
+//                                boutonSupp.setEnabled(true);
+//                            } catch (SQLException ex) {
+//                                System.out.println("Pas reussi à supprimer le type d'operation");
+//                            }
+//                                dsuppression.close();
+//
+//                            
+//                        });
+//                        
+//                  
+//                        boutonAnnuler.addClickListener(event3 -> {
+//                            dsuppression.close();
+//                        });
+//
+//                        boutonFermer2.addClickListener(event3 -> {
+//                            dsuppression.close();
+//                        });
                              
                         
 
@@ -629,6 +640,8 @@ public class Controleur {
         
         
         
+                    
+                    
 //        System.out.println("les ateliers devraient être affichés");
 //        this.getVuePrincipale().getEntete().setComboBoxAtelier(listaltelier(this.getVuePrincipale().getGestionBDD().conn));
         

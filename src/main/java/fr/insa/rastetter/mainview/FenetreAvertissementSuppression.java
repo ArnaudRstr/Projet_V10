@@ -24,6 +24,7 @@ import fr.insa.moly.objet.Machine;
 import fr.insa.moly.objet.Operateur;
 import fr.insa.moly.objet.Operation;
 import fr.insa.moly.objet.Produit;
+import fr.insa.moly.objet.Typeoperation;
 
 /**
  *
@@ -109,6 +110,9 @@ public FenetreAvertissementSuppression(Controleur controleur,String type,Object 
             boutonFermer1.addClickListener(event1 -> {
                 dialograpportsupp.close();
             });
+             //On remet à jour
+             
+             
             
 
 
@@ -276,6 +280,38 @@ public FenetreAvertissementSuppression(Controleur controleur,String type,Object 
        });
     }
     
+    if (type == "typeoperation"){
+        hlselection.add(((Typeoperation)objet).getNom());
+        
+        boutonEnregistrer.addClickListener(event -> {
+
+            
+            ArrayList<String> stringList = new ArrayList();
+            try {
+                stringList =((Typeoperation)objet).getGrandChildList(this.controleur.getVuePrincipale().getGestionBDD().conn);
+            } catch (SQLException ex) {
+                Logger.getLogger(FenetreAvertissementSuppression.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
+            System.out.println("La liste du texte à afficher a été récupérée");      
+            
+            stringList.forEach(element -> {
+            contenurapport.add(new Text(element));
+            contenurapport.add(new Div());
+            
+            });
+            
+            
+            dialograpportsupp.open();
+            
+            boutonFermer1.addClickListener(event1 -> {
+                dialograpportsupp.close();
+            });
+            
+
+
+       });
+    }
     
     
     
@@ -299,10 +335,32 @@ public FenetreAvertissementSuppression(Controleur controleur,String type,Object 
     
     
     boutonFermer.addClickListener(event -> {
-           this.close();   
+           this.close();  
+           
+           
+           if (type=="typeoperation"){
+           try {
+                   this.controleur.MenuItemTypeOperation();
+               } catch (SQLException ex) {
+                   Logger.getLogger(FenetreAvertissementSuppression.class.getName()).log(Level.SEVERE, null, ex);
+               } 
+               
+        }
+           
+           
        });
     boutonAnnuler.addClickListener(event -> {
-           this.close();   
+           this.close(); 
+           
+           if (type=="typeoperation"){
+           try {
+                   this.controleur.MenuItemTypeOperation();
+               } catch (SQLException ex) {
+                   Logger.getLogger(FenetreAvertissementSuppression.class.getName()).log(Level.SEVERE, null, ex);
+               } 
+               
+        }
+           
        });
     
     
@@ -333,6 +391,12 @@ public FenetreAvertissementSuppression(Controleur controleur,String type,Object 
         } catch (SQLException ex) {
             Logger.getLogger(FenetreAvertissementSuppression.class.getName()).log(Level.SEVERE, null, ex);
         }
+        
+        try {
+                this.controleur.boutonConnect(this.controleur.getVuePrincipale());
+            } catch (SQLException ex) {
+                Logger.getLogger(FenetreEntreeDonnees.class.getName()).log(Level.SEVERE, null, ex);
+            }
         
         
         }
@@ -414,6 +478,20 @@ public FenetreAvertissementSuppression(Controleur controleur,String type,Object 
             
             
             
+        }
+        
+        if (type=="typeoperation"){
+            
+               try {
+                   delete(this.controleur.getVuePrincipale().getGestionBDD().conn,type,((Typeoperation)objet).getId());
+               } catch (SQLException ex) {
+                   System.out.println("erreur dans la suppression du produit");
+               }
+               try {
+                   this.controleur.MenuItemTypeOperation();
+               } catch (SQLException ex) {
+                   Logger.getLogger(FenetreAvertissementSuppression.class.getName()).log(Level.SEVERE, null, ex);
+               }
         }
 
        });
