@@ -30,34 +30,25 @@ public class VuePrincipale extends MyVerticalLayout {
         this.mainContent.setWidthFull();
         this.mainContent.setHeightFull();
         this.getStyle().set("padding", "0px");
-        //this.mainContent.getStyle().set("border", "1px solid #000000");
         this.getStyle().set("background-color","#FFFFFF");
         this.mainContent.getStyle().set("border", "0px solid #000000");
         this.mainContent.getStyle().set("border-radius", "10px");
         this.mainContent.getStyle().set("padding", "0px");
         this.mainContent.setMargin(false);
-        
         this.entete=new Entete();
         this.entete.setWidthFull();
-
         this.add(this.entete);
-        this.add(this.mainContent);
-
-        
+        this.add(this.mainContent);    
         this.setMainContent(new VueInitialeConnection(this,this.controleur));
-        
-        
+     
     }
     public void setEntete(Entete entete1){
         this.entete.removeAll();
         this.entete.add(entete1);
-
-    }
-    
+    }  
     public void setMainContent(MyVerticalLayout vlo){
         this.mainContent.removeAll();
-        this.mainContent.add(vlo);
-        
+        this.mainContent.add(vlo);       
     }
     public MyVerticalLayout getMainContent(){
         return this.mainContent;
