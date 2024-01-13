@@ -43,7 +43,8 @@ public class FenetreAvertissementSuppression extends Dialog {
     
     private Controleur controleur;
 
-    //public FenetreAvertissementSuppression(Controleur controleur,String type,String text,int id) throws SQLException{
+    
+    //Permet de créer la fenetre de suppression pour un objet. 
 public FenetreAvertissementSuppression(Controleur controleur,String type,Object objet) throws SQLException{
     
     this.controleur=controleur;
@@ -54,15 +55,15 @@ public FenetreAvertissementSuppression(Controleur controleur,String type,Object 
     this.boutonFermer = new Button(new Icon("lumo","cross"));
     this.boutonFermer1 = new Button(new Icon("lumo","cross"));
     this.boutonEnregistrer = new Button ("Ouvrir rapport de suppression");
+    this.dialograpportsupp = new Dialog();
+    this.setDraggable(true);
+    this.setResizable(true);
     this.setHeaderTitle("Suppression");
     this.getHeader().add(boutonFermer1);
-    this.dialograpportsupp = new Dialog();
+    
     this.getFooter().add(boutonAnnuler,boutonContinuer);
-    
-    
     this.contenu.add(new H3("Etes-vous sûr de vouloir supprimer la sélection? "));
-    MyHorizontalLayout hlselection = new MyHorizontalLayout();
-    
+
     dialograpportsupp.setResizable(true);
     dialograpportsupp.getHeader().add(boutonFermer1);
     dialograpportsupp.setHeaderTitle("Rapport de suppression");
@@ -74,47 +75,38 @@ public FenetreAvertissementSuppression(Controleur controleur,String type,Object 
     dialograpportsupp.add(contenurapport);
     dialograpportsupp.setDraggable(true);
 
-    this.setDraggable(true);
-    this.setResizable(true);
+    
     Div div = new Div();
     div.setHeight("0px");
+    MyHorizontalLayout hlselection = new MyHorizontalLayout();
+
     
     
-    
-    
+    //La fenetre n'est pas la même pour chaque objet, on gère donc les différents cas.
+    //Si le bouton "ouvrir" est cliqué, on affiche le rapport de suppression
     if (type == "atelier"){
         
-        hlselection.add(((Atelier)objet).getNom());
-        
+        hlselection.add(((Atelier)objet).getNom()); 
         boutonEnregistrer.addClickListener(event -> {
-
-            
+ 
             ArrayList<String> stringList = new ArrayList();
             try {
                 stringList =((Atelier)objet).getGrandChildList(this.controleur.getVuePrincipale().getGestionBDD().conn);
             } catch (SQLException ex) {
                 Logger.getLogger(FenetreAvertissementSuppression.class.getName()).log(Level.SEVERE, null, ex);
             }
-            
-            System.out.println("La liste du texte à afficher a été récupérée");      
-            
+
             stringList.forEach(element -> {
             contenurapport.add(new Text(element));
             contenurapport.add(new Div());
-            
             });
             
             
-            dialograpportsupp.open();
+        dialograpportsupp.open();
             
             boutonFermer1.addClickListener(event1 -> {
                 dialograpportsupp.close();
-            });
-             //On remet à jour
-             
-             
-            
-
+        });
 
        });
         
@@ -138,13 +130,13 @@ public FenetreAvertissementSuppression(Controleur controleur,String type,Object 
             contenurapport.add(new Text(element));
             contenurapport.add(new Div());
             
-            });
+        });
             
             
-            dialograpportsupp.open();
+        dialograpportsupp.open();
             
-            boutonFermer1.addClickListener(event1 -> {
-                dialograpportsupp.close();
+        boutonFermer1.addClickListener(event1 -> {
+            dialograpportsupp.close();
             });
             
 
@@ -155,31 +147,23 @@ public FenetreAvertissementSuppression(Controleur controleur,String type,Object 
         hlselection.add(((Produit)objet).getRef());
         
         boutonEnregistrer.addClickListener(event -> {
-
-            
             ArrayList<String> stringList = new ArrayList();
             try {
                 stringList =((Produit)objet).getGrandChildList(this.controleur.getVuePrincipale().getGestionBDD().conn);
             } catch (SQLException ex) {
                 Logger.getLogger(FenetreAvertissementSuppression.class.getName()).log(Level.SEVERE, null, ex);
             }
-            
-            System.out.println("La liste du texte à afficher a été récupérée");      
-            
+
             stringList.forEach(element -> {
             contenurapport.add(new Text(element));
-            contenurapport.add(new Div());
-            
+            contenurapport.add(new Div());    
             });
-            
-            
+  
             dialograpportsupp.open();
             
             boutonFermer1.addClickListener(event1 -> {
                 dialograpportsupp.close();
             });
-            
-
 
        });
     }
@@ -187,31 +171,24 @@ public FenetreAvertissementSuppression(Controleur controleur,String type,Object 
         hlselection.add(((Brut)objet).getNom());
         
         boutonEnregistrer.addClickListener(event -> {
-
-            
+ 
             ArrayList<String> stringList = new ArrayList();
             try {
                 stringList =((Brut)objet).getGrandChildList(this.controleur.getVuePrincipale().getGestionBDD().conn);
             } catch (SQLException ex) {
                 Logger.getLogger(FenetreAvertissementSuppression.class.getName()).log(Level.SEVERE, null, ex);
             }
-            
-            System.out.println("La liste du texte à afficher a été récupérée");      
-            
+
             stringList.forEach(element -> {
             contenurapport.add(new Text(element));
             contenurapport.add(new Div());
-            
             });
-            
-            
+   
             dialograpportsupp.open();
             
             boutonFermer1.addClickListener(event1 -> {
                 dialograpportsupp.close();
             });
-            
-
 
        });
     }
@@ -219,134 +196,104 @@ public FenetreAvertissementSuppression(Controleur controleur,String type,Object 
         hlselection.add(((Operateur)objet).getNom());
         
         boutonEnregistrer.addClickListener(event -> {
-
-            
             ArrayList<String> stringList = new ArrayList();
             try {
                 stringList =((Operateur)objet).getGrandChildList(this.controleur.getVuePrincipale().getGestionBDD().conn);
             } catch (SQLException ex) {
                 Logger.getLogger(FenetreAvertissementSuppression.class.getName()).log(Level.SEVERE, null, ex);
             }
-            
-            System.out.println("La liste du texte à afficher a été récupérée");      
-            
+
             stringList.forEach(element -> {
             contenurapport.add(new Text(element));
             contenurapport.add(new Div());
             
             });
-            
-            
+
             dialograpportsupp.open();
             
             boutonFermer1.addClickListener(event1 -> {
                 dialograpportsupp.close();
             });
-            
-
-
        });
     }
+    
     if (type == "operation"){
         hlselection.add(((Operation)objet).getNom());
         
         boutonEnregistrer.addClickListener(event -> {
 
-            
             ArrayList<String> stringList = new ArrayList();
             try {
                 stringList =((Operation)objet).getGrandChildList(this.controleur.getVuePrincipale().getGestionBDD().conn);
             } catch (SQLException ex) {
                 Logger.getLogger(FenetreAvertissementSuppression.class.getName()).log(Level.SEVERE, null, ex);
             }
-            
-            System.out.println("La liste du texte à afficher a été récupérée");      
-            
+
             stringList.forEach(element -> {
             contenurapport.add(new Text(element));
-            contenurapport.add(new Div());
-            
+            contenurapport.add(new Div());      
             });
-            
-            
+ 
             dialograpportsupp.open();
             
             boutonFermer1.addClickListener(event1 -> {
                 dialograpportsupp.close();
             });
-            
-
-
        });
     }
+    
     
     if (type == "typeoperation"){
         hlselection.add(((Typeoperation)objet).getNom());
         
         boutonEnregistrer.addClickListener(event -> {
 
-            
             ArrayList<String> stringList = new ArrayList();
             try {
                 stringList =((Typeoperation)objet).getGrandChildList(this.controleur.getVuePrincipale().getGestionBDD().conn);
             } catch (SQLException ex) {
                 Logger.getLogger(FenetreAvertissementSuppression.class.getName()).log(Level.SEVERE, null, ex);
             }
-            
-            System.out.println("La liste du texte à afficher a été récupérée");      
-            
             stringList.forEach(element -> {
             contenurapport.add(new Text(element));
             contenurapport.add(new Div());
             
             });
-            
-            
-            dialograpportsupp.open();
-            
+
+            dialograpportsupp.open();     
             boutonFermer1.addClickListener(event1 -> {
                 dialograpportsupp.close();
             });
-            
-
-
        });
     }
     
     
-    
-    //hlselection.add(new Text(text));
+    //on configure la fenetre
     hlselection.setWidthFull();
     hlselection.getStyle().set("border", "1px solid #000000");
     this.contenu.add(hlselection);
-    
     MyHorizontalLayout hlenregistrer = new MyHorizontalLayout();
     hlenregistrer.setWidthFull();
     hlenregistrer.getStyle().set("align-items", "center");
-    //hlenregistrer.add(new Text("Enregistrer le rapport de suppression"));
     hlenregistrer.add(boutonEnregistrer);
     this.contenu.setSpacing(true);
     this.contenu.add(hlenregistrer);
     hlenregistrer.setAlignItems(FlexComponent.Alignment.CENTER);
     this.contenu.setAlignItems(FlexComponent.Alignment.CENTER);
     this.add(contenu);
-    
     this.open();
     
     
     boutonFermer.addClickListener(event -> {
            this.close();  
-           
-           
+
            if (type=="typeoperation"){
            try {
                    this.controleur.MenuItemTypeOperation();
                } catch (SQLException ex) {
                    Logger.getLogger(FenetreAvertissementSuppression.class.getName()).log(Level.SEVERE, null, ex);
-               } 
-               
-        }
-           
+               }       
+        }      
            
        });
     boutonAnnuler.addClickListener(event -> {
@@ -357,48 +304,32 @@ public FenetreAvertissementSuppression(Controleur controleur,String type,Object 
                    this.controleur.MenuItemTypeOperation();
                } catch (SQLException ex) {
                    Logger.getLogger(FenetreAvertissementSuppression.class.getName()).log(Level.SEVERE, null, ex);
-               } 
-               
+               }    
         }
            
        });
     
-    
-    
-    
-    
-    
         boutonContinuer.addClickListener(event -> {
            this.close(); 
-           
-           
+  
         if (type == "atelier"){
-            
-        
-        try {
-            
-            
-            
-            delete(this.controleur.getVuePrincipale().getGestionBDD().conn,type,((Atelier)objet).getId());
-            System.out.println("suppression devrait être effectuée : id  : "+((Atelier)objet).getId());
 
+        try {
+            delete(this.controleur.getVuePrincipale().getGestionBDD().conn,type,((Atelier)objet).getId());
         } catch (SQLException ex) {
-                   System.out.println("erreur dans la suppression de l'atelier");
         }      
         
         try { //On reactualise le combobox
             this.controleur.getVuePrincipale().getEntete().setComboBoxAtelier(listAtelier(this.controleur.getVuePrincipale().getGestionBDD().conn));
         } catch (SQLException ex) {
             Logger.getLogger(FenetreAvertissementSuppression.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
+        }     
         try {
                 this.controleur.boutonConnect(this.controleur.getVuePrincipale());
             } catch (SQLException ex) {
                 Logger.getLogger(FenetreEntreeDonnees.class.getName()).log(Level.SEVERE, null, ex);
             }
-        
-        
+ 
         }
         
         if (type=="brut"){
@@ -413,12 +344,10 @@ public FenetreAvertissementSuppression(Controleur controleur,String type,Object 
                } catch (SQLException ex) {
                    Logger.getLogger(FenetreAvertissementSuppression.class.getName()).log(Level.SEVERE, null, ex);
                }
-            
-            
+  
         }
         
         if (type=="produit"){
-            
                try {
                    delete(this.controleur.getVuePrincipale().getGestionBDD().conn,type,((Produit)objet).getId());
                } catch (SQLException ex) {
@@ -429,8 +358,6 @@ public FenetreAvertissementSuppression(Controleur controleur,String type,Object 
                } catch (SQLException ex) {
                    Logger.getLogger(FenetreAvertissementSuppression.class.getName()).log(Level.SEVERE, null, ex);
                }
-            
-            
         }
         if (type=="machine"){
             try {
@@ -443,9 +370,7 @@ public FenetreAvertissementSuppression(Controleur controleur,String type,Object 
                } catch (SQLException ex) {
                    Logger.getLogger(FenetreAvertissementSuppression.class.getName()).log(Level.SEVERE, null, ex);
                }
-            
-            
-            
+
         }
 
         if (type=="operation"){
@@ -459,9 +384,7 @@ public FenetreAvertissementSuppression(Controleur controleur,String type,Object 
                } catch (SQLException ex) {
                    Logger.getLogger(FenetreAvertissementSuppression.class.getName()).log(Level.SEVERE, null, ex);
                }
-            
-            
-            
+
         }
         
         if (type=="operateur"){
@@ -475,9 +398,7 @@ public FenetreAvertissementSuppression(Controleur controleur,String type,Object 
                } catch (SQLException ex) {
                    Logger.getLogger(FenetreAvertissementSuppression.class.getName()).log(Level.SEVERE, null, ex);
                }
-            
-            
-            
+ 
         }
         
         if (type=="typeoperation"){
@@ -495,9 +416,6 @@ public FenetreAvertissementSuppression(Controleur controleur,String type,Object 
         }
 
        });
-        
-        
-        
-    
+
 }
 }
