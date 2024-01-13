@@ -191,7 +191,6 @@ public class Controleur {
         
     }
     
-    
     public void MenuItemPlan() {
         this.main.setMainContent(new VuePlan());
     }
@@ -200,7 +199,6 @@ public class Controleur {
         this.fenetrePartagee =new FenetrePartagee(this, "machine");        
         this.main.setMainContent(this.fenetrePartagee);
         this.etatFenetre= "machine";
-
     }
     
     public void MenuItemProduit() throws SQLException {
