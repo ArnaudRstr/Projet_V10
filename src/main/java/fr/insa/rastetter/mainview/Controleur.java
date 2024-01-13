@@ -8,24 +8,18 @@ import com.vaadin.flow.component.Text;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.grid.Grid;
-import com.vaadin.flow.component.html.H2;
-import com.vaadin.flow.component.html.H3;
 import com.vaadin.flow.component.html.H5;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
-import com.vaadin.flow.component.menubar.MenuBar;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.textfield.NumberField;
 import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.component.textfield.TextField;
 import static fr.insa.moly.GestionBDD.GestionBDD.addtypeoperation;
-import static fr.insa.moly.GestionBDD.GestionBDD.delete;
 import fr.insa.moly.objet.Atelier;
 import static fr.insa.moly.GestionBDD.GestionBDD.listtypeoperation;
-import fr.insa.moly.objet.Machine;
 import fr.insa.moly.objet.Typeoperation;
-import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.logging.Level;
@@ -33,6 +27,7 @@ import java.util.logging.Logger;
 import static fr.insa.moly.GestionBDD.GestionBDD.listAtelier;
 import static fr.insa.moly.GestionBDD.GestionBDD.listoperateur;
 import fr.insa.moly.objet.Operateur;
+import java.sql.Connection;
 
 /**
  *
@@ -40,19 +35,13 @@ import fr.insa.moly.objet.Operateur;
  */
 
 
-
-
 public class Controleur {
     
     private VuePrincipale main;
     private int etatAtelier;
     private String etatFenetre;
-    
-    
     private String identifiantutilisateur;
-    
     private FenetrePartagee fenetrePartagee;
-    
     private FenetreEntreeDonnees fenetreEntreeDonnees;
     
     
@@ -71,8 +60,7 @@ public class Controleur {
         
     
     //On gère les événements pour les boutons et différents composants
-    
-    
+
     public void boutonConnect(VuePrincipale main) throws SQLException{
         //this.main.setMainContent(new VuePlan());
         MenuItemMachine();
@@ -82,39 +70,31 @@ public class Controleur {
         MenuItemMachine();
         
     }
+
     
-    
+   
+    //Retour sur la vue initiale
     public void MenuItemDeconnexion() {
         Notification.show("Deconnexion via controleur");
-        
-        
-        
-        
-        //ICI il faudra déconnecter l'utilisateur
-        
+
         this.main.setMainContent(new VueInitialeConnection(this.main,this));
         this.main.entete.removeAll();
         this.main.setEntete(new Entete());
-        
-        
+   
     }
     
     
     public void MenuItemInfosCompte() throws SQLException {
         Notification.show("Deconnexion via controleur");
-        
         Dialog dcompte = new Dialog();
         MyVerticalLayout vlcontenu = new MyVerticalLayout();
         vlcontenu.setWidthFull();
         Button boutonEnregistrer=new Button(new H5("Enregistrer"));
         Button boutonFermer = new Button(new Icon("lumo","cross"));
         dcompte.getFooter().add(boutonEnregistrer);
-        
         dcompte.setWidth("30vw");
-        
         //On récupèrera les infos de la personne connectée ici
         ArrayList <Operateur> listoperateurs = new ArrayList();
-        
         listoperateurs = listoperateur (this.main.getGestionBDD().getConn());
         
         //On recherche la personne grâce à l'identifiant (attribut du controleur)
@@ -127,8 +107,7 @@ public class Controleur {
                 operateurconnecte= (Operateur) listoperateurs.get(i);
                 valide = true;
             }
-            i++;
-            
+            i++;   
         }
         
         
@@ -509,31 +488,30 @@ public class Controleur {
         
         
         MyVerticalLayout contenu = new MyVerticalLayout();
-        NumberField id = new NumberField();
-        TextField nom = new TextField();
-        TextArea des = new TextArea();
+        NumberField id = new NumberField("Identifiant");
+        TextField nom = new TextField("Nom de l'atelier");
+        TextArea des = new TextArea("Description");
+        NumberField nfdimlarg = new NumberField("Largeur (cm)");
+        NumberField nfdimlong = new NumberField("Longueur (cm)");
         
         
-        NumberField dimLong = new NumberField();
-        NumberField dimLarg = new NumberField();
+       
         Dialog fenetre = new Dialog();
         
         Button boutonModifNom = new Button(new Icon("lumo","edit"));
-        Button boutonModifDes = new Button(new Icon("lumo","edit"));
 
-        MyHorizontalLayout hlnom = new MyHorizontalLayout();
-        MyHorizontalLayout hldes = new MyHorizontalLayout();
         
         
-        nom.setLabel("Nom de l'atelier");
-        des.setLabel("Description");
-        id.setLabel("Identifiant");
+//        nom.setLabel("Nom de l'atelier");
+//        des.setLabel("Description");
+//        id.setLabel("Identifiant");
         
         
         nom.setReadOnly(true);
         des.setReadOnly(true);
         id.setReadOnly(true);
-                
+        nfdimlarg.setReadOnly(true);
+        nfdimlong.setReadOnly(true);    
         
         //Il faut encore ajouter les placeHolder et les boutons pour activer les zones.
 
@@ -550,35 +528,55 @@ public class Controleur {
                 nom.setValue(atelierTemp.getNom());
                 id.setValue((double)Math.round(atelierTemp.getId()));
                 des.setValue(atelierTemp.getDes());
+                nom.setReadOnly(true);
+                id.setReadOnly(true);
+                des.setReadOnly(true);
+                nfdimlarg.setReadOnly(true);
+                nfdimlong.setReadOnly(true);
                 
-                hlnom.add(nom,boutonModifNom);
-                //hlnom.add(boutonModifNom);
+                contenu.add(boutonModifNom,nom,id,des,nfdimlong,nfdimlarg);
                 
-                hldes.add(des,boutonModifDes);
-                
-                
-                hlnom.setAlignItems(FlexComponent.Alignment.END);
-                hldes.setAlignItems(FlexComponent.Alignment.END);
-                
-                contenu.add(hlnom);
-                contenu.add(id);
-                contenu.add(hldes);
                 fenetre.add(contenu);
+                
                 fenetre.setHeaderTitle("Détails de l'atelier");
                 Button boutonFermer = new Button(new Icon("lumo","cross"));
+                Button boutonEnregistrer = new Button("Enregistrer");
+
                 fenetre.getHeader().add(boutonFermer);
+                fenetre.getFooter().add(boutonEnregistrer);
                 fenetre.open();
                 
                 boutonFermer.addClickListener(event -> {
                     fenetre.close();
         });
+                boutonModifNom.addClickListener(event -> {
+                nom.setReadOnly(false);
+                des.setReadOnly(false);
+                nfdimlarg.setReadOnly(false);
+                nfdimlong.setReadOnly(false);
+    
+                    
+        });
+                boutonEnregistrer.addClickListener(event -> {
+                nom.setReadOnly(true);
+                des.setReadOnly(true);
+                nfdimlarg.setReadOnly(true);
+                nfdimlong.setReadOnly(true);
+                fenetre.close();
                 
                 
+                    try {
+                        this.getVuePrincipale().getGestionBDD().updateAtelier(this.getVuePrincipale().getGestionBDD().conn,atelierTemp.getId(), nom.getValue(),  des.getValue(), 100/*(int) Math.round(nfdimlarg.getValue())*/, 100/*(int) Math.round(nfdimlong.getValue())*/);
+                    } catch (SQLException ex) {
+                        Logger.getLogger(Controleur.class.getName()).log(Level.SEVERE, null, ex);
+                    }
                 
                 
+               
                 
                 
-                
+        });
+    
                 
             }
             
@@ -591,7 +589,7 @@ public class Controleur {
         
         
         
-        //A compléter
+        
         
         
     }
