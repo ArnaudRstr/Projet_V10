@@ -27,14 +27,9 @@ public class MyVerticalLayout extends VerticalLayout{
                     .set("font-size", "0.8em").set("color", CSS_COLOR)
                     .set("font-style", "italic");
             this.addComponentAsFirst(nom);
-            //this.getStyle().set("padding", "40px");
-            //this.getStyle().set("border", "1px dotted "+CSS_COLOR);
-            
-            
-            
 
         }
-        this.setHeightFull(); //peut être qu'il faudra enlever ça
+        this.setHeightFull(); 
     }
     
     

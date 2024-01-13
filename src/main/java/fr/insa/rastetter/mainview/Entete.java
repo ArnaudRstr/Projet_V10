@@ -5,7 +5,6 @@
 package fr.insa.rastetter.mainview;
 
 
-import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.contextmenu.MenuItem;
 import com.vaadin.flow.component.contextmenu.SubMenu;
@@ -37,26 +36,13 @@ public class Entete extends MyHorizontalLayout {
     public VuePrincipale main;
     
     
-    
-    
-    
-    //Boutons
-    
     private MenuItem menuItemCompte;
-    
-    
-    
-    
-    
     
     private MenuBar menuBarG;
     private MenuBar menuBarD;
     private MenuBar menuBarM;
-    private MenuBar menuFichier;
     private MenuItem menuItemMenu;
-    
-    
-    
+
     //Pour le bouton de menu principal
     private SubMenu subMenuMenuPrincipal;
     private MenuItem menuItemPlan;
@@ -81,56 +67,50 @@ public class Entete extends MyHorizontalLayout {
     private MenuItem menuItemInfos;
     private ComboBox comboBoxAtelier;
     
-    
-    
+
     private ArrayList <String> listDesAteliers;
     
+    //Création entête vide pour la vue initiale de connection
     public Entete(){
         this.comboBoxAtelier= new ComboBox<>();
+        
     }
+     
     
-    
-    
-    
+    //Creation de l'entête principale
     public Entete(VuePrincipale main) throws SQLException {
         this.main = main;
         this.comboBoxAtelier= new ComboBox<>();
-        
-        
 
         this.addClassName("Custom-Entete");
-        //this.getStyle().set("border", "1px solid #000000");
         this.getStyle().set("padding", "0px");
         this.getStyle().set("border-radius", "15px");
         this.getStyle().set("background-color","#EFEFEF");
-        //this.getStyle().set("background-color","#D3D3D3");
         this.setMargin(true);
-
-
         this.setWidthFull();
         
+        //Couleurs du logo
         String couleur1 = new String("#38998C");
         String couleur2 = new String("#BDE767");
         String couleur3 = new String("#1F4C83");
         
-        //Configuration de la menubar Menu
+        
+        
+        
+        //Initialisation de tous les composants de l'entête
         this.menuBarG = new MenuBar();
         this.menuBarM = new MenuBar();
         this.menuBarD = new MenuBar();
 
-
-        
         Icon menuIcon = new Icon(VaadinIcon.MENU);
         menuIcon.setSize("20px");
         menuIcon.setColor(couleur3);
         MyHorizontalLayout hlmenu = new MyHorizontalLayout();
         hlmenu.add(menuIcon,new H5("Menu"));
-       
+        
         hlmenu.setAlignItems(CENTER);
-        //this.menuItemMenu= this.menuBarG.addItem(menuIcon,"Menu Principal");
         this.menuItemMenu= this.menuBarG.addItem(hlmenu);
-        
-        
+            
         //On crée un sous menu du menu item du menu principal
         this.subMenuMenuPrincipal= menuItemMenu.getSubMenu();
         
@@ -140,57 +120,30 @@ public class Entete extends MyHorizontalLayout {
         this.menuItemProduit = this.subMenuMenuPrincipal.addItem("Produits");       
         this.menuItemBrut=this.subMenuMenuPrincipal.addItem("Bruts");
         this.menuItemOperations=this.subMenuMenuPrincipal.addItem("Operations");
-        this.menuItemTypeOperation=this.subMenuMenuPrincipal.addItem("Types d'opérations");
-        
         this.menuItemOperateurs=this.subMenuMenuPrincipal.addItem("Operateurs");
-
-        
-        
+        this.menuItemTypeOperation=this.subMenuMenuPrincipal.addItem("Types d'opérations");
         this.menuItemAtelier=this.menuBarM.addItem(new H5("Atelier"));
         this.subMenuAtelier=menuItemAtelier.getSubMenu();
-        
-        
         this.menuItemAjouterAtelier=this.subMenuAtelier.addItem("Ajouter");
         this.menuItemDetailsAtelier=this.subMenuAtelier.addItem("Details");
         this.menuItemSupprimerAtelier=this.subMenuAtelier.addItem("Supprimer");
-        
-        this.comboBoxAtelier.setPlaceholder("Atelier");
-        
-        
+        this.comboBoxAtelier.setPlaceholder("Atelier");   
         this.setAlignItems(CENTER);
 
-        
-        
-        
-        
-        
-        
-        
- 
-        
-        
         this.setComboBoxAtelier(listAtelier(this.main.getGestionBDD().conn));
         
-        
-        
+
         Icon compteIcon = new Icon(VaadinIcon.USER);
         compteIcon.setSize("20px");
         compteIcon.setColor(couleur3);
         MyHorizontalLayout hlcompte = new MyHorizontalLayout();
         hlcompte.add(compteIcon,new H5("Compte"));
         hlcompte.setAlignItems(CENTER);
-        
-        
-        //this.menuItemMenu= this.menuBarG.addItem(hlmenu);
-        
+
         this.menuItemCompte = this.menuBarD.addItem(hlcompte);
-        
         this.subMenuCompte=menuItemCompte.getSubMenu();
-        
-        this.menuItemDeconnexion = this.subMenuCompte.addItem("Deconnexion");
+        this.menuItemDeconnexion = this.subMenuCompte.addItem("Déconnexion");
         this.menuItemInfosCompte=this.subMenuCompte.addItem("Informations");
-        
-        
         
         Icon infosIcon = new Icon(VaadinIcon.INFO_CIRCLE);
         infosIcon.setSize("20px");
@@ -205,14 +158,11 @@ public class Entete extends MyHorizontalLayout {
         MyHorizontalLayout hlnotice = new MyHorizontalLayout();
         hlnotice.add(noticeIcon,new H5("Notice"));
         hlnotice.setAlignItems(CENTER);
-        
-        
+
         this.menuItemNotice= this.menuBarD.addItem(hlnotice);
         this.menuItemInfos= this.menuBarD.addItem(hlinfos);
-        
-        
-        
-        
+         
+        //Création de diviseurs permettant de mettre un espace entre les composants
         Div div0 = new Div();
         div0.setWidth("100px");
         Div div1 = new Div();
@@ -222,41 +172,30 @@ public class Entete extends MyHorizontalLayout {
         Div div3 = new Div();
         div0.setWidth("1px");
         
+        //ajout du logo
         String imagePath = "logo.png";
-
-        // Créer une ressource de flux pour l'image
         StreamResource resource = new StreamResource("logo.png", () ->
                 getClass().getClassLoader().getResourceAsStream(imagePath));
-
         // Créer un composant Image avec la ressource
         Image image = new Image(resource, "Description de l'image");
         image.setWidth("60px");
-        
         Span nomLogiciel = new Span("LEON");
         nomLogiciel.getElement().getStyle().set("font-family", "Nunito");
         nomLogiciel.getStyle().set("font-size", "25px");
         
-        
         this.add(menuBarG,div1,comboBoxAtelier,menuBarM,div2,menuItemCompte,menuBarD,image,nomLogiciel);
-    
         this.getThemeList().add("spacing-xl");
         
         
         
 
-        
-        
-        
-        //On renvoie l'événement vers le controleur de la vue principale
+
+        //Gestion des événements : on renvoie vers le controleur de la vue principale
         menuItemDeconnexion.addClickListener(event -> {
-            Notification.show("Deconnexion selectionnée !");
             this.main.getControleur().MenuItemDeconnexion();
         });
         
-        
-        
         menuItemInfosCompte.addClickListener(event -> {
-            Notification.show("Infos compte selectionné !");
             try {
                 this.main.getControleur().MenuItemInfosCompte();
             } catch (SQLException ex) {
@@ -265,10 +204,10 @@ public class Entete extends MyHorizontalLayout {
         });
         
         
-        
+        //ouverture du .pdf de la notice
         menuItemNotice.addClickListener(event -> {
             Notification.show("Ouverture du mode d'emploi");
-            String cheminRelatif = "src/main/resources/FichierTest.pdf";
+            String cheminRelatif = "src/main/resources/Notice d'utilisation.pdf";
         
         try {
             // Utilisation de cmd pour ouvrir le fichier avec l'application par défaut
@@ -277,13 +216,8 @@ public class Entete extends MyHorizontalLayout {
         } catch (IOException er) {
             er.printStackTrace();
         }
-            
-            
         });
-        
-        
-        
-        
+        //ouverture du .pdf des informations sur le logiciel
         menuItemInfos.addClickListener(event -> {
             Notification.show("Ouverture de la section à propos");
             String cheminRelatif = "src/main/resources/LEON.pdf";
@@ -295,21 +229,17 @@ public class Entete extends MyHorizontalLayout {
         } catch (IOException er) {
             er.printStackTrace();
         }
-            
-            
+   
         });
         
-        
-        
+      
+        //Evénements du menu
         menuItemPlan.addClickListener(event -> {
-            Notification.show("Option Plan sélectionnée !");
             this.main.getControleur().MenuItemPlan();
             this.main.getControleur().setEtatFenetre("plan");
         });
-        
-        
+  
         menuItemMachine.addClickListener(event -> {
-            Notification.show("Option machine sélectionnée !");
             try {
                 this.main.getControleur().MenuItemMachine();
                 this.main.getControleur().setEtatFenetre("machine");
@@ -318,51 +248,26 @@ public class Entete extends MyHorizontalLayout {
                 Logger.getLogger(Entete.class.getName()).log(Level.SEVERE, null, ex);
             }
         });
-        
-        
-        
+ 
         menuItemProduit.addClickListener(event -> {
-            Notification.show("Option produit sélectionnée !");
             try {
                 this.main.getControleur().MenuItemProduit();
             } catch (SQLException ex) {
                 System.out.println("Entete : erreur :  MenuItemProduit dans le controleur");
-            }
-            
-            
-            
-            
-            
+            }   
         });
         
         menuItemOperations.addClickListener(event -> {
-            Notification.show("Option operation sélectionnée !");
             try {
                 this.main.getControleur().MenuItemOperations();
             } catch (SQLException ex) {
                 System.out.println("Entete : erreur :  MenuItemOperations dans le controleur");
-            }
-            
-            
-            
-            
-            
+            }  
         });
         
         
         
         menuItemTypeOperation.addClickListener(event -> {
-            Notification.show("Option type operation sélectionnée !");
-//            try {
-//                //On essaie d'ajouter un type d'opération
-//                this.main.getGestionBDD().addtypeoperation(this.main.getGestionBDD().conn,"test2");
-//                System.out.println("Type opération ajouté");
-//            } catch (SQLException ex) {
-//                System.out.println("Type opération pas ajouté");
-//            }
-
-
-
             try {
                 this.main.getControleur().MenuItemTypeOperation();
             } catch (SQLException ex) {
@@ -371,174 +276,87 @@ public class Entete extends MyHorizontalLayout {
         });
         
         menuItemOperateurs.addClickListener(event -> {
-            Notification.show("Operateurs sélectionnés !");
             try {
                 this.main.getControleur().MenuItemOperateur();
             } catch (SQLException ex) {
                 System.out.println("Entete : erreur :  MenuItemOperateur dans le controleur");
-            }
-            
-            
+            } 
         });
         
-        
         menuItemBrut.addClickListener(event -> {
-            Notification.show("Bruts sélectionnés !");
-            
             try {
                 this.main.getControleur().MenuItemBrut();
             } catch (SQLException ex) {
                 System.out.println("Erreur controleur : menuItemBrut");
-            }
-            
-            
+            } 
         });
-        
-        
-        
-        
-        
-        
-        menuItemAjouterAtelier.addClickListener(event -> {
-         
-        Notification.show("bouton ajouter Atelier sélectionné !");
 
+        menuItemAjouterAtelier.addClickListener(event -> {
             try {
                 this.main.getControleur().CreationObjet("atelier");
             } catch (SQLException ex) {
                 Logger.getLogger(Entete.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        
-        
-        //Il faut remettre à jour le bouton
-        
-//        try {
-//
-//               this.setComboBoxAtelier(listaltelier(this.main.getGestionBDD().conn));
-//               
-//                
-//                System.out.println("Combo box Atelier mis à jour");
-//            } catch (SQLException ex) {
-//                Logger.getLogger(Entete.class.getName()).log(Level.SEVERE, null, ex);   
-//            }
-//            
-//             
-     });
+            }      
+        });
         
         
         menuItemDetailsAtelier.addClickListener(event -> {
-         
-        Notification.show("bouton details Atelier sélectionné !");
-        
             try {
                 this.main.getControleur().MenuItemDetailsAtelier();
             } catch (SQLException ex) {
                 Logger.getLogger(Entete.class.getName()).log(Level.SEVERE, null, ex);
             }
-                
- 
         });
         
-        
-        
         menuItemSupprimerAtelier.addClickListener(event -> {
-         
-        Notification.show("bouton Supprimer Atelier sélectionné !");
-        
             try {
                 this.main.getControleur().MenuItemSupprimerAtelier();
             } catch (SQLException ex) {
                 Logger.getLogger(Entete.class.getName()).log(Level.SEVERE, null, ex);
             }
-                
- 
         });
         
         
         comboBoxAtelier.addValueChangeListener(event -> {
             
             //on cherche à récupérer l'identifiant de l'atelier, on fait une méthode générale dans le cas où l'on peu avoir plusieurs ateliers (+ de 9)
-            
-            //System.out.println("Evénement Combo box déclenché");
-            
-            System.out.println("1er event value: " +event.getValue()+" (Entete evenement du combobox");
-            
-            
-            
-            if (event.getValue()==null){
-                
+            if (event.getValue()==null){       
             }
-            else if (event.getValue()!=null){
-                
+            else if (event.getValue()!=null){    
                 String idNom = (String) event.getValue();
-                
-                
+  
             int indexEspace = idNom.indexOf(' ');
             String avantEspace = idNom.substring(0,indexEspace);
             int idAtelier = Integer.parseInt(avantEspace);
-            //System.out.println("idAtelier "+idAtelier);
-            
-            // On renvoie la valeur de l'atelier au contrôleur pour mettre à jour dans quel atelier on se trouve
-            
+            // On renvoie la valeur de l'atelier au contrôleur pour mettre à jour dans quel atelier on se trouve    
             this.main.getControleur().setEtatAtelier(idAtelier);
-            
-            
-            System.out.println("Etat du controleur mis à jour : "+idAtelier);
-            
-            
+  
             //Ici on met à jour la fenetre
                 try {
                     if (this.main.getControleur().getEtatFenetre() =="machine"){
                         this.main.getControleur().MenuItemMachine();
-
-                    }
-                    
-                    
-                    
+                    }    
                 } catch (SQLException ex) {
                     Logger.getLogger(Entete.class.getName()).log(Level.SEVERE, null, ex);
                 }
-
-            }
-            
+            }      
         });
-
+        
 }
     
-    
-            
-            
-            
-
-    
-    
-    
-    public void setComboBoxAtelier(ArrayList<Atelier> listTemp){
+    //Permet la mise à jour du combobox contenant la liste des ateliers
+    public void setComboBoxAtelier(ArrayList<Atelier> listTemp) throws SQLException{
         
         ArrayList <String> listNomAtelier = new ArrayList<>();
-
-        
-        
+        ArrayList <String> listNulle = new ArrayList<>();
         int index =0;
-        
         while (index<listTemp.size()){
             Atelier atelierTemp = (Atelier) listTemp.get(index);
-            
             listNomAtelier.add(atelierTemp.getId()+" : "+atelierTemp.getNom());
-            
-            System.out.println(listNomAtelier.get(index));
             index++;
         }
-        
-        //System.out.println("arrivé dans la méthode set comboboxAtelier");
-        //System.out.println("liste ateliers à mettre dans combobox: "+listNomAtelier);
-        
-        
         this.comboBoxAtelier.setItems(listNomAtelier);
-        //System.out.println("Le comboBox est mis à jour (méthode setCombobox)");
-        
     }
-    
     
     
 
