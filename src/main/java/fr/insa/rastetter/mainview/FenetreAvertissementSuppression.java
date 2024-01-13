@@ -7,6 +7,7 @@ package fr.insa.rastetter.mainview;
 import com.vaadin.flow.component.Text;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.dialog.Dialog;
+import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.component.html.H3;
 import com.vaadin.flow.component.icon.Icon;
@@ -33,8 +34,11 @@ public class FenetreAvertissementSuppression extends Dialog {
     private Button boutonContinuer;
     private Button boutonAnnuler;
     private Button boutonFermer;
+    private Button boutonFermer1;
     private Button boutonEnregistrer;
     private MyVerticalLayout contenu;
+    private MyVerticalLayout contenurapport;
+    private Dialog dialograpportsupp;
     
     private Controleur controleur;
 
@@ -43,29 +47,46 @@ public FenetreAvertissementSuppression(Controleur controleur,String type,Object 
     
     this.controleur=controleur;
     this.contenu=new MyVerticalLayout();
+    this.contenurapport=new MyVerticalLayout();
     this.boutonAnnuler =new Button("Annuler");
     this.boutonContinuer=new Button("Supprimer définitivement");
     this.boutonFermer = new Button(new Icon("lumo","cross"));
+    this.boutonFermer1 = new Button(new Icon("lumo","cross"));
     this.boutonEnregistrer = new Button ("Ouvrir rapport de suppression");
     this.setHeaderTitle("Suppression");
-    this.getHeader().add(boutonFermer);
-    
+    this.getHeader().add(boutonFermer1);
+    this.dialograpportsupp = new Dialog();
     this.getFooter().add(boutonAnnuler,boutonContinuer);
     
     
     this.contenu.add(new H3("Etes-vous sûr de vouloir supprimer la sélection? "));
     MyHorizontalLayout hlselection = new MyHorizontalLayout();
     
+    dialograpportsupp.setResizable(true);
+    dialograpportsupp.getHeader().add(boutonFermer1);
+    dialograpportsupp.setHeaderTitle("Rapport de suppression");
+    contenurapport.getStyle().set("padding", "3px");
+    contenurapport.getStyle().set("border-radius", "10px");
+    contenurapport.setHeightFull();
+    contenurapport.setSpacing(false);
+    
+    dialograpportsupp.add(contenurapport);
+    dialograpportsupp.setDraggable(true);
+
+    this.setDraggable(true);
+    this.setResizable(true);
+    Div div = new Div();
+    div.setHeight("0px");
+    
+    
+    
+    
     if (type == "atelier"){
+        
         hlselection.add(((Atelier)objet).getNom());
         
         boutonEnregistrer.addClickListener(event -> {
-        //Rapport de suppression
-        Dialog rapportsupp = new Dialog();
-        MyVerticalLayout contenurapport = new MyVerticalLayout();
 
-        //try {
-            contenurapport.add();
             
             ArrayList<String> stringList = new ArrayList();
             try {
@@ -73,33 +94,186 @@ public FenetreAvertissementSuppression(Controleur controleur,String type,Object 
             } catch (SQLException ex) {
                 Logger.getLogger(FenetreAvertissementSuppression.class.getName()).log(Level.SEVERE, null, ex);
             }
-            System.out.println("La liste du texte à afficher a été récupérée");
-            stringList.forEach(element -> contenurapport.add(new Text(element)));
             
-            rapportsupp.open();
+            System.out.println("La liste du texte à afficher a été récupérée");      
             
-//        } catch (SQLException ex) {
-//            System.out.println("L'ouverture du rapport a échoué");
-//            System.out.println(ex.getMessage());
-//        }
+            stringList.forEach(element -> {
+            contenurapport.add(new Text(element));
+            contenurapport.add(new Div());
+            
+            });
+            
+            
+            dialograpportsupp.open();
+            
+            boutonFermer1.addClickListener(event1 -> {
+                dialograpportsupp.close();
+            });
+            
+
 
        });
         
     }
     if (type == "machine"){
         hlselection.add(((Machine)objet).getNom());
+        
+        boutonEnregistrer.addClickListener(event -> {
+
+            
+            ArrayList<String> stringList = new ArrayList();
+            try {
+                stringList =((Machine)objet).getGrandChildList(this.controleur.getVuePrincipale().getGestionBDD().conn);
+            } catch (SQLException ex) {
+                Logger.getLogger(FenetreAvertissementSuppression.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
+            System.out.println("La liste du texte à afficher a été récupérée");      
+            
+            stringList.forEach(element -> {
+            contenurapport.add(new Text(element));
+            contenurapport.add(new Div());
+            
+            });
+            
+            
+            dialograpportsupp.open();
+            
+            boutonFermer1.addClickListener(event1 -> {
+                dialograpportsupp.close();
+            });
+            
+
+
+       });
     }
     if (type == "produit"){
         hlselection.add(((Produit)objet).getRef());
+        
+        boutonEnregistrer.addClickListener(event -> {
+
+            
+            ArrayList<String> stringList = new ArrayList();
+            try {
+                stringList =((Produit)objet).getGrandChildList(this.controleur.getVuePrincipale().getGestionBDD().conn);
+            } catch (SQLException ex) {
+                Logger.getLogger(FenetreAvertissementSuppression.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
+            System.out.println("La liste du texte à afficher a été récupérée");      
+            
+            stringList.forEach(element -> {
+            contenurapport.add(new Text(element));
+            contenurapport.add(new Div());
+            
+            });
+            
+            
+            dialograpportsupp.open();
+            
+            boutonFermer1.addClickListener(event1 -> {
+                dialograpportsupp.close();
+            });
+            
+
+
+       });
     }
     if (type == "brut"){
         hlselection.add(((Brut)objet).getNom());
+        
+        boutonEnregistrer.addClickListener(event -> {
+
+            
+            ArrayList<String> stringList = new ArrayList();
+            try {
+                stringList =((Brut)objet).getGrandChildList(this.controleur.getVuePrincipale().getGestionBDD().conn);
+            } catch (SQLException ex) {
+                Logger.getLogger(FenetreAvertissementSuppression.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
+            System.out.println("La liste du texte à afficher a été récupérée");      
+            
+            stringList.forEach(element -> {
+            contenurapport.add(new Text(element));
+            contenurapport.add(new Div());
+            
+            });
+            
+            
+            dialograpportsupp.open();
+            
+            boutonFermer1.addClickListener(event1 -> {
+                dialograpportsupp.close();
+            });
+            
+
+
+       });
     }
     if (type == "operateur"){
         hlselection.add(((Operateur)objet).getNom());
+        
+        boutonEnregistrer.addClickListener(event -> {
+
+            
+            ArrayList<String> stringList = new ArrayList();
+            try {
+                stringList =((Operateur)objet).getGrandChildList(this.controleur.getVuePrincipale().getGestionBDD().conn);
+            } catch (SQLException ex) {
+                Logger.getLogger(FenetreAvertissementSuppression.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
+            System.out.println("La liste du texte à afficher a été récupérée");      
+            
+            stringList.forEach(element -> {
+            contenurapport.add(new Text(element));
+            contenurapport.add(new Div());
+            
+            });
+            
+            
+            dialograpportsupp.open();
+            
+            boutonFermer1.addClickListener(event1 -> {
+                dialograpportsupp.close();
+            });
+            
+
+
+       });
     }
     if (type == "operation"){
         hlselection.add(((Operation)objet).getNom());
+        
+        boutonEnregistrer.addClickListener(event -> {
+
+            
+            ArrayList<String> stringList = new ArrayList();
+            try {
+                stringList =((Operation)objet).getGrandChildList(this.controleur.getVuePrincipale().getGestionBDD().conn);
+            } catch (SQLException ex) {
+                Logger.getLogger(FenetreAvertissementSuppression.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
+            System.out.println("La liste du texte à afficher a été récupérée");      
+            
+            stringList.forEach(element -> {
+            contenurapport.add(new Text(element));
+            contenurapport.add(new Div());
+            
+            });
+            
+            
+            dialograpportsupp.open();
+            
+            boutonFermer1.addClickListener(event1 -> {
+                dialograpportsupp.close();
+            });
+            
+
+
+       });
     }
     
     
