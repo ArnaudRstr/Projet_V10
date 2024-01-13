@@ -187,7 +187,7 @@ public class Entete extends MyHorizontalLayout {
         
         this.subMenuCompte=menuItemCompte.getSubMenu();
         
-        this.menuItemDeconnexion = this.subMenuCompte.addItem("Deconnexion");
+        this.menuItemDeconnexion = this.subMenuCompte.addItem("Déconnexion");
         this.menuItemInfosCompte=this.subMenuCompte.addItem("Informations");
         
         
