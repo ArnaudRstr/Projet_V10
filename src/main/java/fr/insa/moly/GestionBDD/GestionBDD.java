@@ -1617,14 +1617,14 @@ public static ArrayList<Atelier> listAtelier (Connection connect)throws SQLExcep
             
             ResultSet ateliers = affichetab.executeQuery();
             while (ateliers.next()!= false){
-                Atelier at = new Atelier(connect, ateliers.getInt("id"));
+                Atelier at = new Atelier(ateliers.getInt("id"),ateliers.getString("nom"),ateliers.getString("des"),ateliers.getInt("dimensionlargeur"),ateliers.getInt("dimensionlongueur"));
                 listatelier.add(at);
             }
 
             }
         try { // creation d'un requete 
             connect.commit(); // valide le refresh
-            System.out.println("le refresh fonctionne") ;
+            System.out.println("le refresh fonctionne dans listatelier") ;
         } catch (SQLException ex) { // en cas d'erreur on "rollback" on retourne avant 
             connect.rollback();
             System.out.println("rollback");

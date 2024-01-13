@@ -79,6 +79,7 @@ public class Entete extends MyHorizontalLayout {
     
     //Creation de l'entête principale
     public Entete(VuePrincipale main) throws SQLException {
+        System.out.println("entré dans Entete");
         this.main = main;
         this.comboBoxAtelier= new ComboBox<>();
 
@@ -114,6 +115,7 @@ public class Entete extends MyHorizontalLayout {
         //On crée un sous menu du menu item du menu principal
         this.subMenuMenuPrincipal= menuItemMenu.getSubMenu();
         
+        System.out.println("va créer les sous menu");
         //On ajoute les menu item au sous menu du menuitem du menu principal
         this.menuItemPlan = this.subMenuMenuPrincipal.addItem("Plan");
         this.menuItemMachine = this.subMenuMenuPrincipal.addItem("Machines");
@@ -129,9 +131,10 @@ public class Entete extends MyHorizontalLayout {
         this.menuItemSupprimerAtelier=this.subMenuAtelier.addItem("Supprimer");
         this.comboBoxAtelier.setPlaceholder("Atelier");   
         this.setAlignItems(CENTER);
-
-        this.setComboBoxAtelier(listAtelier(this.main.getGestionBDD().conn));
         
+System.out.println("va demander list atelier");
+        this.setComboBoxAtelier(listAtelier(this.main.getGestionBDD().conn));
+        System.out.println("listatelier à fonctionné");
 
         Icon compteIcon = new Icon(VaadinIcon.USER);
         compteIcon.setSize("20px");
@@ -235,7 +238,14 @@ public class Entete extends MyHorizontalLayout {
       
         //Evénements du menu
         menuItemPlan.addClickListener(event -> {
-            this.main.getControleur().MenuItemPlan();
+            try {
+                System.out.println("try");
+                this.main.getControleur().MenuItemPlan();
+                System.out.println("success");
+            } catch (SQLException ex) {
+                System.out.println("fail");
+                Logger.getLogger(Entete.class.getName()).log(Level.SEVERE, null, ex);
+            }
             this.main.getControleur().setEtatFenetre("plan");
         });
   

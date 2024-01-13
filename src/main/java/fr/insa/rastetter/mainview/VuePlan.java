@@ -32,13 +32,14 @@ public class VuePlan extends MyVerticalLayout {
     private ArrayList<PlanButton> spaceSelect;
     private ArrayList<Machine> listMachine;
     
-    public VuePlan(Controleur controleur,Atelier atelier)throws SQLException {
-        this.atelier = atelier;
+    public VuePlan(Controleur controleur,int idatelier)throws SQLException {
+//        Atelier atelier = new Atelier(controleur.getVuePrincipale().getGestionBDD().conn, idatelier);
+//        this.atelier = atelier;
         this.ordonnee = 10;
         this.abscisse=15;
         this.spaceSelect= new ArrayList();
         this.spaceMachineTaked= new ArrayList();
-        this.listMachine = GestionBDD.listMachineAtelier(controleur.getVuePrincipale().getGestionBDD().conn,atelier.getId());
+//        this.listMachine = GestionBDD.listMachineAtelier(controleur.getVuePrincipale().getGestionBDD().conn,atelier.getId());
         Button valider = new Button("Valider");
         valider.addClickListener(even -> {
             for (int i=0; i<spaceSelect.size();i++){

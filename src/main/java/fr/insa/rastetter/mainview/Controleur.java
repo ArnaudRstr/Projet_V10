@@ -193,9 +193,8 @@ public class Controleur {
     
     
     public void MenuItemPlan() throws SQLException {
-        Atelier atelier = new Atelier(this.getVuePrincipale().getGestionBDD().conn, this.etatAtelier);
-        this.main.setMainContent(new VuePlan(this,atelier));
-        Notification.show("plan via controleur");
+       System.out.println("MenuItemPlan");
+       this.main.setMainContent(new VuePlan(this,this.etatAtelier));
     }
 
     public void MenuItemMachine() throws SQLException {
