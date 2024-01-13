@@ -238,8 +238,9 @@ public class Controleur {
     }
     
     
-    public void MenuItemPlan() {
-        this.main.setMainContent(new VuePlan());
+    public void MenuItemPlan() throws SQLException {
+        Atelier atelier = new Atelier(this.getVuePrincipale().getGestionBDD().conn, this.etatAtelier);
+        this.main.setMainContent(new VuePlan(this,atelier));
         Notification.show("plan via controleur");
     }
 
@@ -604,7 +605,7 @@ public class Controleur {
         String nom = new String();
         int index =0;
         boolean valide = false;
-        Atelier atelierselect = new Atelier(-1, "vide", "vide");
+        Atelier atelierselect = new Atelier(-1, "vide", "vide",0,0);
         while (index<listTemp.size()&& valide == false){
             Atelier atelierTemp = (Atelier) listTemp.get(index);
 
