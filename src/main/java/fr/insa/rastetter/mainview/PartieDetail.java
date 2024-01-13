@@ -15,7 +15,6 @@ import com.vaadin.flow.component.html.H4;
 import com.vaadin.flow.component.html.H5;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
-import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.textfield.NumberField;
 import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.component.textfield.TextField;
@@ -42,16 +41,16 @@ import java.util.Set;
  *
  * @author arnaud
  */
+
+//Il s'agit ici de la partie droite du contenu, qui contient les différentes informations de détail. Elle est donc adaptée à chaque type d'objet.
 public class PartieDetail extends MyVerticalLayout{
     
 private Controleur controleur;
-
 private MyVerticalLayout contenu; 
 private MyHorizontalLayout listboutons;
 private Button boutonModifier;
 private Button boutonEnregistrer;
 private Button boutonSupprimer;
-
 
     public PartieDetail(Controleur controleur){
         this.controleur=controleur;
@@ -69,11 +68,9 @@ private Button boutonSupprimer;
         contenu.setSpacing(false);
         this.listboutons= new MyHorizontalLayout();
         
-        
         String couleur1 = new String("#38998C");
         String couleur2 = new String("#BDE767");
         String couleur3 = new String("#1F4C83");
-        
         
         Icon iconenreg = new Icon("lumo","checkmark");
         iconenreg.setSize("30px");
@@ -93,21 +90,13 @@ private Button boutonSupprimer;
         
         Div div0 = new Div();
         div0.setWidth("200px");
-        
-        
-        
+     
         this.listboutons.add(new H2(" Détail"),boutonSupprimer,boutonModifier,boutonEnregistrer);
-        
-        
-        
-        
-        if (typeobjet =="machine"){
-            
+ 
+        if ("machine".equals(typeobjet)){           
             contenu.add(listboutons);
-
             Machine machinetemp = (Machine) object;
-            
-            
+        
             TextField tfnom=  new TextField();
             tfnom.setLabel("Nom");
             tfnom.getStyle().set("font-size","40px");
@@ -134,12 +123,9 @@ private Button boutonSupprimer;
             tades.setLabel("Description");
             tades.setReadOnly(true);
             tades.setValue(machinetemp.getDes());
-            tades.setWidthFull();
-            
+            tades.setWidthFull();            
             contenu.add(tades);
-            
-            
-            
+     
             ArrayList <String> listStatuts = new ArrayList();
         
             listStatuts.add("Arrêt");
@@ -149,40 +135,25 @@ private Button boutonSupprimer;
             ComboBox cbbstatut = new ComboBox();
             cbbstatut.setItems(listStatuts);
             cbbstatut.setReadOnly(true);
-            cbbstatut.setWidthFull();
-            
+            cbbstatut.setWidthFull();    
             cbbstatut.setLabel("Statut");
-            
-            
-            
             cbbstatut.setValue(machinetemp.getStatutString());
-            
             contenu.add(cbbstatut);
 
-          
-            
             ComboBox cbtypeoperation = new ComboBox();
-            
-            
+
+            //On récupère les types d'opération pour remplir les combobox
             ArrayList altypeop = new ArrayList();
-            
-            altypeop = listtypeoperation(this.controleur.getVuePrincipale().getGestionBDD().conn);
-            
+            altypeop = listtypeoperation(this.controleur.getVuePrincipale().getGestionBDD().conn);           
             ArrayList listajouter = new ArrayList();
 
             int index =0;
-            while(index< altypeop.size()){
-            
-            //listajouter.add(((Typeoperation)altypeop.get(index)).getId()+" : "+ ((Typeoperation)altypeop.get(index)).getNom());
+            while(index< altypeop.size()){ 
             listajouter.add(((Typeoperation)altypeop.get(index)).getNom());
             index++;
         }
             cbtypeoperation.setItems(listajouter);
-            
-            
-            
-            //Ici il faut encore faire en sorte d'afficher l'id + le nom du type d'opération et pas uniquement le type d'op pcq ça marche pas.
-            
+
             //On recherche le type d'operation à partir de son id.
             int valide=0;
             int i =0;
@@ -193,8 +164,7 @@ private Button boutonSupprimer;
                     cbtypeoperation.setValue(((Typeoperation) altypeop.get(i)).getNom());
 
                 }
-                i++;
-                                
+                i++;                               
             }
             cbtypeoperation.setReadOnly(true);
             cbtypeoperation.setLabel("Type operation");
@@ -230,7 +200,6 @@ private Button boutonSupprimer;
 
             contenu.add(nfdimlong);
             
-            
             TextField tfloca=  new TextField();
             tfloca.setLabel("Localisation");
             tfloca.setReadOnly(true);
@@ -239,8 +208,7 @@ private Button boutonSupprimer;
             contenu.add(tfloca);
             
             this.add(contenu);
-            
-            
+                        
             boutonModifier.addClickListener(event -> {
                     
             tfnom.setReadOnly(false);
@@ -253,12 +221,7 @@ private Button boutonSupprimer;
             cbtypeoperation.setReadOnly(false);
             cbbstatut.setReadOnly(false);
             tfloca.setReadOnly(false);
-            
-                        
-            
-            
-            
-            
+      
             });
             
             boutonEnregistrer.addClickListener(event -> {
@@ -275,20 +238,17 @@ private Button boutonSupprimer;
             tfloca.setReadOnly(true);
             
             String nomtypeopchoix = (String) cbtypeoperation.getValue();
-            //On recherche ensuite l'identifiant du type d'op à partir de son nom. 
-            
+            //On recherche ensuite l'identifiant du type d'op à partir de son nom.             
             int index1 =0;
             int idtypeopchoix=-1;
             
-            ArrayList altypeop1 = new ArrayList();
-            
+            ArrayList altypeop1 = new ArrayList();           
                 try {
                     altypeop1 = listtypeoperation(this.controleur.getVuePrincipale().getGestionBDD().conn);
                 } catch (SQLException ex) {
                     Logger.getLogger(PartieDetail.class.getName()).log(Level.SEVERE, null, ex);
                 }
-            
-                
+                           
             while(altypeop1.size()>index1){
                
                 if(nomtypeopchoix.equals(((Typeoperation)altypeop1.get(index1)).getNom())){
@@ -296,34 +256,26 @@ private Button boutonSupprimer;
                     idtypeopchoix=((Typeoperation)altypeop1.get(index1)).getId();
                 }
                 index1++;
-            }
-            
-            //On récupère le nouveau statut
-            
-            String nvstat = (String) cbbstatut.getValue();
-            
+            }            
+            //On récupère le nouveau statut           
+            String nvstat = (String) cbbstatut.getValue();           
             int idnvstatut = -1000;
             
-            if (nvstat=="Arrêt"){
+            if ("Arrêt".equals(nvstat)){
                 idnvstatut =0;
             }
-            if (nvstat=="Marche"){
+            if ("Marche".equals(nvstat)){
                 idnvstatut =1;
             }
-            if (nvstat=="Maintenance à prévoir"){
+            if ("Maintenance à prévoir".equals(nvstat)){
                 idnvstatut =2;
             }
-            
-
-            
-            
-         //                                                                                                                                          Connection connect,int id,String nom,int idatelier,int idtypeoperation,String des, String marque,double puissance,int statut,double couthoraire,String localisation,double dimensionlargeur,double dimensionlongueur)   
+        
             try {
                     this.controleur.getVuePrincipale().getGestionBDD().updateMachine(this.controleur.getVuePrincipale().getGestionBDD().conn,machinetemp.getId(),tfnom.getValue(),this.controleur.getEtatAtelier(),idtypeopchoix,tades.getValue(),tfmarque.getValue(),nfpuissance.getValue(),idnvstatut,nfcouthoraire.getValue(),tfloca.getValue(),nfdimlarg.getValue(),nfdimlong.getValue());
                 } catch (SQLException ex) {
                     Logger.getLogger(PartieDetail.class.getName()).log(Level.SEVERE, null, ex);
-                }
-                
+                }    
                 try {
                     this.controleur.MenuItemMachine();
                 } catch (SQLException ex) {
@@ -350,25 +302,12 @@ private Button boutonSupprimer;
             
         }
         
+
         
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        if (typeobjet == "produit"){
+        if ("produit".equals(typeobjet)){
             contenu.add(listboutons);
             this.add(contenu);
-            
-            
+
             Produit produittemp = (Produit) object;
             System.out.println("Recupération du produit réussie");
             
@@ -419,23 +358,11 @@ private Button boutonSupprimer;
             }
             //cbbbrut.setValue();
             contenu.add(cbbbrut);
-            
-            
-            //On pourra encore ajouter le nom du brut ??
-//            TextField tfnombrut=  new TextField();
-//            tfref.setLabel("Nom du brut");
-//            tfref.getStyle().set("font-size","40px");
-//            tfref.setReadOnly(true);
-//            
-//            
-//            tfref.setValue();
-//            tfref.setWidthFull();
-//            contenu.add(tfref);
+   
 
-            //On créé une opération vide
+            //On créé une opération vide qui permet de ne rien sélectionner.
             Operation opnulle = new Operation(-1,-1,"vide",-1,"nul",-1);
 
-            
             //Ajout de la gamme => opérations
             
             ArrayList<Operation> listoptemp = new ArrayList();
@@ -448,40 +375,15 @@ private Button boutonSupprimer;
                 i++;
                 
             }
-            
-            
-            
-            //final ArrayList<Operation> listop = listoperation(this.controleur.getVuePrincipale().getGestionBDD().conn);
+
             final ArrayList<Operation> listop = listoptemp;
-            
-            System.out.println("Taille de la liste des operations disponibles "+listop.size());
-            
-            
-             
+
             //On récupère la liste d'operation du produit
             ArrayList <Operation> listopactuelle = new ArrayList();
             listopactuelle = produittemp.getGamme().getList();
-            System.out.println("Recupération de la gamme du produit réussie");
-            System.out.println("Taille de la liste de gamme (différente de 0) : "+listopactuelle.size());
-            
-            ArrayList <Operation> listopselect = new ArrayList();
-            
+            ArrayList <Operation> listopselect = new ArrayList();   
             ArrayList <ComboBox> listcbb = new ArrayList();
-            
-            
-            
-            
-            MyHorizontalLayout hl1 = new MyHorizontalLayout();
-            
-            
-            //ComboBox <Operation>cbbop1 = new ComboBox<>();
-//            cbbop1.setItems(listop);
-//            cbbop1.setItemLabelGenerator(Operation::getNom);
-//            cbbop1.setLabel("Operation 1");
-//            cbbop1.setWidth("80%");
-//            cbbop1.getStyle().set("margin-left", "auto");
-//            cbbop1.getStyle().set("margin-right", "auto");
-            
+
             MyHorizontalLayout hlbouton = new MyHorizontalLayout();
             hlbouton.add(VaadinIcon.PLUS_CIRCLE.create(),new H5("Ajouter une operation"));
             Button baddop = new Button(hlbouton);
@@ -490,39 +392,11 @@ private Button boutonSupprimer;
             div.setHeight("300px");
             div.setWidthFull();
             div.add(baddop);
-            //listcbb.add(cbbop1);
-            
-            //div.add(cbbop1);
             contenu.add(div);
-            
-            int nbop = 1;
-            
-            
-            
+
             //On créé à nouveau la liste de combobox pour afficher les infos actuelles (avant modif)
               int index1=0;
-            
-              
-            System.out.println("On essaie de donner la valeur aux combobox : erreur si taille =0");
-            
-            
-            
-//            try{
-//                cbbop1.setValue(listopactuelle.get(0));
-//                cbbop1.setReadOnly(true);
-//
-//            }
-//            catch(IndexOutOfBoundsException e){
-//                System.out.println("Liste de taille nulle");
-//            }
-            //cbbop1.setReadOnly(true);
-            
-            
-            System.out.println();
-            listopactuelle.forEach(Produit -> System.out.println(Produit.getNom()));
-            System.out.println();
-            
-            
+      
             while(index1<listopactuelle.size()){
                 
                 ComboBox <Operation>cbbopn = new ComboBox<>();
@@ -535,40 +409,28 @@ private Button boutonSupprimer;
                 listcbb.add(cbbopn);       
                 div.add(cbbopn);
                 cbbopn.setValue(listopactuelle.get(index1));
-                
-                    
+       
                 index1++;
 
             }           
-               
-            
-            
+ 
             //Les cases vides ne peuvent pas être supprimées pendant la saisie, mais elles sont éliminées lors de l'enregistrement
             int index0=0;
             while(index0<listcbb.size()){
                 
                 if((listcbb.get(index0).getValue())== null){
                     listcbb.remove(index0);
-                    index0--;
-                    
-                }
-                
+                    index0--;      
+                }          
                 else{
                 System.out.println(index0);
-
-                
+        
                 System.out.println(((Operation)(listcbb.get(index0).getValue())).getNom());
                 listcbb.get(index0).setReadOnly(true);
-                //ON ajoute l'operation à la liste finale 
-                //listopselect.add((Operation)(listcbb.get(index0).getValue()));
                 }      
                 index0++;
-
             }           
-               
-            
-            
-            
+
             baddop.addClickListener(event -> {
                 
                 ComboBox <Operation>cbbopn = new ComboBox<>();
@@ -578,15 +440,11 @@ private Button boutonSupprimer;
                 cbbopn.setWidth("80%");
                 cbbopn.getStyle().set("margin-left", "auto");
                 cbbopn.getStyle().set("margin-right", "auto");
-                listcbb.add(cbbopn);
-                
+                listcbb.add(cbbopn);               
                 div.add(cbbopn);
-                
-                
+            
             });
             
-                    
-   
             boutonModifier.addClickListener(event -> {
                     
             tfref.setReadOnly(false);
@@ -597,13 +455,9 @@ private Button boutonSupprimer;
             int index2=0;
             while(index2<listcbb.size()){
                 listcbb.get(index2).setReadOnly(false);
-
-                //listopselect.add((Operation)(listcbb.get(index2).getValue()));     
                 index2++;
-
             }           
-
-            
+    
             });
             
             boutonEnregistrer.addClickListener(event -> {
@@ -613,84 +467,50 @@ private Button boutonSupprimer;
                 listcbb.get(index2).setReadOnly(true);
                 index2++;
             }     
-            
-                            
-
-            
-            
+   
             baddop.setEnabled(false);
             tfref.setReadOnly(true);
             tades.setReadOnly(true);
-            //rajouter les cbb en lecture
-
-            
-            System.out.println();
-            //System.out.println(produittemp.getId()+tfref.getValue()+tades.getValue()+(int)Math.round(nfidbrut.getValue()));
-            
-            int index =0;
-            System.out.println("Taille listecbb : "+listcbb.size());
-            
+            int index =0;        
             while(index<listcbb.size()){
                 
                 if((listcbb.get(index).getValue())== null){
                     listcbb.remove(index);
-                    index--;
-                    
+                    index--;       
                 }
-                if(((Operation)(listcbb.get(index).getValue())).getNom()=="vide"){
+                if("vide".equals(((Operation)(listcbb.get(index).getValue())).getNom())){
                     listcbb.remove(index);
                     index--;
                 }
-                else{
-                System.out.println(index);
-                
-                System.out.println("Nom de l'opération ajoutée : "+((Operation)(listcbb.get(index).getValue())).getNom()+" dans la liste listopselect");
+                else{  
                 listopselect.add((Operation)(listcbb.get(index).getValue()));
                 }
-                
-                
+  
                 index++;
-                
-                
-                
+      
             }
-                
-            System.out.println("taille de la list d'operations à ajouter au produit : "+listopselect.size());
-            
-            System.out.println(listopselect.get(0).getClass());    
-            System.out.println();
-            System.out.println();
-            
+
                 try {
                     this.controleur.getVuePrincipale().getGestionBDD().updateProduit(this.controleur.getVuePrincipale().getGestionBDD().conn,produittemp.getId(),tfref.getValue(),tades.getValue(),(int)Math.round(((Brut)cbbbrut.getValue()).getId()),listopselect);
                 } catch (SQLException ex) {
                     Logger.getLogger(PartieDetail.class.getName()).log(Level.SEVERE, null, ex);
                 }
-                
                 try {
-                    System.out.println();
-                    System.out.println();
-                    System.out.println("Actualisation menuitemproduit");
                     this.controleur.MenuItemProduit();
                 } catch (SQLException ex) {
                     Logger.getLogger(PartieDetail.class.getName()).log(Level.SEVERE, null, ex);
                 }
 
-            
             });
-            
-            
+     
             boutonSupprimer.addClickListener(event -> {
-                
-                
-                
+       
                 try {
                     FenetreAvertissementSuppression fenetreAvertissementSuppression = new FenetreAvertissementSuppression(this.controleur,"produit",produittemp);
                 } catch (SQLException ex) {
                     Logger.getLogger(PartieDetail.class.getName()).log(Level.SEVERE, null, ex);
                 }
                 
-                //delete(this.controleur.getVuePrincipale().getGestionBDD().conn,produittemp.getnomtable(),produittemp.getId());
                 try {
                     this.controleur.MenuItemProduit();
                 } catch (SQLException ex) {
@@ -699,11 +519,8 @@ private Button boutonSupprimer;
             });
             
         }
-        
-        
-        
-        
-         if (typeobjet == "brut"){
+  
+         if ("brut".equals(typeobjet)){
             contenu.add(listboutons);
             this.add(contenu);
             
@@ -760,26 +577,7 @@ private Button boutonSupprimer;
             tffourn.setValue(bruttemp.getFournisseur());
             tffourn.setWidthFull();
             contenu.add(tffourn);
-            
-            
- 
-           
-            
-            //On pourra encore ajouter le nom du brut
-//            TextField tfnombrut=  new TextField();
-//            tfref.setLabel("Nom du brut");
-//            tfref.getStyle().set("font-size","40px");
-//            tfref.setReadOnly(true);
-//            
-//            
-//            tfref.setValue();
-//            tfref.setWidthFull();
-//            contenu.add(tfref);
 
-            
-            
-            
-            
             boutonModifier.addClickListener(event -> {
                     
             tfref.setReadOnly(false);
@@ -788,12 +586,7 @@ private Button boutonSupprimer;
             tffourn.setReadOnly(false);
             tfmatiere.setReadOnly(false);
             nfstock.setReadOnly(false);
-            
-                        
-            
-            
-            
-            
+
             });
             
             boutonEnregistrer.addClickListener(event -> {
@@ -804,11 +597,7 @@ private Button boutonSupprimer;
             tffourn.setReadOnly(true);
             tfmatiere.setReadOnly(true);
             nfstock.setReadOnly(true);
-            
-            
-            Notification.show("La méthode d'enregistrement n'est pas encore faite");
-            
-            
+   
             try {
                     this.controleur.getVuePrincipale().getGestionBDD().updateBrut(this.controleur.getVuePrincipale().getGestionBDD().conn,bruttemp.getId(),tfnom.getValue(),tfref.getValue(),tfmatiere.getValue(),(int)Math.round(nfstock.getValue()),tfdim.getValue(),tffourn.getValue());
                 } catch (SQLException ex) {
@@ -822,8 +611,7 @@ private Button boutonSupprimer;
                 }
             
             });
-            
-            
+                     
             boutonSupprimer.addClickListener(event -> {
                 
                 
@@ -832,8 +620,6 @@ private Button boutonSupprimer;
                     
                     FenetreAvertissementSuppression fenetreAvertissementSuppression = new FenetreAvertissementSuppression(this.controleur,"brut",bruttemp);
 
-                    //delete(this.controleur.getVuePrincipale().getGestionBDD().conn,bruttemp.getnomtable(),bruttemp.getId());
-                    // On fait apparaitre une fenetre supplémentaire
                 } catch (SQLException ex) {
                     System.out.println("Erreur partie Detail");
                 }
@@ -842,11 +628,10 @@ private Button boutonSupprimer;
             
         }
         
-        if (typeobjet == "operation"){
+        if ("operation".equals(typeobjet)){
             contenu.add(listboutons);
             this.add(contenu);
-            
-            
+
             Operation operationtemp = (Operation) object;
             
             TextField tfnom=  new TextField();
@@ -856,40 +641,25 @@ private Button boutonSupprimer;
             tfnom.setValue(operationtemp.getNom());
             tfnom.setWidthFull();
             contenu.add(tfnom);
-            
-            
+
             TextField tfoutil = new TextField("Outil");
             contenu.add(tfoutil);
             tfoutil.setWidthFull();
-            tfoutil.setValue(operationtemp.getOutil());
-            
+            tfoutil.setValue(operationtemp.getOutil());            
             
             NumberField nbid = new NumberField("Identifiant");
             nbid.setValue((double)operationtemp.getId());
-            nbid.setWidthFull();
-            
+            nbid.setWidthFull();           
             contenu.add(nbid);
-            
-            
-            
+                                   
             NumberField nbduree = new NumberField("Durée (s)");
             nbduree.setValue(operationtemp.getDuree());
-            nbduree.setWidthFull();
-            
+            nbduree.setWidthFull();            
             contenu.add(nbduree);
-            
-            
-            
-            
-           
-            ComboBox comboBoxTypeOperation = new ComboBox();
-            
+                                                      
+            ComboBox comboBoxTypeOperation = new ComboBox();           
             comboBoxTypeOperation.setWidthFull();
-            
-            
-            
-            
-            
+                                                          
             ArrayList<Typeoperation> listtemp = new ArrayList();
 
             listtemp=listtypeoperation(this.controleur.getVuePrincipale().getGestionBDD().conn);
@@ -903,14 +673,11 @@ private Button boutonSupprimer;
                 index++;
             }
             comboBoxTypeOperation.setItems(listajouter);
-            
-            
+       
             comboBoxTypeOperation.setLabel("Type d'opération");
             comboBoxTypeOperation.setValue(operationtemp.getIdtypeoperation());
             contenu.add(comboBoxTypeOperation);
-            
-            
-            
+      
             ComboBox comboBoxMachines = new ComboBox();
             comboBoxMachines.setLabel("Machine");
             ArrayList<Machine> listmachinetemp = new ArrayList();
@@ -939,38 +706,22 @@ private Button boutonSupprimer;
             comboBoxMachines.setWidthFull();
             
             boutonModifier.addClickListener(event -> {
-                    
-            
             tfnom.setReadOnly(false);
             tfoutil.setReadOnly(false);
             nbduree.setReadOnly(false);
             comboBoxTypeOperation.setReadOnly(false);
-            comboBoxMachines.setReadOnly(false);
-            
-            
-                        
-            
-            
-            
-            
+            comboBoxMachines.setReadOnly(false);          
             });
             
-            boutonEnregistrer.addClickListener(event -> {
-             
+            boutonEnregistrer.addClickListener(event -> {             
             tfnom.setReadOnly(true);
             tfoutil.setReadOnly(true);
             nbduree.setReadOnly(true);
             comboBoxTypeOperation.setReadOnly(true);
-            comboBoxMachines.setReadOnly(true);
-            
-            
-            
-            
+            comboBoxMachines.setReadOnly(true);     
             int indexEspace =-1;
             int idtypeoperationtemp = -2;
-            
-            
-            
+          
             String idNom = String.valueOf(comboBoxTypeOperation.getValue());
             try {
                 indexEspace = idNom.indexOf(' ');
@@ -982,27 +733,16 @@ private Button boutonSupprimer;
             if(indexEspace==-1){
                 
                idtypeoperationtemp =  Integer.parseInt(idNom);
-            }
-            
+            }            
             else{
                 
-                String avantEspace = idNom.substring(0,indexEspace);
-                
+                String avantEspace = idNom.substring(0,indexEspace);       
                 idtypeoperationtemp = Integer.parseInt(avantEspace);
                 
             }
-            
-            
-            
-            
-            
-            
-            
-            
-            
+      
             int indexEspace1 =-1;
-            int idmachineselect = -2;
-            
+            int idmachineselect = -2;           
             String idMachine = String.valueOf(comboBoxMachines.getValue());
             try {
                 indexEspace1 = idMachine.indexOf(' ');
@@ -1010,54 +750,31 @@ private Button boutonSupprimer;
             catch (ArrayIndexOutOfBoundsException e1){
                 ;
             }
-            System.out.println("IndexEspace1"+indexEspace1);
-            if(indexEspace1==-1){
-                
+            if(indexEspace1==-1){               
                idmachineselect = Integer.parseInt(idMachine);
-            }
-            
+            }           
             else{
                 
-                String avantEspace1 = idMachine.substring(0,indexEspace1);
-                
+                String avantEspace1 = idMachine.substring(0,indexEspace1);               
                 idmachineselect = Integer.parseInt(avantEspace1);
                 
             }
-            
-            System.out.println("id type op /"+idtypeoperationtemp+"/id machine /"+idmachineselect+"/");
-            
 
-            
-            
-          
-            
-            
-            
-            
-            
-            
-            
                 try {
                     //updateOperation(Connection connect,int id, int idtypeoperation, String nom,double duree,String outil,int idmachine)
                     updateOperation(this.controleur.getVuePrincipale().getGestionBDD().conn,(int) Math.round(nbid.getValue()), idtypeoperationtemp,tfnom.getValue(),nbduree.getValue(),tfoutil.getValue(),idmachineselect);
                 } catch (SQLException ex) {
                     System.out.println("Partie détail : erreur dans la modification de l'operation");
-                }
-                
+                }               
                 try {
                     this.controleur.MenuItemOperations();
                 } catch (SQLException ex) {
                     Logger.getLogger(PartieDetail.class.getName()).log(Level.SEVERE, null, ex);
                 }
             });
-            
-            
-            
-            
+     
             boutonSupprimer.addClickListener(event -> {
-                
-                
-                
+        
                 try {
                     
                     FenetreAvertissementSuppression fenetreAvertissementSuppression = new FenetreAvertissementSuppression(this.controleur,"operation",operationtemp);
@@ -1069,27 +786,11 @@ private Button boutonSupprimer;
                 }
                 
             });
-            
-            
-            
-            
+   
         }
         
         
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        if (typeobjet == "operateur"){
+        if ("operateur".equals(typeobjet)){
             contenu.add(listboutons);
             this.add(contenu);
             
@@ -1102,19 +803,7 @@ private Button boutonSupprimer;
             final String prenom =operateurtemp.getPrenom();
             
             final int tel = operateurtemp.getTel();
-            final String mail = operateurtemp.getMail();
-            final ArrayList typeop =operateurtemp.getListtypeoperation();
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
+            final String mail = operateurtemp.getMail();       
             ArrayList <String> listStatuts = new ArrayList();
         
             listStatuts.add("Disponible");
@@ -1137,54 +826,39 @@ private Button boutonSupprimer;
             div4.setHeight("20px"); 
             
             H2 hnom = new H2(operateurtemp.getNom()+" "+operateurtemp.getPrenom());
-            
-            
+
             H3 ttel = new H3("Téléphone : +33 0"+String.valueOf(operateurtemp.getTel()));
             H3 tmail = new H3("Mail : "+String.valueOf(operateurtemp.getMail()));
 
             contenu.add(div,hnom,div4,ttel,div5,tmail,cbbstatut);
-            
-            
-            
-            
-            
-            
+
             String statut = (String) cbbstatut.getValue();
             int idstatut=-1;
         
         
-            if(statut=="En congé"){
+            if("En congé".equals(statut)){
             idstatut=0;
             }
-            if(statut=="En activité"){
+            if("En activité".equals(statut)){
             idstatut=1;
             }
-            if(statut=="En formation"){
+            if("En formation".equals(statut)){
                 idstatut=2;
             }
-            if(statut=="Disponible"){
+            if("Disponible".equals(statut)){
                 idstatut=3;
             }
-            if(statut=="Hors service"){
+            if("Hors service".equals(statut)){
                 idstatut=4;
             }
             cbbstatut.setValue(idstatut);
-            
-           
-            
-            
-            
-            
-            
             
             ComboBox cbbatelier = new ComboBox();
             ArrayList <Atelier> listTemp = new ArrayList();
             listTemp = listAtelier (this.controleur.getVuePrincipale().getGestionBDD().conn);
       
             ArrayList <String> listNomAtelier = new ArrayList<>();
-
             int index =0;
-
             while (index<listTemp.size()){
                 Atelier atelierTemp = (Atelier) listTemp.get(index);
 
@@ -1198,18 +872,13 @@ private Button boutonSupprimer;
             cbbatelier.setWidthFull();
             cbbatelier.setLabel("Atelier");
             contenu.add(cbbatelier);
-            
-            
-            
-            
+ 
             cbbstatut.setValue(operateurtemp.getStatutString());
                 try {
                     cbbatelier.setValue(operateurtemp.getAtelierString(this.controleur));
                 } catch (SQLException ex) {
                     System.out.println("Pas reussi à récupérer l'atelier de l'opérateur");
-                }
-            
-            
+                } 
                 
             Div divtypeop = new Div();
             divtypeop.setHeight("500px");
@@ -1225,11 +894,9 @@ private Button boutonSupprimer;
             cbgtypeop.setItems(listtemptypop);
             cbgtypeop.addThemeVariants(CheckboxGroupVariant.LUMO_VERTICAL);
             cbgtypeop.setReadOnly(true);
-            
- 
+
             ArrayList<Typeoperation> listtypeoperationoperateur = operateurtemp.getListtypeoperation();
 
-            
             cbgtypeop.setItems(listtemptypop);    
 
             for (int i=0;i<listtemptypop.size();i++){
@@ -1242,24 +909,16 @@ private Button boutonSupprimer;
                     }
                 }
             }
-    
 
-            
             divtypeop.add(cbgtypeop); 
             contenu.add(divtypeop); 
-                
-                
-                
-                
+   
             boutonModifier.addClickListener(event -> {
-            
             cbbstatut.setReadOnly(false);
             cbbatelier.setReadOnly(false);
             cbgtypeop.setReadOnly(false);
 
-            
             });
-            
             
             boutonEnregistrer.addClickListener(event -> {
                     
@@ -1271,36 +930,27 @@ private Button boutonSupprimer;
             
             
             int idstatut2=-1;
-        
-        
-            if(stringstatut=="En congé"){
+
+            if("En congé".equals(stringstatut)){
             idstatut2=0;
             }
-            if(stringstatut=="En activité"){
+            if("En activité".equals(stringstatut)){
             idstatut2=1;
             }
-            if(stringstatut=="En formation"){
+            if("En formation".equals(stringstatut)){
                 idstatut2=2;
             }
-            if(stringstatut=="Disponible"){
+            if("Disponible".equals(stringstatut)){
                 idstatut2=3;
             }
-            if(stringstatut=="Hors service"){
+            if("Hors service".equals(stringstatut)){
                 idstatut2=4;
             }
             
             final int idstatutchoix = idstatut2;
-            
-            
-            
-            
-            
-            
-            
-            
+
             int indexEspace =-1;
             int idateliertemp = -2;
-
             String NomAtelier = String.valueOf(cbbatelier.getValue());
             try {
                 indexEspace = NomAtelier.indexOf(' ');
@@ -1317,73 +967,31 @@ private Button boutonSupprimer;
                 String avantEspace = NomAtelier.substring(0,indexEspace);
                 
                 idateliertemp = Integer.parseInt(avantEspace);   
-            }
-            
+            }          
            final int idatelier =idateliertemp; 
-            
-           
-           
-           
-           
-           
-           
-           
            Set<Typeoperation> selectedItems = cbgtypeop.getSelectedItems();
             ArrayList<Typeoperation> listtypeop = new ArrayList<>(selectedItems);
-           
-           
-           
-           
-           
-           
-           
-            
-            
-            
-            
-            Notification.show("La méthode d'enregistrement n'est pas encore faite");
-            
             try {
-                    //this.controleur.getVuePrincipale().getGestionBDD().updateOperateur(this.controleur.getVuePrincipale().getGestionBDD().conn,operateurtemp.getId(),operateurtemp.getIdentifiant(),operateurtemp.getMotdepasse(),operateurtemp.getNom(),operateurtemp.getPrenom(),idateliertemp,idstatut,operateurtemp.getTel(),operateurtemp.getMail(),operateurtemp.getListtypeoperation());
-              
-            
                     this.controleur.getVuePrincipale().getGestionBDD().updateOperateur(this.controleur.getVuePrincipale().getGestionBDD().conn,id,identifiant,mdp,nom,prenom,idateliertemp,idstatutchoix,tel,mail,listtypeop);
-
-            
+     
             } catch (SQLException ex) {
                     Logger.getLogger(PartieDetail.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            
+                }    
                 try {
                     this.controleur.MenuItemOperateur();
                 } catch (SQLException ex) {
                     Logger.getLogger(PartieDetail.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            
+                }         
             });
-//            
-//            
+         
             boutonSupprimer.addClickListener(event -> {
-                
-                
-                
-                try {
-                    
-                    FenetreAvertissementSuppression fenetreAvertissementSuppression = new FenetreAvertissementSuppression(this.controleur,"operateur",operateurtemp);
 
-                    //delete(this.controleur.getVuePrincipale().getGestionBDD().conn,bruttemp.getnomtable(),bruttemp.getId());
-                    // On fait apparaitre une fenetre supplémentaire
+                try {  
+                    FenetreAvertissementSuppression fenetreAvertissementSuppression = new FenetreAvertissementSuppression(this.controleur,"operateur",operateurtemp);
                 } catch (SQLException ex) {
                     System.out.println("Erreur partie Detail");
-                }
-                
-            });
-            
-            
-            
-            
-            
-            
+                }      
+            });        
         }
     }
     

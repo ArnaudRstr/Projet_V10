@@ -45,10 +45,7 @@ import fr.insa.moly.objet.Operation;
 
 //Gère l'entrée de donnée lors de la création d'un objet
 public class FenetreEntreeDonnees extends Dialog{
-    
-    
-    
-    
+
     private Button boutonEnregistrer;
     private Button boutonAnnuler;
     private MyVerticalLayout contenuVL;
@@ -82,8 +79,6 @@ public class FenetreEntreeDonnees extends Dialog{
        
       //Cette classe créé une fenêtre de dialogue d'entrée de donnée. 
       //Ces fenêtres sont toutes différentes en fonction de l'objet que l'on souhaite ajouter.
-      
-      
       //Dans chaque cas, on configure d'abord la fenêtre de dialogue, puis lors de clic sur les boutons on récupère les informations néssaires à la création de l'objet.
       
       
@@ -618,32 +613,11 @@ public class FenetreEntreeDonnees extends Dialog{
                 } catch (SQLException ex) {
                     Logger.getLogger(FenetreEntreeDonnees.class.getName()).log(Level.SEVERE, null, ex);
                 }
-
         });
- 
        }
-    
     }
 
-    
-       
-       
-       
-       
-    
-    
-    
-    
-    
-   
-       
 
-       
-       
-       
-      
-    
-    
     public ArrayList getDonneesText(){
         
         return this.donneesText;
@@ -655,12 +629,7 @@ public class FenetreEntreeDonnees extends Dialog{
     }
     public void OuvrirFenetre(){
         this.open();
-        
-        
-        
+
     }
-   
-    
-    
-    
+  
 }
