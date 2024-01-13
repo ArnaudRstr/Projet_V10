@@ -262,7 +262,6 @@ public class Controleur {
 
             if (nomtype.isEmpty()){
                 Notification.show("Ajoutez un nom");
-                System.out.println("Ajoutez un nom");
             }
             else  {
                 
@@ -457,7 +456,6 @@ public class Controleur {
 
         while (index<listTemp.size()){
             Atelier atelierTemp = (Atelier) listTemp.get(index);
-            System.out.println(atelierTemp.getId()+" : "+atelierTemp.getNom());
             index++;
         }  
         }

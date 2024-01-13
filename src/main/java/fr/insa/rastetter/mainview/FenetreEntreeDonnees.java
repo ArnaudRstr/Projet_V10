@@ -125,7 +125,6 @@ public class FenetreEntreeDonnees extends Dialog{
             } catch (SQLException ex) {
                 System.out.println("Impossible de mettre à jour le combobox");
             }
-                System.out.println("Combobox mis à jour (via Fenetre)");
 
             //On remet à jour la vue 
             try {
@@ -305,7 +304,6 @@ public class FenetreEntreeDonnees extends Dialog{
             this.close();   
         });       
         boutonEnregistrer.addClickListener(event -> {
-            System.out.println("1");
             int index =0;
             while(index<listcbb.size()){
                 
@@ -315,8 +313,6 @@ public class FenetreEntreeDonnees extends Dialog{
                 }
                 
                 else{
-                System.out.println(index+1);
-                //On ajoutera ici l'operation à la listopselect
                 listopselect.add((Operation)(listcbb.get(index).getValue()));
                 }                          
                 index++;                                                
@@ -414,7 +410,6 @@ public class FenetreEntreeDonnees extends Dialog{
 
                 listNomAtelier.add(atelierTemp.getId()+" : "+atelierTemp.getNom());
 
-                System.out.println(listNomAtelier.get(index));
                 index++;
             }
             cbbatelier.setItems(listNomAtelier); 
@@ -501,7 +496,6 @@ public class FenetreEntreeDonnees extends Dialog{
             .map(Typeoperation::getId) 
             .collect(Collectors.toList());
        
-           System.out.println(listtypeop);
        
            String typesOperations = listtypeop.stream()
             .map(Typeoperation::getNom)

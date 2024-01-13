@@ -62,7 +62,6 @@ private Button boutonSupprimer;
     public PartieDetail(Controleur controleur, String typeobjet , Object object ) throws SQLException{
         this.controleur=controleur;
         this.getStyle().set("padding", "0px");
-        System.out.println("Partie detail mise à jour");
         this.contenu = new MyVerticalLayout();
         contenu.getStyle().set("padding", "10px");
         contenu.setSpacing(false);
@@ -309,7 +308,6 @@ private Button boutonSupprimer;
             this.add(contenu);
 
             Produit produittemp = (Produit) object;
-            System.out.println("Recupération du produit réussie");
             
             TextField tfref=  new TextField();
             tfref.setLabel("Référence");
@@ -349,10 +347,7 @@ private Button boutonSupprimer;
                 
                 if(((Brut)brutsbdd.get(j)).getId()==produittemp.getIdbrut())
                     cbbbrut.setValue(brutsbdd.get(j));
-                
-                System.out.println();
-                System.out.println("cbbbrut mis à jour");
-                System.out.println();
+
                                    
                 j++;
             }
@@ -423,9 +418,7 @@ private Button boutonSupprimer;
                     index0--;      
                 }          
                 else{
-                System.out.println(index0);
         
-                System.out.println(((Operation)(listcbb.get(index0).getValue())).getNom());
                 listcbb.get(index0).setReadOnly(true);
                 }      
                 index0++;
@@ -863,8 +856,6 @@ private Button boutonSupprimer;
                 Atelier atelierTemp = (Atelier) listTemp.get(index);
 
                 listNomAtelier.add(atelierTemp.getId()+" : "+atelierTemp.getNom());
-
-                System.out.println(listNomAtelier.get(index));
                 index++;
             }
             cbbatelier.setItems(listNomAtelier); 

@@ -112,7 +112,6 @@ public class VueInitialeConnection extends MyVerticalLayout{
             
             String login = event.getUsername();
             String mdp = event.getPassword();
-            System.out.println(login+" " +mdp);
  
             
             
@@ -130,7 +129,6 @@ public class VueInitialeConnection extends MyVerticalLayout{
                 //On va tester de se connecter ici
                 if (connectionutilisateur(this.controleur.getVuePrincipale().getGestionBDD().getConn(),login,mdp)==true){
                     try {
-                        System.out.println("Identifiants corrects");
                         this.main.getControleur().boutonConnect(this.main);
                     } catch (SQLException ex) {
                         System.out.println("impossible de se connecter");

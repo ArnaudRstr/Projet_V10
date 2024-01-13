@@ -353,7 +353,6 @@ public class Entete extends MyHorizontalLayout {
         while (index<listTemp.size()){
             Atelier atelierTemp = (Atelier) listTemp.get(index);
             listNomAtelier.add(atelierTemp.getId()+" : "+atelierTemp.getNom());
-            System.out.println(listNomAtelier.get(index));
             index++;
         }
         this.comboBoxAtelier.setItems(listNomAtelier);
