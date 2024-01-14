@@ -335,8 +335,8 @@ public class Controleur {
         NumberField id = new NumberField("Identifiant");
         TextField nom = new TextField("Nom de l'atelier");
         TextArea des = new TextArea("Description");
-        NumberField nfdimlarg = new NumberField("Largeur (cm)");
-        NumberField nfdimlong = new NumberField("Longueur (cm)");
+        NumberField nfdimlarg = new NumberField("Largeur (m)");
+        NumberField nfdimlong = new NumberField("Longueur (m)");
 
         Dialog fenetre = new Dialog();
         

@@ -89,9 +89,9 @@ public class FenetreEntreeDonnees extends Dialog{
         nom.setWidthFull();
         this.des = new TextArea("Description");
         des.setWidthFull();
-        this.dimLongueur = new NumberField("Longueur (cm)");
+        this.dimLongueur = new NumberField("Longueur (m)");
         dimLongueur.setWidthFull();
-        this.dimLargeur = new NumberField("Largeur (cm)");
+        this.dimLargeur = new NumberField("Largeur (m)");
         dimLargeur.setWidthFull();
         this.setHeaderTitle("Ajouter un atelier");
         this.contenuVL.add(nom,des,dimLongueur,dimLargeur);

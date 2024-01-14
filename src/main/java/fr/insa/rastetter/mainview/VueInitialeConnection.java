@@ -118,7 +118,7 @@ public class VueInitialeConnection extends MyVerticalLayout{
             
             //Pour se connecter sans login valide
 //            try {
-//                this.main.getControleur().boutonConnect();
+//                this.main.getControleur().boutonConnect(this.main);
 //            } catch (SQLException ex) {
 //                Logger.getLogger(VueInitialeConnection.class.getName()).log(Level.SEVERE, null, ex);
 //            }
