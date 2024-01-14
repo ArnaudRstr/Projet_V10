@@ -480,6 +480,21 @@ public void creatBDDTest()throws SQLException {
                 } catch (SQLException ex) {
                 System.out.println("nothing");
                 }
+        try ( Statement st = this.conn.createStatement()){
+                st.executeUpdate(
+                        """
+                    CREATE TABLE `placementmachine` (
+                      `idmachine` int NOT NULL,
+                      `abscisse` int NOT NULL,
+                      `ordonnee` int NOT NULL
+                    )
+                        """
+                );
+                        System.out.println("atelier created");
+
+                } catch (SQLException ex) {
+                System.out.println("nothing");
+                }
 //On ajoute les clés étrangères
         try ( Statement st = this.conn.createStatement()){
                 st.executeUpdate(
@@ -554,6 +569,18 @@ public void creatBDDTest()throws SQLException {
                         """
                 );
                         System.out.println("Contraint realiseoo created");
+
+                } catch (SQLException ex) {
+                System.out.println("nothing");
+                }
+           try ( Statement st = this.conn.createStatement()){
+                st.executeUpdate(
+                        """
+                    ALTER TABLE `placementmachine`
+                                  ADD CONSTRAINT `fk_placementmachine_machine` FOREIGN KEY (`idmachine`) REFERENCES `machine` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+                        """
+                );
+                        System.out.println("Contraint placementmachine created");
 
                 } catch (SQLException ex) {
                 System.out.println("nothing");
@@ -1479,10 +1506,53 @@ System.out.print("list op taille"+ gamme.getList().size());
 }
 }
 
+
 public static void updateGamme(Connection connect,Gamme gamme)throws SQLException {
      deleteOrdre(connect,gamme.getIdproduit());
      addgamme(connect,gamme);
 }
+
+public static void addPlacementMachine(Connection connect,Machine machine,int abscisse,int ordonnee)throws SQLException {
+  connect.setAutoCommit(false); //stope la mise à jour, elle sera fait à la fin si tout se passe bien
+        try ( PreparedStatement cherchedouble = connect.prepareStatement(
+                "select * from placementmachine where idmachine=? AND abscisse=? AND ordonnee=? ")) {
+            cherchedouble.setInt(1, machine.getId());
+            cherchedouble.setInt(2, abscisse);
+            cherchedouble.setInt(3, ordonnee);
+            ResultSet test = cherchedouble.executeQuery();
+            if (test.next()!= false){
+                System.out.println("Attention, il existe déjà");
+                System.out.println("On ne peut pas l'ajouter");
+            }
+            else{
+            try ( PreparedStatement pst = connect.prepareStatement(
+                        "INSERT INTO `placementmachine` (idmachine,abscisse,ordonnee) VALUES (?,?,?);"
+
+            )){
+                    pst.setInt(1, machine.getId());
+                    pst.setInt(2, abscisse);
+                    pst.setInt(3, ordonnee);
+                    pst.executeUpdate();
+                    System.out.println("placement add");
+
+            } catch (SQLException ex) {
+            // nothing to do : maybe the constraint was not created
+            System.out.println("nothing");
+            }
+            }
+        try { // creation d'un requete 
+            connect.commit(); // valide le refresh
+            System.out.print("le refresh fonctionne") ;
+        } catch (SQLException ex) { // en cas d'erreur on "rollback" on retourne avant 
+            connect.rollback();
+            System.out.print("rollback");
+            throw ex;
+        } finally {
+            connect.setAutoCommit(true);// on remet le refresh automatique
+        }
+}  
+}
+
 
 //ATTENTION ne fonctionne pas avec gamme(ordre) et realiseoo (ne peuvent pas être supprimés seulement modifiés)
 public static void delete(Connection connect, String table, int id) throws SQLException {
@@ -1567,6 +1637,33 @@ public static void deleteOrdre(Connection connect, int idproduit) throws SQLExce
     }
 }
 
+public static void deletePlacementMachine(Connection connect, Machine machine) throws SQLException {
+    try {
+        connect.setAutoCommit(false);
+
+        String sql = "DELETE FROM placementmachine WHERE idmachine=?";
+        try (PreparedStatement pst = connect.prepareStatement(sql)) {
+            pst.setInt(1, machine.getId());
+            pst.executeUpdate();
+            connect.commit();
+            System.out.println("Le DELETE ordre a été exécuté avec succès.");
+        } catch (SQLException ex) {
+            connect.rollback();
+            System.out.println("Rollback. Erreur : " + ex.getMessage());
+            throw ex;
+        }
+    } finally {
+        try {
+            if (connect != null) {
+                connect.setAutoCommit(true);
+                
+            }
+        } catch (SQLException ex) {
+            System.err.println("Erreur lors de la gestion des ressources : " + ex.getMessage());
+        }
+    }
+}
+
 public static int askidtype(Connection connect)throws SQLException{
     boolean test= false;
     int idtype=-1;
@@ -1606,7 +1703,7 @@ public static int askidproduit(Connection connect)throws SQLException{
     }
     return idproduit;
 }
- 
+
 //Renvoit la liste des ateliers de la base de donné en objet Atelier
 public static ArrayList<Atelier> listAtelier (Connection connect)throws SQLException{
     ArrayList<Atelier> listatelier = new ArrayList();
@@ -1931,41 +2028,11 @@ public static ArrayList<Operation> listgammeproduit(Connection connect,int idpro
             }
             if (!listidavant.isEmpty()){
   
-//                for(int i=0;i<listidavant.size();i++){
-//                    idfirst=listidavant.get(i);
-//                    
-//                    for(int j=0;j<listidapres.size();j++){
-//                        if (idfirst==listidapres.get(j)){
-//                            find=false;
-//                        }
-//                        else{
-//                            find=true;
-//                        }
-//                    }
-//                    if(find==true){
-//                        break;
-//                    }
-//                }
-                
-//                ordre.add(idfirst);
+
                 ordre.add(listidavant.get(0));
 
                 for (int j=0;j<listidapres.size();j++){
-//                     try ( PreparedStatement idapres = connect.prepareStatement(
-//                    "select idopapres from ordre where idopavant=?")) {
-//                         
-//                         idapres.setInt(1, ordre.get(j));
-//                         System.out.println("statement ready");
-//                         ResultSet tabidopapres = idapres.executeQuery();
-//                         System.out.println("resultat recup");
-//                          while (tabidopapres.next()!= false){
-//                              System.out.println("dans le while");
-//                             ordre.add(tabidopapres.getInt("idopapres"));
-//                             System.out.println("ordre add à sa list =" + ordre.get(j+1));
-//                          }
-//                     } catch(SQLException ex) {
-//                          System.out.println("Rollback. Erreur : " + ex.getMessage());
-//                     }
+
                         ordre.add(listidapres.get(j));
                 }
             }
@@ -2023,6 +2090,41 @@ public static ArrayList<Gamme> listgamme(Connection connect) throws SQLException
 
 }
 
+//Renvoit la liste des ateliers de la base de donné en objet Atelier
+public static int[][] listPlacementMachine (Connection connect)throws SQLException{
+   // int[][] listplacement = new int[][];
+    ArrayList<Integer> listabscisse = new ArrayList();
+    ArrayList<Integer> listordonnee = new ArrayList();
+    connect.setAutoCommit(false); //stope la mise à jour, elle sera fait à la fin si tout se passe bien
+        try ( PreparedStatement affichetab = connect.prepareStatement(
+                "select * from placementmachine")) {
+            
+            ResultSet placement = affichetab.executeQuery();
+            while (placement.next()!= false){
+                listabscisse.add(placement.getInt("abscisse"));
+                listordonnee.add(placement.getInt("ordonnee"));
+                
+            }
+
+            }
+        try { // creation d'un requete 
+            connect.commit(); // valide le refresh
+            System.out.println("le refresh fonctionne dans listatelier") ;
+        } catch (SQLException ex) { // en cas d'erreur on "rollback" on retourne avant 
+            connect.rollback();
+            System.out.println("rollback");
+            throw ex;
+        } finally {
+            connect.setAutoCommit(true);// on remet le refresh automatique
+        }
+     int[][] listplacement = new int[2][listabscisse.size()];
+     for (int i=0; i<listabscisse.size();i++){
+         listplacement[0][i]=listabscisse.get(i);
+         listplacement[1][i]=listordonnee.get(i);
+     }
+     
+    return listplacement;
+}  
 
 //renvoit les id des enfants dans une table d'un elément particulier d'un table en ArrayList<Integer>
 public static ArrayList<Integer> listchild(Connection connect,String tabparentname,int idparent,String tabchild) throws SQLException{
