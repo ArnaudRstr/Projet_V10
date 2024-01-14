@@ -16,51 +16,52 @@ import java.util.ArrayList;
  * @author molys
  */
 public class Produit {
+
     private final int id;
     private String ref;
     private String des;
     private int idbrut;
-    private Gamme gamme ;
+    private Gamme gamme;
 
-    public Produit(Connection connect, int id, String ref, String des, int idbrut,ArrayList<Operation> listOperation) throws SQLException {
+    public Produit(Connection connect, int id, String ref, String des, int idbrut, ArrayList<Operation> listOperation) throws SQLException {
         this.id = id;
         this.ref = ref;
         this.des = des;
         this.idbrut = idbrut;
-        this.gamme= new Gamme(listOperation, id);
-        
-    }
-    
-    public Produit(Connection connect,int id)throws SQLException {
-       this.id=id;
-        try {
-        connect.setAutoCommit(false);
+        this.gamme = new Gamme(listOperation, id);
 
-        String sql = "select * from produit WHERE id=?";
-        try (PreparedStatement pst = connect.prepareStatement(sql)) {
-            pst.setInt(1, id);
-            ResultSet resultat = pst.executeQuery();
-            while (resultat.next()!= false){
-                this.ref = resultat.getString("ref");
-                this.des = resultat.getString("des");
-                this.idbrut = resultat.getInt("idbrut");
-            }
-        } catch (SQLException ex) {
-            connect.rollback();
-            System.out.println("Rollback. Erreur : " + ex.getMessage());
-            throw ex;
-        }
-    } finally {
-        try {
-            if (connect != null) {
-                connect.setAutoCommit(true);
-            }
-        } catch (SQLException ex) {
-            System.err.println("Erreur lors de la gestion des ressources : " + ex.getMessage());
-        }
     }
-    this.gamme= new Gamme(connect, id);
-   }
+
+    public Produit(Connection connect, int id) throws SQLException {
+        this.id = id;
+        try {
+            connect.setAutoCommit(false);
+
+            String sql = "select * from produit WHERE id=?";
+            try (PreparedStatement pst = connect.prepareStatement(sql)) {
+                pst.setInt(1, id);
+                ResultSet resultat = pst.executeQuery();
+                while (resultat.next() != false) {
+                    this.ref = resultat.getString("ref");
+                    this.des = resultat.getString("des");
+                    this.idbrut = resultat.getInt("idbrut");
+                }
+            } catch (SQLException ex) {
+                connect.rollback();
+                System.out.println("Rollback. Erreur : " + ex.getMessage());
+                throw ex;
+            }
+        } finally {
+            try {
+                if (connect != null) {
+                    connect.setAutoCommit(true);
+                }
+            } catch (SQLException ex) {
+                System.err.println("Erreur lors de la gestion des ressources : " + ex.getMessage());
+            }
+        }
+        this.gamme = new Gamme(connect, id);
+    }
 
     public int getId() {
         return id;
@@ -81,7 +82,6 @@ public class Produit {
     public Gamme getGamme() {
         return gamme;
     }
-    
 
     public void setRef(String ref) {
         this.ref = ref;
@@ -94,24 +94,25 @@ public class Produit {
     public void setIdbrut(int idbrut) {
         this.idbrut = idbrut;
     }
-    
-    public void setGamme(Gamme gamme){
-        this.gamme=gamme;
+
+    public void setGamme(Gamme gamme) {
+        this.gamme = gamme;
     }
-    
-    public String getString(){
-        String tab = "identifiant: "+this.id + " Reférence: "+ this.ref+ " Description: "+ this.des+" Identifiant Brut: "+this.idbrut;
+
+    public String getString() {
+        String tab = "identifiant: " + this.id + " Reférence: " + this.ref + " Description: " + this.des + " Identifiant Brut: " + this.idbrut;
         return tab;
     }
-    public String getnomtable(){
-      return   "produit";
+
+    public String getnomtable() {
+        return "produit";
     }
-   
-    public ArrayList getGrandChildList(Connection connect)throws SQLException{
+
+    public ArrayList getGrandChildList(Connection connect) throws SQLException {
         ArrayList<String> listIdGrandChild = new ArrayList();
         listIdGrandChild.add("Rapport de suppression, en supprimant :");
         listIdGrandChild.add(this.getString());
-        
+
         return listIdGrandChild;
     }
 }

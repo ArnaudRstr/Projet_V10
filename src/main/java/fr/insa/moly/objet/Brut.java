@@ -16,6 +16,7 @@ import java.sql.SQLException;
  * @author molys
  */
 public class Brut {
+
     private final int id;
     private String nom;
     private String ref;
@@ -24,7 +25,7 @@ public class Brut {
     private String dimension;
     private String fournisseur;
 
-    public Brut(int id , String nom, String ref, String matiere, int stock, String dimension, String fournisseur) {
+    public Brut(int id, String nom, String ref, String matiere, int stock, String dimension, String fournisseur) {
         this.id = id;
         this.nom = nom;
         this.ref = ref;
@@ -33,39 +34,39 @@ public class Brut {
         this.dimension = dimension;
         this.fournisseur = fournisseur;
     }
-    
-     public Brut(Connection connect,int id)throws SQLException {
-       this.id=id;
-        try {
-        connect.setAutoCommit(false);
 
-        String sql = "select * from brut WHERE id=?";
-        try (PreparedStatement pst = connect.prepareStatement(sql)) {
-            pst.setInt(1, id);
-            ResultSet resultat = pst.executeQuery();
-            while (resultat.next()!= false){
-                this.nom=resultat.getString("nom");
-                this.ref = resultat.getString("ref");
-                this.matiere = resultat.getString("matiere");
-                this.stock = resultat.getInt("stock");
-                this.dimension = resultat.getString("dimension");
-                this.fournisseur = resultat.getString("fournisseur");
-            }
-        } catch (SQLException ex) {
-            connect.rollback();
-            System.out.println("Rollback. Erreur : " + ex.getMessage());
-            throw ex;
-        }
-    } finally {
+    public Brut(Connection connect, int id) throws SQLException {
+        this.id = id;
         try {
-            if (connect != null) {
-                connect.setAutoCommit(true);
+            connect.setAutoCommit(false);
+
+            String sql = "select * from brut WHERE id=?";
+            try (PreparedStatement pst = connect.prepareStatement(sql)) {
+                pst.setInt(1, id);
+                ResultSet resultat = pst.executeQuery();
+                while (resultat.next() != false) {
+                    this.nom = resultat.getString("nom");
+                    this.ref = resultat.getString("ref");
+                    this.matiere = resultat.getString("matiere");
+                    this.stock = resultat.getInt("stock");
+                    this.dimension = resultat.getString("dimension");
+                    this.fournisseur = resultat.getString("fournisseur");
+                }
+            } catch (SQLException ex) {
+                connect.rollback();
+                System.out.println("Rollback. Erreur : " + ex.getMessage());
+                throw ex;
             }
-        } catch (SQLException ex) {
-            System.err.println("Erreur lors de la gestion des ressources : " + ex.getMessage());
+        } finally {
+            try {
+                if (connect != null) {
+                    connect.setAutoCommit(true);
+                }
+            } catch (SQLException ex) {
+                System.err.println("Erreur lors de la gestion des ressources : " + ex.getMessage());
+            }
         }
     }
-   }
 
     public int getId() {
         return id;
@@ -95,9 +96,6 @@ public class Brut {
         return fournisseur;
     }
 
-    
-    
-    
     public void setNom(String nom) {
         this.nom = nom;
     }
@@ -121,32 +119,33 @@ public class Brut {
     public void setFournisseur(String fournisseur) {
         this.fournisseur = fournisseur;
     }
-    public String getString(){
-        String tab = "Identifiant: "+this.id + " Nom: "+ this.nom+ " Réference: "+ this.ref+" Matière: "+this.matiere+" Dimention: "+this.dimension +" Stock: "+ this.stock +" Fournisseur: "+ this.fournisseur;
+
+    public String getString() {
+        String tab = "Identifiant: " + this.id + " Nom: " + this.nom + " Réference: " + this.ref + " Matière: " + this.matiere + " Dimention: " + this.dimension + " Stock: " + this.stock + " Fournisseur: " + this.fournisseur;
         return tab;
     }
-    public String getnomtable(){
-      return   "brut";
+
+    public String getnomtable() {
+        return "brut";
     }
-    
-    public ArrayList getProduitchild(Connection connect)throws SQLException{
-        ArrayList<Integer> listidproduitchild = GestionBDD.listChild(connect,this.getnomtable(),this.id,"produit");       
+
+    public ArrayList getProduitchild(Connection connect) throws SQLException {
+        ArrayList<Integer> listidproduitchild = GestionBDD.listChild(connect, this.getnomtable(), this.id, "produit");
         return listidproduitchild;
     }
-    
-    public ArrayList getGrandChildList(Connection connect)throws SQLException{
-        
+
+    public ArrayList getGrandChildList(Connection connect) throws SQLException {
+
         ArrayList<String> listIdGrandChild = new ArrayList();
-        ArrayList<Integer> listidproduitchild =this.getProduitchild(connect);
+        ArrayList<Integer> listidproduitchild = this.getProduitchild(connect);
         listIdGrandChild.add("Rapport de suppression, en supprimant :");
         listIdGrandChild.add(this.getString());
         listIdGrandChild.add("Produits Supprimés");
-        for(int i=0;i<listidproduitchild.size();i++){
-            Produit prod = new Produit(connect,listidproduitchild.get(i));
+        for (int i = 0; i < listidproduitchild.size(); i++) {
+            Produit prod = new Produit(connect, listidproduitchild.get(i));
             listIdGrandChild.add(prod.getString());
         }
-        
-        
+
         return listIdGrandChild;
     }
 }

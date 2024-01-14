@@ -4,18 +4,15 @@
  */
 package fr.insa.rastetter.mainview;
 
-
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.html.Paragraph;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
-
-
 
 /**
  *
  * @author arnaud
  */
-public class MyVerticalLayout extends VerticalLayout{
+public class MyVerticalLayout extends VerticalLayout {
 
     public static String CSS_COLOR = "blue";
 
@@ -29,9 +26,7 @@ public class MyVerticalLayout extends VerticalLayout{
             this.addComponentAsFirst(nom);
 
         }
-        this.setHeightFull(); 
+        this.setHeightFull();
     }
-    
-    
-    
+
 }

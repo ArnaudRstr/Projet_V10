@@ -18,6 +18,7 @@ import static fr.insa.moly.GestionBDD.GestionBDD.listAtelier;
  * @author molys
  */
 public class Operateur {
+
     private final int id;
     private String identifiant;
     private String motdepasse;
@@ -29,7 +30,7 @@ public class Operateur {
     private String mail;
     private ArrayList<Typeoperation> listtypeoperation;
 
-    public Operateur(int id, String identifiant, String motdepasse, String nom, String prenom, int idatelier, int statut, int tel, String mail,ArrayList<Typeoperation> listtypeoperation) {
+    public Operateur(int id, String identifiant, String motdepasse, String nom, String prenom, int idatelier, int statut, int tel, String mail, ArrayList<Typeoperation> listtypeoperation) {
         this.id = id;
         this.identifiant = identifiant;
         this.motdepasse = motdepasse;
@@ -41,51 +42,50 @@ public class Operateur {
         this.mail = mail;
         this.listtypeoperation = listtypeoperation;
     }
-    
-    public Operateur(){
-        this.id=-1;
+
+    public Operateur() {
+        this.id = -1;
     }
 
-    public Operateur(Connection connect,int id)throws SQLException {
-       this.id=id;
+    public Operateur(Connection connect, int id) throws SQLException {
+        this.id = id;
         try {
-        connect.setAutoCommit(false);
+            connect.setAutoCommit(false);
 
-        String sql = "select * from operateur WHERE id=?";
-        try (PreparedStatement pst = connect.prepareStatement(sql)) {
-            pst.setInt(1, id);
-            ResultSet resultat = pst.executeQuery();
-            while (resultat.next()!= false){
-                this.identifiant = resultat.getString("identifiant");
-                this.motdepasse = resultat.getString("motdepasse");
-                this.nom = resultat.getString("nom");
-                this.prenom = resultat.getString("prenom");
-                this.idatelier = resultat.getInt("idatelier");
-                this.statut = resultat.getInt("statut");
-                this.tel = resultat.getInt("tel");
-                this.mail = resultat.getString("mail");
-                
+            String sql = "select * from operateur WHERE id=?";
+            try (PreparedStatement pst = connect.prepareStatement(sql)) {
+                pst.setInt(1, id);
+                ResultSet resultat = pst.executeQuery();
+                while (resultat.next() != false) {
+                    this.identifiant = resultat.getString("identifiant");
+                    this.motdepasse = resultat.getString("motdepasse");
+                    this.nom = resultat.getString("nom");
+                    this.prenom = resultat.getString("prenom");
+                    this.idatelier = resultat.getInt("idatelier");
+                    this.statut = resultat.getInt("statut");
+                    this.tel = resultat.getInt("tel");
+                    this.mail = resultat.getString("mail");
+
+                }
+            } catch (SQLException ex) {
+                connect.rollback();
+                System.out.println("Rollback. Erreur : " + ex.getMessage());
+                throw ex;
             }
-        } catch (SQLException ex) {
-            connect.rollback();
-            System.out.println("Rollback. Erreur : " + ex.getMessage());
-            throw ex;
-        }
-        
-        this.listtypeoperation = GestionBDD.listRealiseooOperateur(connect,id);
-        
-         
-    } finally {
-        try {
-            if (connect != null) {
-                connect.setAutoCommit(true);
+
+            this.listtypeoperation = GestionBDD.listRealiseooOperateur(connect, id);
+
+        } finally {
+            try {
+                if (connect != null) {
+                    connect.setAutoCommit(true);
+                }
+            } catch (SQLException ex) {
+                System.err.println("Erreur lors de la gestion des ressources : " + ex.getMessage());
             }
-        } catch (SQLException ex) {
-            System.err.println("Erreur lors de la gestion des ressources : " + ex.getMessage());
         }
     }
-   }
-    
+
     public int getId() {
         return id;
     }
@@ -114,59 +114,48 @@ public class Operateur {
         return statut;
     }
 
-    public String getStatutString(){
+    public String getStatutString() {
         String stringstatut = "";
-        
-        
-        if(statut==0){
-            stringstatut="En congé";
+
+        if (statut == 0) {
+            stringstatut = "En congé";
         }
-        if(statut==1){
-            stringstatut="En activité";
+        if (statut == 1) {
+            stringstatut = "En activité";
         }
-        if(statut==2){
-            stringstatut="En formation";
+        if (statut == 2) {
+            stringstatut = "En formation";
         }
-        if(statut==3){
-            stringstatut="Disponible";
+        if (statut == 3) {
+            stringstatut = "Disponible";
         }
-        if(statut==4){
-            stringstatut="Hors service";
+        if (statut == 4) {
+            stringstatut = "Hors service";
         }
-        
-  
+
         return stringstatut;
     }
-    
-    
-    
-    public String getAtelierString(Controleur controleur) throws SQLException{
+
+    public String getAtelierString(Controleur controleur) throws SQLException {
         String stringatelier = "";
-        
-        ArrayList <Atelier> listateliertemp = new ArrayList();
-        listateliertemp = listAtelier (controleur.getVuePrincipale().getGestionBDD().conn);
-        int index =0;
-        boolean valid =false;
-        while (index<listateliertemp.size()||valid==false){
+
+        ArrayList<Atelier> listateliertemp = new ArrayList();
+        listateliertemp = listAtelier(controleur.getVuePrincipale().getGestionBDD().conn);
+        int index = 0;
+        boolean valid = false;
+        while (index < listateliertemp.size() || valid == false) {
             Atelier atelierTemp = (Atelier) listateliertemp.get(index);
-            
-            
-            if (this.idatelier==atelierTemp.getId()){
-                stringatelier = atelierTemp.getId()+" : "+atelierTemp.getNom();
-                valid=true;
+
+            if (this.idatelier == atelierTemp.getId()) {
+                stringatelier = atelierTemp.getId() + " : " + atelierTemp.getNom();
+                valid = true;
             }
             index++;
         }
-        
-        
-        
-        
-        
-        
-        
+
         return stringatelier;
     }
-    
+
     public int getTel() {
         return tel;
     }
@@ -203,36 +192,29 @@ public class Operateur {
     public void setStatut(int statut) {
         this.statut = statut;
     }
-    
-    
-    
-    public void setStatutString(String statut){
-        
-        int idstatut=-1;
-        
-        
-        if(statut=="En congé"){
-            idstatut=0;
+
+    public void setStatutString(String statut) {
+
+        int idstatut = -1;
+
+        if (statut == "En congé") {
+            idstatut = 0;
         }
-        if(statut=="En activité"){
-            idstatut=1;
+        if (statut == "En activité") {
+            idstatut = 1;
         }
-        if(statut=="En formation"){
-            idstatut=2;
+        if (statut == "En formation") {
+            idstatut = 2;
         }
-        if(statut=="Disponible"){
-            idstatut=3;
+        if (statut == "Disponible") {
+            idstatut = 3;
         }
-        if(statut=="Hors service"){
-            idstatut=4;
+        if (statut == "Hors service") {
+            idstatut = 4;
         }
-        
-        
-        
-        
-        
-        this.statut=idstatut;
-        
+
+        this.statut = idstatut;
+
     }
 
     public void setTel(int tel) {
@@ -246,19 +228,21 @@ public class Operateur {
     public void setListtypeoperation(ArrayList<Typeoperation> listtypeoperation) {
         this.listtypeoperation = listtypeoperation;
     }
-    public String getString(){
-        String tab = "Identifiant: "+this.id + " Nom: "+ this.nom+ " Prénom: "+ this.prenom+" Identifiant Atelier: "+this.idatelier+" Téléphone: "+this.tel+ " Mail: "+this.mail;
+
+    public String getString() {
+        String tab = "Identifiant: " + this.id + " Nom: " + this.nom + " Prénom: " + this.prenom + " Identifiant Atelier: " + this.idatelier + " Téléphone: " + this.tel + " Mail: " + this.mail;
         return tab;
     }
-    public String getnomtable(){
-      return   "operateur";
+
+    public String getnomtable() {
+        return "operateur";
     }
-    
-     public ArrayList getGrandChildList(Connection connect)throws SQLException{
+
+    public ArrayList getGrandChildList(Connection connect) throws SQLException {
         ArrayList<String> listIdGrandChild = new ArrayList();
         listIdGrandChild.add("Rapport de suppression, en supprimant :");
         listIdGrandChild.add(this.getString());
-        
+
         return listIdGrandChild;
     }
 }

@@ -4,7 +4,7 @@
  */
 package fr.insa.rastetter.mainview;
 
-    import com.vaadin.flow.component.Component;
+import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.html.Paragraph;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 
@@ -12,8 +12,7 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
  *
  * @author arnaud
  */
-public class MyHorizontalLayout extends HorizontalLayout{
-
+public class MyHorizontalLayout extends HorizontalLayout {
 
     public static String CSS_COLOR = "green";
 
@@ -25,11 +24,9 @@ public class MyHorizontalLayout extends HorizontalLayout{
                     .set("font-size", "0.8em").set("color", CSS_COLOR)
                     .set("font-style", "italic");
             this.addComponentAsFirst(nom);
-            this.getStyle().set("border", "1px dotted "+CSS_COLOR);
+            this.getStyle().set("border", "1px dotted " + CSS_COLOR);
 
         }
     }
 
-
-    
 }

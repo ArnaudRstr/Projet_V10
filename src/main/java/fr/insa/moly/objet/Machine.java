@@ -21,6 +21,7 @@ import java.util.ArrayList;
  * @author molys
  */
 public class Machine {
+
     private final int id;
     private String nom;
     private int idatelier;
@@ -34,13 +35,12 @@ public class Machine {
     private double dimensionlargeur;
     private double dimensionlongueur;
     private int[][] coordonnee;
-    
+
     private MyHorizontalLayout pannel;
     private Span spanStatut;
-    
-    
+
     public Machine(int id, String nom, int idatelier, int idtypeoperation, String des, String marque, double puissance, int statut, double couthoraire, String localisation, double dimensionlargeur, double dimensionlongueur) {
-        
+
         this.id = id;
         this.nom = nom;
         this.idatelier = idatelier;
@@ -54,84 +54,78 @@ public class Machine {
         this.dimensionlargeur = dimensionlargeur;
         this.dimensionlongueur = dimensionlongueur;
         this.coordonnee = new int[2][0];
-        
-        this.pannel= new MyHorizontalLayout();
+
+        this.pannel = new MyHorizontalLayout();
         this.pannel.setWidthFull();
         this.pannel.getStyle().set("border", "1px solid #000000");
         this.pannel.getStyle().set("border-radius", "7px");
         this.pannel.getStyle().set("padding", "4px");
-        
-        
-        Text nomaffiche= new Text(nom);
+
+        Text nomaffiche = new Text(nom);
         Text idaffiche = new Text(String.valueOf(id));
         Text marqueaffiche = new Text(marque);
-        
-        
-        
-        this.spanStatut=new Span();
+
+        this.spanStatut = new Span();
         this.spanStatut.setText("statut");
         //this.spanStatut.getElement().getStyle().set("margin-left", "auto");
         this.spanStatut.getElement().getThemeList().add("badge success primary");
-        this.pannel.add(spanStatut,nomaffiche);
+        this.pannel.add(spanStatut, nomaffiche);
     }
 
-   public Machine(Connection connect,int id)throws SQLException {
-       this.id=id;
+    public Machine(Connection connect, int id) throws SQLException {
+        this.id = id;
         try {
-        connect.setAutoCommit(false);
+            connect.setAutoCommit(false);
 
-        String sql = "select * from machine WHERE id=?";
-        try (PreparedStatement pst = connect.prepareStatement(sql)) {
-            pst.setInt(1, id);
-            ResultSet resultat = pst.executeQuery();
-            while (resultat.next()!= false){
-                this.nom = resultat.getString("nom");
-                this.idatelier = resultat.getInt("idatelier");
-                this.idtypeoperation = resultat.getInt("idtypeoperation");
-                this.des = resultat.getString("des");
-                this.marque = resultat.getString("marque");
-                this.puissance = resultat.getDouble("puissance");
-                this.statut = resultat.getInt("statut");
-                this.couthoraire = resultat.getDouble("couthoraire");
-                this.localisation = resultat.getString("localisation");
-                this.dimensionlargeur = resultat.getDouble("dimensionlargeur");
-                this.dimensionlongueur = resultat.getDouble("dimensionlongueur");
+            String sql = "select * from machine WHERE id=?";
+            try (PreparedStatement pst = connect.prepareStatement(sql)) {
+                pst.setInt(1, id);
+                ResultSet resultat = pst.executeQuery();
+                while (resultat.next() != false) {
+                    this.nom = resultat.getString("nom");
+                    this.idatelier = resultat.getInt("idatelier");
+                    this.idtypeoperation = resultat.getInt("idtypeoperation");
+                    this.des = resultat.getString("des");
+                    this.marque = resultat.getString("marque");
+                    this.puissance = resultat.getDouble("puissance");
+                    this.statut = resultat.getInt("statut");
+                    this.couthoraire = resultat.getDouble("couthoraire");
+                    this.localisation = resultat.getString("localisation");
+                    this.dimensionlargeur = resultat.getDouble("dimensionlargeur");
+                    this.dimensionlongueur = resultat.getDouble("dimensionlongueur");
+                }
+            } catch (SQLException ex) {
+                connect.rollback();
+                System.out.println("Rollback. Erreur : " + ex.getMessage());
+                throw ex;
             }
-        } catch (SQLException ex) {
-            connect.rollback();
-            System.out.println("Rollback. Erreur : " + ex.getMessage());
-            throw ex;
-        }
-    } finally {
-        try {
-            if (connect != null) {
-                connect.setAutoCommit(true);
+        } finally {
+            try {
+                if (connect != null) {
+                    connect.setAutoCommit(true);
+                }
+            } catch (SQLException ex) {
+                System.err.println("Erreur lors de la gestion des ressources : " + ex.getMessage());
             }
-        } catch (SQLException ex) {
-            System.err.println("Erreur lors de la gestion des ressources : " + ex.getMessage());
         }
-    }
-        this.coordonnee=GestionBDD.listPlacementMachineMachine(connect,this);
-        this.pannel= new MyHorizontalLayout();
+        this.coordonnee = GestionBDD.listPlacementMachineMachine(connect, this);
+        this.pannel = new MyHorizontalLayout();
         this.pannel.setWidthFull();
         this.pannel.getStyle().set("border", "1px solid #000000");
         this.pannel.getStyle().set("border-radius", "7px");
         this.pannel.getStyle().set("padding", "4px");
-        
-        
-        Text nomaffiche= new Text(nom);
+
+        Text nomaffiche = new Text(nom);
         Text idaffiche = new Text(String.valueOf(id));
         Text marqueaffiche = new Text(marque);
-        
-        
-        
-        this.spanStatut=new Span();
+
+        this.spanStatut = new Span();
         this.spanStatut.setText("statut");
         //this.spanStatut.getElement().getStyle().set("margin-left", "auto");
         this.spanStatut.getElement().getThemeList().add("badge success primary");
-        this.pannel.add(spanStatut,nomaffiche);
-   }
-    
+        this.pannel.add(spanStatut, nomaffiche);
+    }
+
     public int getId() {
         return id;
     }
@@ -178,60 +172,58 @@ public class Machine {
 
     public double getDimensionlongueur() {
         return dimensionlongueur;
-        
+
     }
 
     public int[][] getCoordonnee() {
         return coordonnee;
     }
-    
-    public MyHorizontalLayout getPannel(){
+
+    public MyHorizontalLayout getPannel() {
         return this.pannel;
     }
-    
-    public Span getSpanStatut(){
+
+    public Span getSpanStatut() {
         return this.spanStatut;
     }
-    public String getStatutString(){
-        
-        
+
+    public String getStatutString() {
+
         String result = new String();
-        if (this.statut==0){
+        if (this.statut == 0) {
             result = "Arrêt";
         }
-        if (this.statut==1){
+        if (this.statut == 1) {
             result = "Marche";
         }
-        if (this.statut==2){
+        if (this.statut == 2) {
             result = "Maintenance à prévoir";
         }
-        
-        
+
         return result;
     }
-    
-    public String getSpanText(){
+
+    public String getSpanText() {
         return this.spanStatut.getText();
     }
-    
-    public void setSpanStatut(Span statut){
-        this.spanStatut=statut;
-    }
-    
 
-    public void setStatutString(String stat){
-        if (stat=="Arrêt"){
-            this.statut=0;
-        }
-        if (stat=="Marche"){
-            this.statut=1;
-        }
-        if (stat=="Maintenance à prévoir"){
-            this.statut=2;
-        }
-        
-        
+    public void setSpanStatut(Span statut) {
+        this.spanStatut = statut;
     }
+
+    public void setStatutString(String stat) {
+        if (stat == "Arrêt") {
+            this.statut = 0;
+        }
+        if (stat == "Marche") {
+            this.statut = 1;
+        }
+        if (stat == "Maintenance à prévoir") {
+            this.statut = 2;
+        }
+
+    }
+
     public void setNom(String nom) {
         this.nom = nom;
     }
@@ -279,40 +271,39 @@ public class Machine {
     public void setCoordonnee(int[][] coordonnee) {
         this.coordonnee = coordonnee;
     }
-    
-    
-    public String getString(){
-        String tab = "Identifiant: "+this.id + " Nom: "+ this.nom+" Description: "+this.des+" Marque: "+this.marque+" Indentifiant Atelier:"+this.idatelier+ " Identifiant du type d'opération: "+ this.idtypeoperation+" Coût horaire: "+this.couthoraire+" Puissance: "+this.puissance+" Statut: "+this.statut+" Localisation: "+this.localisation+" Longueur x Largeur: "+this.dimensionlongueur+" x "+this.dimensionlargeur;
+
+    public String getString() {
+        String tab = "Identifiant: " + this.id + " Nom: " + this.nom + " Description: " + this.des + " Marque: " + this.marque + " Indentifiant Atelier:" + this.idatelier + " Identifiant du type d'opération: " + this.idtypeoperation + " Coût horaire: " + this.couthoraire + " Puissance: " + this.puissance + " Statut: " + this.statut + " Localisation: " + this.localisation + " Longueur x Largeur: " + this.dimensionlongueur + " x " + this.dimensionlargeur;
         return tab;
     }
-    public String getnomtable(){
-      return   "machine";
+
+    public String getnomtable() {
+        return "machine";
     }
-    
-    public ArrayList getOperationchild(Connection connect)throws SQLException{
-        ArrayList<Integer> listidoperationchild = GestionBDD.listChild(connect,this.getnomtable(),this.id,"operation");       
+
+    public ArrayList getOperationchild(Connection connect) throws SQLException {
+        ArrayList<Integer> listidoperationchild = GestionBDD.listChild(connect, this.getnomtable(), this.id, "operation");
         return listidoperationchild;
     }
-    
-     public ArrayList getGrandChildList(Connection connect)throws SQLException{
-        
+
+    public ArrayList getGrandChildList(Connection connect) throws SQLException {
+
         ArrayList<String> listIdGrandChild = new ArrayList();
-        ArrayList<Integer> listidoperationchild =this.getOperationchild(connect);
+        ArrayList<Integer> listidoperationchild = this.getOperationchild(connect);
         listIdGrandChild.add("Rapport de suppression, en supprimant :");
         listIdGrandChild.add(this.getString());
         listIdGrandChild.add("Opérations Supprimées :");
-        for(int i=0;i<listidoperationchild.size();i++){
-            Operation op = new Operation(connect,listidoperationchild.get(i));
+        for (int i = 0; i < listidoperationchild.size(); i++) {
+            Operation op = new Operation(connect, listidoperationchild.get(i));
             listIdGrandChild.add(op.getString());
             listIdGrandChild.add("Cette opération sera enlevé de la gamme de Ces produits :");
             ArrayList<Integer> listIdProduit = GestionBDD.listGammeOperation(connect, listidoperationchild.get(i));
-            for(int j=0; j<listIdProduit.size();j++){
-                Produit prod = new Produit(connect,listIdProduit.get(j));
+            for (int j = 0; j < listIdProduit.size(); j++) {
+                Produit prod = new Produit(connect, listIdProduit.get(j));
                 listIdGrandChild.add(prod.getString());
             }
         }
-        
-        
+
         return listIdGrandChild;
     }
 }

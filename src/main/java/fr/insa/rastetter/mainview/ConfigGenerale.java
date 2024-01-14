@@ -9,9 +9,10 @@ package fr.insa.rastetter.mainview;
  * @author arnaud
  */
 class ConfigGenerale {
-        public static boolean ENCADRE_LAYOUT = false;
-        
-        public static boolean AFFICHE_PANNEAU_CONNEXION_BDD = true;
-        
-        public static boolean AFFICHE_RAZ_DATABASE = true;    
+
+    public static boolean ENCADRE_LAYOUT = false;
+
+    public static boolean AFFICHE_PANNEAU_CONNEXION_BDD = true;
+
+    public static boolean AFFICHE_RAZ_DATABASE = true;
 }

@@ -3,6 +3,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package fr.insa.moly.GestionBDD;
+
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
@@ -10,6 +11,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileSystemView;
+
 /**
  *
  * @author molys
@@ -19,15 +21,16 @@ public class RapportSuppr {
     private final String cheminDossier;
     private final ArrayList<String> list;
     private String nomFichier;
-    
+
     // Constructeur avec tous préexistants
-    public RapportSuppr(String cheminDossier,ArrayList<String> list,String nomFichier){
-        this.list=list;
-        this.cheminDossier=cheminDossier;
-        this.nomFichier=nomFichier;
+    public RapportSuppr(String cheminDossier, ArrayList<String> list, String nomFichier) {
+        this.list = list;
+        this.cheminDossier = cheminDossier;
+        this.nomFichier = nomFichier;
     }
+
     // Constructeur avec fenêtre pour choix du dossier
-    public RapportSuppr(ArrayList<String> list,String nomFichier) {
+    public RapportSuppr(ArrayList<String> list, String nomFichier) {
         this.list = list;
         this.cheminDossier = choisirDossier();
     }
@@ -48,15 +51,13 @@ public class RapportSuppr {
         }
     }
 
-    
-
     public void creeFichier() {
-        String cheminFichier=this.cheminDossier + this.nomFichier;
+        String cheminFichier = this.cheminDossier + this.nomFichier;
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(cheminFichier))) {
-            for (int i=0;i<list.size();i++){
-            writer.write(list.get(i)+"\n");
-            
-        }
+            for (int i = 0; i < list.size(); i++) {
+                writer.write(list.get(i) + "\n");
+
+            }
             System.out.println("En confimant la suppression, voici les modification qui seront apporté");
         } catch (IOException e) {
             System.err.println("Erreur lors de l'écriture dans le fichier : " + e.getMessage());
@@ -64,7 +65,7 @@ public class RapportSuppr {
     }
 
     public void supprimerFichier() {
-        String cheminFichier=this.cheminDossier + this.nomFichier;
+        String cheminFichier = this.cheminDossier + this.nomFichier;
         File fichier = new File(cheminFichier);
         if (fichier.exists()) {
             if (fichier.delete()) {
@@ -77,7 +78,4 @@ public class RapportSuppr {
         }
     }
 
-    
 }
-
-

@@ -14,19 +14,19 @@ import java.util.ArrayList;
  * @author molys
  */
 public class Gamme {
+
     private ArrayList<Operation> listOperation;
     private int idproduit;
 
-    public Gamme(ArrayList<Operation> list,int idproduit) {
+    public Gamme(ArrayList<Operation> list, int idproduit) {
         this.listOperation = list;
         this.idproduit = idproduit;
     }
-    
-    public Gamme(Connection connect,int idproduit) throws SQLException {
+
+    public Gamme(Connection connect, int idproduit) throws SQLException {
         this.listOperation = GestionBDD.listGammeProduit(connect, idproduit);
         this.idproduit = idproduit;
     }
-    
 
     public ArrayList<Operation> getList() {
         return listOperation;
@@ -43,14 +43,16 @@ public class Gamme {
     public void setIdproduit(int idproduit) {
         this.idproduit = idproduit;
     }
-    public String getString(){
-        String tab= "Identifiant produit: "+this.idproduit+ " Gamme: ";
-        for (int i=0;i>this.listOperation.size();i++){
-        tab = tab +","+this.listOperation.get(i);
+
+    public String getString() {
+        String tab = "Identifiant produit: " + this.idproduit + " Gamme: ";
+        for (int i = 0; i > this.listOperation.size(); i++) {
+            tab = tab + "," + this.listOperation.get(i);
         }
         return tab;
     }
-    public String getnomtable(){
-      return   "gamme";
+
+    public String getnomtable() {
+        return "gamme";
     }
 }
