@@ -5,6 +5,7 @@
 package fr.insa.rastetter.mainview;
 
 import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.component.grid.Grid;
@@ -35,6 +36,9 @@ public class VuePlan extends MyVerticalLayout {
     private ArrayList<PlanButton> spaceSelect;
     private ArrayList<Machine> listMachine;
     private Machine machinecbb;
+    private ArrayList<PlanButton> listButton;
+    private Controleur controleur;
+    private ComboBox<Machine> cbbMachine;
 
     public Atelier getAtelier() {
         return atelier;
@@ -66,6 +70,8 @@ public class VuePlan extends MyVerticalLayout {
     
     
     public VuePlan(Controleur controleur,int idatelier)throws SQLException {
+        this.listButton= new ArrayList();
+        this.controleur=controleur;
         System.out.println("VuePlan");
         Atelier atelier = new Atelier(controleur.getVuePrincipale().getGestionBDD().conn, idatelier);
         System.out.println("Atelier trouvé");
@@ -78,35 +84,69 @@ public class VuePlan extends MyVerticalLayout {
         System.out.println("les attributs sont initialisés");
         
         //Combobox Machine
-        ComboBox<Machine> cbbMachine = new ComboBox();
+        this.cbbMachine = new ComboBox();
         cbbMachine.setItems(this.listMachine);
         cbbMachine.setItemLabelGenerator(Machine::getNom);
         cbbMachine.setReadOnly(false);
         cbbMachine.setLabel("Machine");
-        this.machinecbb=cbbMachine.getValue();
+        cbbMachine.addValueChangeListener(even -> {
+            
+            this.machinecbb=cbbMachine.getValue();
+            
+            try {
+                this.listMachine=GestionBDD.listMachineAtelier(controleur.getVuePrincipale().getGestionBDD().conn,atelier.getId());
+            } catch (SQLException ex) {
+                Logger.getLogger(VuePlan.class.getName()).log(Level.SEVERE, null, ex);
+            }
+//            cbbMachine.setItems(this.listMachine);
+            for(int i=0; i<this.listButton.size();i++){
+                try {
+                    setColorPlanButton(this.listButton.get(i),this.listMachine,false);
+                } catch (SQLException ex) {
+                    Logger.getLogger(VuePlan.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        });
+        
+        
         
         //Bouton valider
         Button valider = new Button("Valider");
         valider.addClickListener(even -> {
+            System.out.println(this.spaceSelect.size());
             try {
-                GestionBDD.deletePlacementMachine(controleur.getVuePrincipale().getGestionBDD().conn, cbbMachine.getValue());
-                for (int i = 0; i<spaceSelect.size();i++){
-                    GestionBDD.addPlacementMachine(controleur.getVuePrincipale().getGestionBDD().conn, cbbMachine.getValue(), spaceSelect.get(i).getAbscisse(), spaceSelect.get(i).getOrdonnee());
+                GestionBDD.deletePlacementMachine(controleur.getVuePrincipale().getGestionBDD().conn, this.cbbMachine.getValue());
+                for (int i = 0; i<this.spaceSelect.size();i++){
+                    GestionBDD.addPlacementMachine(controleur.getVuePrincipale().getGestionBDD().conn, this.cbbMachine.getValue(), spaceSelect.get(i).getAbscisse(), spaceSelect.get(i).getOrdonnee());
                 }
                 
             } catch (SQLException ex) {
                 Logger.getLogger(VuePlan.class.getName()).log(Level.SEVERE, null, ex);
             }
-            for (int i=0; i<spaceSelect.size();i++){
-                spaceMachineTaked.add(spaceSelect.get(i));
+            
+            try {
+                this.machinecbb = new Machine(controleur.getVuePrincipale().getGestionBDD().conn, this.machinecbb.getId());
+            } catch (SQLException ex) {
+                Logger.getLogger(VuePlan.class.getName()).log(Level.SEVERE, null, ex);
             }
             
-            spaceSelect= new ArrayList();
+            this.spaceSelect= new ArrayList();
+            System.out.println("spaceselect vide "+this.spaceSelect.size());
             
-            for (int i=0; i<spaceMachineTaked.size();i++){
-                spaceMachineTaked.get(i).getStyle().set("background-color", "grey");
+            try {
+                this.listMachine=GestionBDD.listMachineAtelier(controleur.getVuePrincipale().getGestionBDD().conn,atelier.getId());
+            } catch (SQLException ex) {
+                Logger.getLogger(VuePlan.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            for(int i=0; i<this.listButton.size();i++){
+                try {
+                    setColorPlanButton(this.listButton.get(i),this.listMachine,false);
+                } catch (SQLException ex) {
+                    Logger.getLogger(VuePlan.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
             
+       this.cbbMachine.setItems(this.listMachine);
         });
         
         
@@ -133,6 +173,7 @@ public class VuePlan extends MyVerticalLayout {
         }
         hl.setSpacing(false);
         this.add(hl);
+//      
     }
 
     
@@ -143,33 +184,65 @@ public class VuePlan extends MyVerticalLayout {
         
 
         // Utilisez une instruction if pour vérifier la couleur actuelle et changer en conséquence
-        if ("grey".equals(currentColor)){
+        if (!"grey".equals(currentColor)){
             
+        
+            if ("red".equals(currentColor)) {
+                // Si la couleur est rouge, changez-la en bleu
+                button.getStyle().set("background-color", "white");
+                this.spaceSelect.remove(button);
+            } 
+            else {
+                // Sinon, changez-la en rouge
+                button.getStyle().set("background-color", "red");
+                this.spaceSelect.add(button);
+            }  
         }
-        else if ("red".equals(currentColor)) {
-            // Si la couleur est rouge, changez-la en bleu
-            button.getStyle().set("background-color", "white");
-            this.spaceSelect.remove(button);
-        } else {
-            // Sinon, changez-la en rouge
-            button.getStyle().set("background-color", "red");
-            this.spaceSelect.add(button);
-        }    
         return button.getStyle().get("background-color");
     }
     
-    
+    private void setColorPlanButton(PlanButton button,ArrayList<Machine> machineAtelier,boolean initialisation)throws SQLException {
+        
+        //ArrayList<Machine> machineAtelier = GestionBDD.listMachineAtelier(controleur.getVuePrincipale().getGestionBDD().conn,this.atelier.getId());
+        for (int i=0; i< machineAtelier.size();i++){
+            if (machineAtelier.get(i).getCoordonnee().length!=0){
+                for (int j=0; j< machineAtelier.get(i).getCoordonnee()[0].length;j++){
+                    if(button.getAbscisse()==machineAtelier.get(i).getCoordonnee()[0][j]&&button.getOrdonnee()==machineAtelier.get(i).getCoordonnee()[1][j]){
+                        
+                        button.getStyle().set("background-color", "grey");
+                        button.setStatut(1);
+                        this.spaceMachineTaked.add(button);
+                    }
+                   }
+            }
+           
+        }
+        
+        if (initialisation==false){
+            if(this.machinecbb.getCoordonnee().length!=0){
+            for (int i=0; i< this.machinecbb.getCoordonnee()[0].length;i++){
+                if(button.getAbscisse()==this.machinecbb.getCoordonnee()[0][i]&&button.getOrdonnee()==this.machinecbb.getCoordonnee()[1][i]){
+                        button.getStyle().set("background-color", "red");
+                        System.out.println("correspondance !!!!!!!!!!");
+                        button.setStatut(2);
+                        this.spaceSelect.add(button);
+                    }
+            }
+            }
+        }
+    }
     
     
     private VerticalLayout createVerticalLayout(int abscisse){
         
         VerticalLayout vl = new VerticalLayout();
         vl.setSpacing(false);
-        vl.setWidth("30px");
+        vl.setWidth("55px");
         vl.add(new H2(String.valueOf(abscisse)));
         for (int j=0;j<ordonnee;j++){
-          
-          vl.add(new PlanButton(abscisse,j,this.machinecbb));
+          PlanButton pb=new PlanButton(abscisse,j,this.cbbMachine.getValue());
+          this.listButton.add(pb);
+          vl.add(pb);
         }
         return vl;
     }
@@ -180,16 +253,18 @@ public class VuePlan extends MyVerticalLayout {
         private int abscisse;
         private int ordonnee;
         private String color;
+        private int statut;
 
         public PlanButton(int abscisse,int ordonnee,Machine cbbMachine){
+            this.statut=0;
             this.abscisse=abscisse;
             this.ordonnee=ordonnee;
-            
+            this.addThemeVariants(ButtonVariant.LUMO_SMALL);
             this.getStyle().setBackground("white");
             
             this.color=this.getStyle().get("background-color");
-            this.setWidth("25px");
-            this.setHeight("25px");
+            this.setWidth("50px");
+            this.setHeight("50px");
             this.addClickListener(even -> {
 
                 this.color=changeButtonColor(this);
@@ -208,5 +283,18 @@ public class VuePlan extends MyVerticalLayout {
         public String getColor() {
             return color;
         }
+
+        public int getStatut() {
+            return statut;
+        }
+
+        public void setColor(String color) {
+            this.color = color;
+        }
+
+        public void setStatut(int statut) {
+            this.statut = statut;
+        }
+        
     }
 }

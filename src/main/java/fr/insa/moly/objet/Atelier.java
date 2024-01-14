@@ -108,12 +108,12 @@ public class Atelier {
     
     
    
-    public ArrayList getMachinechild(Connection connect)throws SQLException{
+    public ArrayList<Integer> getMachinechild(Connection connect)throws SQLException{
         ArrayList<Integer> listidchild = GestionBDD.listchild(connect,this.getnomtable(),this.id,"machine");       
         return listidchild;
     }
     
-    public ArrayList getOperateurchild(Connection connect)throws SQLException{
+    public ArrayList<Integer> getOperateurchild(Connection connect)throws SQLException{
         ArrayList<Integer> listidchild = GestionBDD.listchild(connect,this.getnomtable(),this.id,"operateur");       
         return listidchild;
     }

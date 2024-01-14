@@ -33,6 +33,7 @@ public class Machine {
     private String localisation;
     private double dimensionlargeur;
     private double dimensionlongueur;
+    private int[][] coordonnee;
     
     private MyHorizontalLayout pannel;
     private Span spanStatut;
@@ -52,6 +53,7 @@ public class Machine {
         this.localisation = localisation;
         this.dimensionlargeur = dimensionlargeur;
         this.dimensionlongueur = dimensionlongueur;
+        this.coordonnee = new int[2][0];
         
         this.pannel= new MyHorizontalLayout();
         this.pannel.setWidthFull();
@@ -109,7 +111,7 @@ public class Machine {
             System.err.println("Erreur lors de la gestion des ressources : " + ex.getMessage());
         }
     }
-        
+        this.coordonnee=GestionBDD.listPlacementMachineMachine(connect,this);
         this.pannel= new MyHorizontalLayout();
         this.pannel.setWidthFull();
         this.pannel.getStyle().set("border", "1px solid #000000");
@@ -177,6 +179,10 @@ public class Machine {
     public double getDimensionlongueur() {
         return dimensionlongueur;
         
+    }
+
+    public int[][] getCoordonnee() {
+        return coordonnee;
     }
     
     public MyHorizontalLayout getPannel(){
@@ -269,6 +275,11 @@ public class Machine {
     public void setDimensionlongueur(double dimensionlongueur) {
         this.dimensionlongueur = dimensionlongueur;
     }
+
+    public void setCoordonnee(int[][] coordonnee) {
+        this.coordonnee = coordonnee;
+    }
+    
     
     public String getString(){
         String tab = "Identifiant: "+this.id + " Nom: "+ this.nom+" Description: "+this.des+" Marque: "+this.marque+" Indentifiant Atelier:"+this.idatelier+ " Identifiant du type d'opération: "+ this.idtypeoperation+" Coût horaire: "+this.couthoraire+" Puissance: "+this.puissance+" Statut: "+this.statut+" Localisation: "+this.localisation+" Longueur x Largeur: "+this.dimensionlongueur+" x "+this.dimensionlargeur;

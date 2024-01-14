@@ -1822,7 +1822,9 @@ public static ArrayList<Machine> listMachineAtelier (Connection connect, int idA
         } finally {
             connect.setAutoCommit(true);// on remet le refresh automatique
         }
-        
+        for (int i=0;i<listmachine.size();i++){
+            listmachine.get(i).setCoordonnee(listPlacementMachineMachine(connect,listmachine.get(i)));
+        }
      
     return listmachine;
 }  
@@ -2090,7 +2092,7 @@ public static ArrayList<Gamme> listgamme(Connection connect) throws SQLException
 
 }
 
-//Renvoit la liste des ateliers de la base de donné en objet Atelier
+//Renvoit la liste des placements de la base de donné en objet int[)[]
 public static int[][] listPlacementMachine (Connection connect)throws SQLException{
    // int[][] listplacement = new int[][];
     ArrayList<Integer> listabscisse = new ArrayList();
@@ -2125,6 +2127,48 @@ public static int[][] listPlacementMachine (Connection connect)throws SQLExcepti
      
     return listplacement;
 }  
+
+//Renvoit la liste des placements d'une machine en objet int[][]
+public static int[][] listPlacementMachineMachine (Connection connect,Machine machine)throws SQLException{
+    System.out.println("entre dans listMachineMachine");
+   // int[][] listplacement = new int[][];
+    ArrayList<Integer> listabscisse = new ArrayList();
+    ArrayList<Integer> listordonnee = new ArrayList();
+    connect.setAutoCommit(false); //stope la mise à jour, elle sera fait à la fin si tout se passe bien
+        try ( PreparedStatement affichetab = connect.prepareStatement(
+                "select * from placementmachine WHERE idmachine=?")) {
+            affichetab.setInt(1, machine.getId());
+            ResultSet placement = affichetab.executeQuery();
+            while (placement.next()!= false){
+                listabscisse.add(placement.getInt("abscisse"));
+                listordonnee.add(placement.getInt("ordonnee"));
+                
+            }
+
+            }
+        try { // creation d'un requete 
+            connect.commit(); // valide le refresh
+            System.out.println("le refresh fonctionne dans listatelier") ;
+        } catch (SQLException ex) { // en cas d'erreur on "rollback" on retourne avant 
+            connect.rollback();
+            System.out.println("rollback");
+            throw ex;
+        } finally {
+            connect.setAutoCommit(true);// on remet le refresh automatique
+        }
+     int[][] listplacement = new int[2][listabscisse.size()];
+     for (int i=0; i<listabscisse.size();i++){
+         listplacement[0][i]=listabscisse.get(i);
+         listplacement[1][i]=listordonnee.get(i);
+     }
+     if(listplacement.length==0){
+         System.out.println("listplacement vide dans listMachineMachine");
+     }
+     else{
+         System.out.println("listplacement non vide dans listMachineMachine");
+     }
+    return listplacement;
+} 
 
 //renvoit les id des enfants dans une table d'un elément particulier d'un table en ArrayList<Integer>
 public static ArrayList<Integer> listchild(Connection connect,String tabparentname,int idparent,String tabchild) throws SQLException{
