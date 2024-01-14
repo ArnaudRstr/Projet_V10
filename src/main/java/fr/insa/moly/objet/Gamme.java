@@ -23,7 +23,7 @@ public class Gamme {
     }
     
     public Gamme(Connection connect,int idproduit) throws SQLException {
-        this.listOperation = GestionBDD.listgammeproduit(connect, idproduit);
+        this.listOperation = GestionBDD.listGammeProduit(connect, idproduit);
         this.idproduit = idproduit;
     }
     

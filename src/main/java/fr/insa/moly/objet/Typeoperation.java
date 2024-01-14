@@ -72,17 +72,17 @@ public String getString(){
     }
     
     public ArrayList getOperationchild(Connection connect)throws SQLException{
-        ArrayList<Integer> listidchild = GestionBDD.listchild(connect,this.getnomtable(),this.id,"operation");       
+        ArrayList<Integer> listidchild = GestionBDD.listChild(connect,this.getnomtable(),this.id,"operation");       
         return listidchild;
     }
     
     public ArrayList getMachinechild(Connection connect)throws SQLException{
-        ArrayList<Integer> listidchild = GestionBDD.listchild(connect,this.getnomtable(),this.id,"machine");       
+        ArrayList<Integer> listidchild = GestionBDD.listChild(connect,this.getnomtable(),this.id,"machine");       
         return listidchild;
     }
     
     public ArrayList getOperateurchild(Connection connect)throws SQLException{
-        ArrayList<Integer> listidchild = GestionBDD.listchildrealiseOperateur(connect,this.id);       
+        ArrayList<Integer> listidchild = GestionBDD.listChildRealiseOperateur(connect,this.id);       
         return listidchild;
     }
     
@@ -97,7 +97,7 @@ public String getString(){
             Operation op = new Operation(connect , listOperation.get(i));
             listIdGrandChild.add(op.getString());
             listIdGrandChild.add("Cette opération sera enlevé de la gamme de Ces produits :");
-                ArrayList<Integer> listIdProduit = GestionBDD.listgammeoperation(connect, this.id);
+                ArrayList<Integer> listIdProduit = GestionBDD.listGammeOperation(connect, this.id);
                 for(int j=0; j<listIdProduit.size();j++){
                     Produit prod = new Produit(connect,listIdProduit.get(j));
                     listIdGrandChild.add(prod.getString());

@@ -8,9 +8,6 @@ import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.html.H2;
-import com.vaadin.flow.component.grid.Grid;
-import com.vaadin.flow.component.grid.GridVariant;
-import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import fr.insa.moly.GestionBDD.GestionBDD;
@@ -18,8 +15,6 @@ import fr.insa.moly.objet.Atelier;
 import fr.insa.moly.objet.Machine;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -70,18 +65,19 @@ public class VuePlan extends MyVerticalLayout {
     
     
     public VuePlan(Controleur controleur,int idatelier)throws SQLException {
+        
         this.listButton= new ArrayList();
         this.controleur=controleur;
-        System.out.println("VuePlan");
+        //System.out.println("VuePlan");
         Atelier atelier = new Atelier(controleur.getVuePrincipale().getGestionBDD().conn, idatelier);
-        System.out.println("Atelier trouvé");
+        //System.out.println("Atelier trouvé");
         this.atelier = atelier;
         this.ordonnee = atelier.getLargeur();
         this.abscisse= atelier.getLongueur();
         this.spaceSelect= new ArrayList();
         this.spaceMachineTaked= new ArrayList();
         this.listMachine = GestionBDD.listMachineAtelier(controleur.getVuePrincipale().getGestionBDD().conn,atelier.getId());
-        System.out.println("les attributs sont initialisés");
+        
         
         //Combobox Machine
         this.cbbMachine = new ComboBox();
@@ -98,7 +94,6 @@ public class VuePlan extends MyVerticalLayout {
             } catch (SQLException ex) {
                 Logger.getLogger(VuePlan.class.getName()).log(Level.SEVERE, null, ex);
             }
-//            cbbMachine.setItems(this.listMachine);
             for(int i=0; i<this.listButton.size();i++){
                 try {
                     setColorPlanButton(this.listButton.get(i),this.listMachine,false);
@@ -173,20 +168,16 @@ public class VuePlan extends MyVerticalLayout {
         }
         hl.setSpacing(false);
         this.add(hl);
-//      
+     
     }
 
     
-    
+    //gestion du changement de couleur au clique
     private String changeButtonColor(PlanButton button){
-      // Obtenez la couleur actuelle du bouton
         String currentColor = button.getStyle().get("background-color");
         
-
-        // Utilisez une instruction if pour vérifier la couleur actuelle et changer en conséquence
         if (!"grey".equals(currentColor)){
             
-        
             if ("red".equals(currentColor)) {
                 // Si la couleur est rouge, changez-la en bleu
                 button.getStyle().set("background-color", "white");
@@ -201,6 +192,7 @@ public class VuePlan extends MyVerticalLayout {
         return button.getStyle().get("background-color");
     }
     
+    //gestion de la couleur du bouton selon s'il est rattaché à une machine
     private void setColorPlanButton(PlanButton button,ArrayList<Machine> machineAtelier,boolean initialisation)throws SQLException {
         
         //ArrayList<Machine> machineAtelier = GestionBDD.listMachineAtelier(controleur.getVuePrincipale().getGestionBDD().conn,this.atelier.getId());
@@ -232,7 +224,7 @@ public class VuePlan extends MyVerticalLayout {
         }
     }
     
-    
+    //Colonne de button pour le plan
     private VerticalLayout createVerticalLayout(int abscisse){
         
         VerticalLayout vl = new VerticalLayout();
@@ -248,7 +240,7 @@ public class VuePlan extends MyVerticalLayout {
     }
     
     
-    
+    //Buttons formaté pour le plan
     class PlanButton extends Button{
         private int abscisse;
         private int ordonnee;

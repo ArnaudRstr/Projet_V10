@@ -17,7 +17,7 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import static fr.insa.moly.GestionBDD.GestionBDD.connectionutilisateur;
+import static fr.insa.moly.GestionBDD.GestionBDD.connectionUtilisateur;
 
 
 /**
@@ -127,7 +127,7 @@ public class VueInitialeConnection extends MyVerticalLayout{
             //Pour se connecter avec le login et le mdp nécessaire
             try {
                 //On va tester de se connecter ici
-                if (connectionutilisateur(this.controleur.getVuePrincipale().getGestionBDD().getConn(),login,mdp)==true){
+                if (connectionUtilisateur(this.controleur.getVuePrincipale().getGestionBDD().getConn(),login,mdp)==true){
                     try {
                         this.main.getControleur().boutonConnect(this.main);
                     } catch (SQLException ex) {

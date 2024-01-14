@@ -290,7 +290,7 @@ public class Machine {
     }
     
     public ArrayList getOperationchild(Connection connect)throws SQLException{
-        ArrayList<Integer> listidoperationchild = GestionBDD.listchild(connect,this.getnomtable(),this.id,"operation");       
+        ArrayList<Integer> listidoperationchild = GestionBDD.listChild(connect,this.getnomtable(),this.id,"operation");       
         return listidoperationchild;
     }
     
@@ -305,7 +305,7 @@ public class Machine {
             Operation op = new Operation(connect,listidoperationchild.get(i));
             listIdGrandChild.add(op.getString());
             listIdGrandChild.add("Cette opération sera enlevé de la gamme de Ces produits :");
-            ArrayList<Integer> listIdProduit = GestionBDD.listgammeoperation(connect, listidoperationchild.get(i));
+            ArrayList<Integer> listIdProduit = GestionBDD.listGammeOperation(connect, listidoperationchild.get(i));
             for(int j=0; j<listIdProduit.size();j++){
                 Produit prod = new Produit(connect,listIdProduit.get(j));
                 listIdGrandChild.add(prod.getString());

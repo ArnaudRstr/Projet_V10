@@ -109,17 +109,17 @@ public class Atelier {
     
    
     public ArrayList<Integer> getMachinechild(Connection connect)throws SQLException{
-        ArrayList<Integer> listidchild = GestionBDD.listchild(connect,this.getnomtable(),this.id,"machine");       
+        ArrayList<Integer> listidchild = GestionBDD.listChild(connect,this.getnomtable(),this.id,"machine");       
         return listidchild;
     }
     
     public ArrayList<Integer> getOperateurchild(Connection connect)throws SQLException{
-        ArrayList<Integer> listidchild = GestionBDD.listchild(connect,this.getnomtable(),this.id,"operateur");       
+        ArrayList<Integer> listidchild = GestionBDD.listChild(connect,this.getnomtable(),this.id,"operateur");       
         return listidchild;
     }
     
     public ArrayList getProduitchild(Connection connect)throws SQLException{
-        ArrayList<Integer> listidchild = GestionBDD.listchild(connect,this.getnomtable(),this.id,"produit");       
+        ArrayList<Integer> listidchild = GestionBDD.listChild(connect,this.getnomtable(),this.id,"produit");       
         return listidchild;
     }
     

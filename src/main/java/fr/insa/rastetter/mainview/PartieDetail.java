@@ -18,8 +18,6 @@ import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.textfield.NumberField;
 import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.component.textfield.TextField;
-import static fr.insa.moly.GestionBDD.GestionBDD.listmachine;
-import static fr.insa.moly.GestionBDD.GestionBDD.listtypeoperation;
 import static fr.insa.moly.GestionBDD.GestionBDD.updateOperation;
 import fr.insa.moly.objet.Atelier;
 import fr.insa.moly.objet.Brut;
@@ -33,8 +31,10 @@ import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import static fr.insa.moly.GestionBDD.GestionBDD.listAtelier;
-import static fr.insa.moly.GestionBDD.GestionBDD.listoperation;
 import java.util.Set;
+import static fr.insa.moly.GestionBDD.GestionBDD.listMachine;
+import static fr.insa.moly.GestionBDD.GestionBDD.listOperation;
+import static fr.insa.moly.GestionBDD.GestionBDD.listTypeOperation;
 
 
 /**
@@ -143,7 +143,7 @@ private Button boutonSupprimer;
 
             //On récupère les types d'opération pour remplir les combobox
             ArrayList altypeop = new ArrayList();
-            altypeop = listtypeoperation(this.controleur.getVuePrincipale().getGestionBDD().conn);           
+            altypeop = listTypeOperation(this.controleur.getVuePrincipale().getGestionBDD().conn);           
             ArrayList listajouter = new ArrayList();
 
             int index =0;
@@ -243,7 +243,7 @@ private Button boutonSupprimer;
             
             ArrayList altypeop1 = new ArrayList();           
                 try {
-                    altypeop1 = listtypeoperation(this.controleur.getVuePrincipale().getGestionBDD().conn);
+                    altypeop1 = listTypeOperation(this.controleur.getVuePrincipale().getGestionBDD().conn);
                 } catch (SQLException ex) {
                     Logger.getLogger(PartieDetail.class.getName()).log(Level.SEVERE, null, ex);
                 }
@@ -363,7 +363,7 @@ private Button boutonSupprimer;
             ArrayList<Operation> listoptemp = new ArrayList();
             listoptemp.add(opnulle);
             
-            ArrayList<Operation> listoptempbdd = listoperation(this.controleur.getVuePrincipale().getGestionBDD().conn);
+            ArrayList<Operation> listoptempbdd = listOperation(this.controleur.getVuePrincipale().getGestionBDD().conn);
             int i =0;
             while(i<listoptempbdd.size()){
                 listoptemp.add(listoptempbdd.get(i));
@@ -655,7 +655,7 @@ private Button boutonSupprimer;
                                                           
             ArrayList<Typeoperation> listtemp = new ArrayList();
 
-            listtemp=listtypeoperation(this.controleur.getVuePrincipale().getGestionBDD().conn);
+            listtemp=listTypeOperation(this.controleur.getVuePrincipale().getGestionBDD().conn);
 
             ArrayList listajouter = new ArrayList();
 
@@ -675,7 +675,7 @@ private Button boutonSupprimer;
             comboBoxMachines.setLabel("Machine");
             ArrayList<Machine> listmachinetemp = new ArrayList();
 
-            listmachinetemp=listmachine(this.controleur.getVuePrincipale().getGestionBDD().conn);
+            listmachinetemp=listMachine(this.controleur.getVuePrincipale().getGestionBDD().conn);
 
             ArrayList listmachineajouter = new ArrayList();
 
@@ -877,7 +877,7 @@ private Button boutonSupprimer;
             CheckboxGroup<Typeoperation> cbgtypeop = new CheckboxGroup<>();
             divtypeop.getStyle().set("overflow-y", "auto");
             cbgtypeop.setLabel("Type(s) d'opération(s)");
-            ArrayList<Typeoperation> listtemptypop = listtypeoperation(this.controleur.getVuePrincipale().getGestionBDD().conn);
+            ArrayList<Typeoperation> listtemptypop = listTypeOperation(this.controleur.getVuePrincipale().getGestionBDD().conn);
       
             cbgtypeop.setItemLabelGenerator(
             Typeoperation -> Typeoperation.getNom());

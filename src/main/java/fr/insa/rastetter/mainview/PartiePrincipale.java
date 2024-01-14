@@ -14,7 +14,6 @@ import com.vaadin.flow.component.html.Paragraph;
 import com.vaadin.flow.component.menubar.MenuBar;
 import com.vaadin.flow.component.notification.Notification;
 import fr.insa.moly.GestionBDD.GestionBDD;
-import static fr.insa.moly.GestionBDD.GestionBDD.listproduit;
 import fr.insa.moly.objet.Brut;
 import fr.insa.moly.objet.Machine;
 import fr.insa.moly.objet.Operateur;
@@ -25,6 +24,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import static fr.insa.moly.GestionBDD.GestionBDD.listProduit;
 
 /**
  *
@@ -120,7 +120,7 @@ public class PartiePrincipale extends MyVerticalLayout {
             this.add(hltitre);
             this.menuItemAjouter.setEnabled(true);
             ArrayList <Produit> produitsTemp = new ArrayList();
-            produitsTemp = listproduit(this.controleur.getVuePrincipale().getGestionBDD().conn);
+            produitsTemp = listProduit(this.controleur.getVuePrincipale().getGestionBDD().conn);
 
             int index =0;
             if (produitsTemp.size()==0){
@@ -208,7 +208,7 @@ public class PartiePrincipale extends MyVerticalLayout {
             this.add(hltitre);
             this.menuItemAjouter.setEnabled(true);    
             ArrayList <Operateur> operateurstemp = new ArrayList();
-            operateurstemp = GestionBDD.listoperateur(this.controleur.getVuePrincipale().getGestionBDD().conn);
+            operateurstemp = GestionBDD.listOperateur(this.controleur.getVuePrincipale().getGestionBDD().conn);
      
             int index =0; 
             if (operateurstemp.size()==0){       
@@ -266,7 +266,7 @@ public class PartiePrincipale extends MyVerticalLayout {
             this.add(hltitre);
             this.menuItemAjouter.setEnabled(true);
             ArrayList <Operation> operationstemp = new ArrayList();
-            operationstemp = this.controleur.getVuePrincipale().getGestionBDD().listoperation(this.controleur.getVuePrincipale().getGestionBDD().conn);
+            operationstemp = this.controleur.getVuePrincipale().getGestionBDD().listOperation(this.controleur.getVuePrincipale().getGestionBDD().conn);
 
             int index =0;
             if (operationstemp.size()==0){    

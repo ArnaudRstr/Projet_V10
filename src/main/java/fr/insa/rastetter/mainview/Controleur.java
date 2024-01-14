@@ -15,17 +15,17 @@ import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.textfield.NumberField;
 import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.component.textfield.TextField;
-import static fr.insa.moly.GestionBDD.GestionBDD.addtypeoperation;
 import fr.insa.moly.objet.Atelier;
-import static fr.insa.moly.GestionBDD.GestionBDD.listtypeoperation;
 import fr.insa.moly.objet.Typeoperation;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import static fr.insa.moly.GestionBDD.GestionBDD.listAtelier;
-import static fr.insa.moly.GestionBDD.GestionBDD.listoperateur;
 import fr.insa.moly.objet.Operateur;
+import static fr.insa.moly.GestionBDD.GestionBDD.addTypeOperation;
+import static fr.insa.moly.GestionBDD.GestionBDD.listOperateur;
+import static fr.insa.moly.GestionBDD.GestionBDD.listTypeOperation;
 
 /**
  *
@@ -84,7 +84,7 @@ public class Controleur {
         dcompte.setWidth("30vw");
         //On récupèrera les infos de la personne connectée ici
         ArrayList <Operateur> listoperateurs = new ArrayList();
-        listoperateurs = listoperateur (this.main.getGestionBDD().getConn());
+        listoperateurs = listOperateur (this.main.getGestionBDD().getConn());
         //On recherche la personne grâce à l'identifiant (attribut du controleur)
         int i =0;
         boolean valide = false;
@@ -237,13 +237,13 @@ public class Controleur {
         hlmodif.add(entreetype,boutonajouter,boutonsupprimer);
         contenu.add(hlmodif);
 
-        if (listtypeoperation(this.getVuePrincipale().getGestionBDD().conn).size()==0){
+        if (listTypeOperation(this.getVuePrincipale().getGestionBDD().conn).size()==0){
             contenu.add(new Text("Il n'y a pas de type d'opération"));
         }
 
         else{
           ArrayList<Typeoperation> listtemp = new ArrayList();
-          listtemp=listtypeoperation(this.getVuePrincipale().getGestionBDD().conn);
+          listtemp=listTypeOperation(this.getVuePrincipale().getGestionBDD().conn);
           grid.addColumn(Typeoperation::getNom).setHeader("Nom");
           grid.addColumn(Typeoperation::getId).setHeader("Identifiant");
           grid.setItems(listtemp);
@@ -266,12 +266,12 @@ public class Controleur {
             else  {
                 
             try {
-                addtypeoperation(this.getVuePrincipale().getGestionBDD().conn,nomtype);
+                addTypeOperation(this.getVuePrincipale().getGestionBDD().conn,nomtype);
             } catch (SQLException ex) {
                 System.out.println("Controleur : Erreur lors de l'ajout du type d'opération");
             }
             try {
-                grid.setItems(listtypeoperation(this.getVuePrincipale().getGestionBDD().conn));
+                grid.setItems(listTypeOperation(this.getVuePrincipale().getGestionBDD().conn));
             } catch (SQLException ex) {
                 System.out.println("Controleur : Erreur lors de la mise à jour du type d'opération");
             }

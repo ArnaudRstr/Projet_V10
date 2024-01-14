@@ -130,7 +130,7 @@ public class Brut {
     }
     
     public ArrayList getProduitchild(Connection connect)throws SQLException{
-        ArrayList<Integer> listidproduitchild = GestionBDD.listchild(connect,this.getnomtable(),this.id,"produit");       
+        ArrayList<Integer> listidproduitchild = GestionBDD.listChild(connect,this.getnomtable(),this.id,"produit");       
         return listidproduitchild;
     }
     

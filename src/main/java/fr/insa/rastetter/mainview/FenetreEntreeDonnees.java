@@ -20,8 +20,6 @@ import com.vaadin.flow.component.checkbox.CheckboxGroupVariant;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.FlexComponent.Alignment;
-import static fr.insa.moly.GestionBDD.GestionBDD.listmachine;
-import static fr.insa.moly.GestionBDD.GestionBDD.listtypeoperation;
 import fr.insa.moly.objet.Atelier;
 import fr.insa.moly.objet.Machine;
 import fr.insa.moly.objet.Typeoperation;
@@ -33,9 +31,11 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import static fr.insa.moly.GestionBDD.GestionBDD.listAtelier;
-import static fr.insa.moly.GestionBDD.GestionBDD.listoperation;
 import fr.insa.moly.objet.Brut;
 import fr.insa.moly.objet.Operation;
+import static fr.insa.moly.GestionBDD.GestionBDD.listMachine;
+import static fr.insa.moly.GestionBDD.GestionBDD.listOperation;
+import static fr.insa.moly.GestionBDD.GestionBDD.listTypeOperation;
 
 /**
  *
@@ -116,7 +116,7 @@ public class FenetreEntreeDonnees extends Dialog{
             this.close();
             Notification.show("Données enregistrées");
             try {
-                this.controleur.getVuePrincipale().getGestionBDD().addatelier(this.controleur.getVuePrincipale().getGestionBDD().conn,this.nom.getValue(),this.des.getValue(),(int)Math.round(this.dimLongueur.getValue()),(int) Math.round(this.dimLargeur.getValue()));       
+                this.controleur.getVuePrincipale().getGestionBDD().addAtelier(this.controleur.getVuePrincipale().getGestionBDD().conn,this.nom.getValue(),this.des.getValue(),(int)Math.round(this.dimLongueur.getValue()),(int) Math.round(this.dimLargeur.getValue()));       
             } catch (SQLException ex) {
                 Logger.getLogger(FenetreEntreeDonnees.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -163,7 +163,7 @@ public class FenetreEntreeDonnees extends Dialog{
         comboBoxTypeOperation.setLabel("Type d'opération");
         ArrayList<Typeoperation> listtemp = new ArrayList();
         
-        listtemp=listtypeoperation(this.controleur.getVuePrincipale().getGestionBDD().conn);
+        listtemp=listTypeOperation(this.controleur.getVuePrincipale().getGestionBDD().conn);
         
         ArrayList listajouter = new ArrayList();
 
@@ -220,7 +220,7 @@ public class FenetreEntreeDonnees extends Dialog{
             this.close();
 
             try {
-                this.controleur.getVuePrincipale().getGestionBDD().addmachine(this.controleur.getVuePrincipale().getGestionBDD().conn,nom.getValue(),this.controleur.getEtatAtelier(),idtypeoperationtemp,des.getValue(),marque.getValue(),puissance.getValue(),statutTemp,coutHoraire.getValue(),localisation.getValue(),dimLargeur.getValue(),dimLongueur.getValue());
+                this.controleur.getVuePrincipale().getGestionBDD().addMachine(this.controleur.getVuePrincipale().getGestionBDD().conn,nom.getValue(),this.controleur.getEtatAtelier(),idtypeoperationtemp,des.getValue(),marque.getValue(),puissance.getValue(),statutTemp,coutHoraire.getValue(),localisation.getValue(),dimLargeur.getValue(),dimLongueur.getValue());
 
             } catch (SQLException ex) {
                 Logger.getLogger(FenetreEntreeDonnees.class.getName()).log(Level.SEVERE, null, ex);
@@ -259,7 +259,7 @@ public class FenetreEntreeDonnees extends Dialog{
             this.add(contenuVL);
 
             //On récupère la liste de toutes les operations possibles pour remplir le choix des combobox
-            final ArrayList<Operation> listop = listoperation(this.controleur.getVuePrincipale().getGestionBDD().conn);
+            final ArrayList<Operation> listop = listOperation(this.controleur.getVuePrincipale().getGestionBDD().conn);
 
             ArrayList <Operation> listopselect = new ArrayList();
             
@@ -320,7 +320,7 @@ public class FenetreEntreeDonnees extends Dialog{
             this.close();
              
                try {
-                   this.controleur.getVuePrincipale().getGestionBDD().addproduit(this.controleur.getVuePrincipale().getGestionBDD().conn,tfref.getValue(),des.getValue(),(int) Math.round(((Brut)cbbbrut.getValue()).getId()),listopselect);
+                   this.controleur.getVuePrincipale().getGestionBDD().addProduit(this.controleur.getVuePrincipale().getGestionBDD().conn,tfref.getValue(),des.getValue(),(int) Math.round(((Brut)cbbbrut.getValue()).getId()),listopselect);
          
                } catch (SQLException ex) {
                    System.out.print("Fenêtre entrée de donnée : erreur lors de l'ajout du produit");
@@ -364,7 +364,7 @@ public class FenetreEntreeDonnees extends Dialog{
             
             this.close();
                try {
-                   this.controleur.getVuePrincipale().getGestionBDD().addbrut(this.controleur.getVuePrincipale().getGestionBDD().conn,this.nom.getValue(), tfref.getValue(),tfmat.getValue(),(int) Math.round(nbstock.getValue()),tfdim.getValue(),tffournisseur.getValue());
+                   this.controleur.getVuePrincipale().getGestionBDD().addBrut(this.controleur.getVuePrincipale().getGestionBDD().conn,this.nom.getValue(), tfref.getValue(),tfmat.getValue(),(int) Math.round(nbstock.getValue()),tfdim.getValue(),tffournisseur.getValue());
                    this.controleur.MenuItemBrut();
                } catch (SQLException ex) {
                    System.out.print("Fenêtre entrée de donnée : erreur lors de l'ajout du brut");
@@ -420,7 +420,7 @@ public class FenetreEntreeDonnees extends Dialog{
             CheckboxGroup<Typeoperation> cbgtypeop = new CheckboxGroup<>();
             divtypeop.getStyle().set("overflow-y", "auto");
             cbgtypeop.setLabel("Type(s) d'opération(s)");
-            ArrayList listtemp = listtypeoperation(this.controleur.getVuePrincipale().getGestionBDD().conn);
+            ArrayList listtemp = listTypeOperation(this.controleur.getVuePrincipale().getGestionBDD().conn);
       
             cbgtypeop.setItemLabelGenerator(
             Typeoperation -> Typeoperation.getNom());
@@ -504,7 +504,7 @@ public class FenetreEntreeDonnees extends Dialog{
 
             this.close();
                try {
-                   this.controleur.getVuePrincipale().getGestionBDD().addoperateur(this.controleur.getVuePrincipale().getGestionBDD().conn,tfidentifiant.getValue(),tfmdp.getValue(),nom.getValue(),tfprenom.getValue(),idateliertemp,idstatut,(int) Math.round(nbtel.getValue()),tfmail.getValue(),listtypeop);
+                   this.controleur.getVuePrincipale().getGestionBDD().addOperateur(this.controleur.getVuePrincipale().getGestionBDD().conn,tfidentifiant.getValue(),tfmdp.getValue(),nom.getValue(),tfprenom.getValue(),idateliertemp,idstatut,(int) Math.round(nbtel.getValue()),tfmail.getValue(),listtypeop);
                
                } catch (SQLException ex) {
                    System.out.print("Fenêtre entrée de donnée : erreur lors de l'ajout de l'opérateur");
@@ -533,7 +533,7 @@ public class FenetreEntreeDonnees extends Dialog{
 
             
             ArrayList<Typeoperation> listtemp = new ArrayList();
-            listtemp=listtypeoperation(this.controleur.getVuePrincipale().getGestionBDD().conn);
+            listtemp=listTypeOperation(this.controleur.getVuePrincipale().getGestionBDD().conn);
             ArrayList listajouter = new ArrayList();
 
             int index =0;
@@ -546,7 +546,7 @@ public class FenetreEntreeDonnees extends Dialog{
             ComboBox comboBoxMachines = new ComboBox();
             comboBoxMachines.setLabel("Machine");
             ArrayList<Machine> listmachinetemp = new ArrayList();
-            listmachinetemp=listmachine(this.controleur.getVuePrincipale().getGestionBDD().conn);
+            listmachinetemp=listMachine(this.controleur.getVuePrincipale().getGestionBDD().conn);
             ArrayList listmachineajouter = new ArrayList();
             int index1 =0;
             while(index1< listmachinetemp.size()){
@@ -597,7 +597,7 @@ public class FenetreEntreeDonnees extends Dialog{
             
             
                try {
-                   this.controleur.getVuePrincipale().getGestionBDD().addoperation(this.controleur.getVuePrincipale().getGestionBDD().conn,idtypeoperationtemp,nom.getValue(),nbduree.getValue(),tfoutil.getValue(),idmachineselect);
+                   this.controleur.getVuePrincipale().getGestionBDD().addOperation(this.controleur.getVuePrincipale().getGestionBDD().conn,idtypeoperationtemp,nom.getValue(),nbduree.getValue(),tfoutil.getValue(),idmachineselect);
                } catch (SQLException ex) {
                    System.out.print("Fenêtre entrée de donnée : erreur lors de l'ajout de l'opération");
                }
